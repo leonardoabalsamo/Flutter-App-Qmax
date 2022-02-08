@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:qmax_inst/src/models/bateria_model.dart';
+import 'package:qmax_inst/src/models/inversor_model.dart';
 import 'package:qmax_inst/src/models/seleccion_model.dart';
 import 'medio_page.dart';
 
@@ -12,8 +14,14 @@ class InicioPage extends StatefulWidget {
 }
 
 class _InicioPageState extends State<InicioPage> {
+  String test = "";
   @override
   Widget build(BuildContext context) {
+    final List<Inversor> inv = creaInversores();
+    final List<Bateria> bat = creaBaterias();
+    Inversor invSeleccionado;
+    Bateria batSeleccionada;
+
     return Scaffold(
       body: Center(
         child: ListView(children: [
@@ -29,7 +37,7 @@ class _InicioPageState extends State<InicioPage> {
                 width: 200.0,
               ),
               const ListaBaterias(),
-              const ListaTipo(),
+              const ListaTensiones(),
               Image.asset(
                 "assets/images/bateria.png",
                 height: 200.0,
@@ -49,15 +57,22 @@ class _InicioPageState extends State<InicioPage> {
       backgroundColor: Colors.black,
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => MedioPage(
-                      inversor: Seleccion.inversor,
-                      bateria: Seleccion.bateria,
-                      cantidad: Seleccion.cantidad,
-                    )),
-          );
+          /*Guardo Inversor y Batería seleccionada*/
+          invSeleccionado = buscaInversor(inv, Seleccion.inversor);
+          batSeleccionada = buscaBateria(bat, Seleccion.bateria);
+
+          /* Hago la validación de la seleccion*/
+          if (validacion(invSeleccionado, batSeleccionada, bat, inv)) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => MedioPage(
+                        inversor: invSeleccionado,
+                        bateria: batSeleccionada,
+                        cantidad: num.parse(Seleccion.cantidad),
+                      )),
+            );
+          }
         },
         backgroundColor: Colors.blue.shade600,
         label: const Text('Continuar',
@@ -66,6 +81,87 @@ class _InicioPageState extends State<InicioPage> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
+  }
+
+  bool validacion(invSeleccionado, batSeleccionada, bat, inv) {
+    num aux;
+
+    aux = invSeleccionado.tensionNominalInversor /
+        batSeleccionada.tensionNominalBateria;
+
+    if (int.parse(Seleccion.cantidad) == aux ||
+        int.parse(Seleccion.cantidad) == (aux * 2) ||
+        int.parse(Seleccion.cantidad) == (aux * 3) ||
+        int.parse(Seleccion.cantidad) == (aux * 4)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  Inversor buscaInversor(List<Inversor> array, String modelo) {
+    return array.firstWhere((Inversor m) => m.modeloInversor == modelo);
+  }
+
+  Bateria buscaBateria(List<Bateria> array, String bateria) {
+    return array.firstWhere((Bateria b) => b.modeloBateria == bateria);
+  }
+
+  List<Inversor> creaInversores() {
+    var inv = <Inversor>[];
+
+    /**************Inversores 12V*************/
+    inv.add(Inversor('QM-1212-SPD', 12, 1200));
+    inv.add(Inversor('QM-2312-SPD', 12, 2300));
+    /**************Inversores 24v*************/
+    inv.add(Inversor('QM-1224-SPD', 24, 1200));
+    inv.add(Inversor('QM-2324-SPD', 24, 2300));
+    inv.add(Inversor('QM-3524-SPD', 24, 3500));
+    /**************Inversores 48V*************/
+    inv.add(Inversor('QM-1248-SPD', 48, 1200));
+    inv.add(Inversor('QM-2348-SPD', 48, 2300));
+    inv.add(Inversor('QM-4548-SPD', 48, 4500));
+
+    return inv;
+  }
+
+  List<Bateria> creaBaterias() {
+    var bat = <Bateria>[];
+
+    bat.add(Bateria(
+        id: 1,
+        tipo: 'PLOMO ACIDO ',
+        modelo: 'TROJAN T105',
+        fondo: 7.25,
+        flote: 6.8,
+        capacidad: 225,
+        tensionNominal: 6));
+    bat.add(Bateria(
+        id: 2,
+        tipo: 'PLOMO ACIDO ',
+        modelo: 'TROJAN T605',
+        fondo: 7.25,
+        flote: 6.8,
+        capacidad: 210,
+        tensionNominal: 6));
+    bat.add(Bateria(
+        id: 3,
+        tipo: 'AGM',
+        modelo: 'VISION 6FM100X',
+        fondo: 7.25,
+        flote: 6.8,
+        capacidad: 100,
+        tensionNominal: 12));
+    bat.add(Bateria(
+        id: 4,
+        tipo: 'AGM',
+        modelo: 'VISION 6FM200X',
+        fondo: 7.25,
+        flote: 6.8,
+        capacidad: 200,
+        tensionNominal: 12));
+
+    return bat;
   }
 }
 

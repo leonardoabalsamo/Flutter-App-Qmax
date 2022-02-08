@@ -28,4 +28,5 @@ class Inversor {
   set potenciaInversor(num value) {
     potencia = value;
   }
+
 }

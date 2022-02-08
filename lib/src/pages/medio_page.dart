@@ -1,13 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:qmax_inst/src/models/bateria_model.dart';
+import 'package:qmax_inst/src/models/inversor_model.dart';
 import 'package:qmax_inst/src/models/seleccion_model.dart';
 import 'config_page.dart';
 
 class MedioPage extends StatefulWidget {
-  final String inversor = "";
-  final String bateria = "";
-  final String cantidad = "";
+  final Inversor inversor;
+  final Bateria bateria;
+  final num cantidad;
 
-  const MedioPage({Key? key, inversor, bateria, cantidad}) : super(key: key);
+  const MedioPage(
+      {Key? key,
+      required this.inversor,
+      required this.bateria,
+      required this.cantidad})
+      : super(key: key);
 
   @override
   _MedioPage createState() => _MedioPage();
@@ -51,6 +58,10 @@ class _MedioPage extends State<MedioPage> {
       backgroundColor: Colors.black38,
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
+          print(widget.inversor.modeloInversor);
+          print(widget.bateria.modeloBateria);
+          print(widget.cantidad);
+
           Navigator.push(
             context,
             MaterialPageRoute(
