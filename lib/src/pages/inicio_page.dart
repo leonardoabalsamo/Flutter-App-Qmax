@@ -1,7 +1,13 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:qmax_inst/src/models/bateria_model.dart';
 import 'package:qmax_inst/src/models/inversor_model.dart';
-import 'package:qmax_inst/src/models/seleccion_model.dart';
+import 'package:qmax_inst/src/providers/bateria_provider.dart';
+import 'package:qmax_inst/src/providers/inversor_provider.dart';
+import 'package:qmax_inst/src/providers/seleccion_provider.dart';
+import '../models/estatica_class.dart';
+import '../providers/db_provider.dart';
 import 'medio_page.dart';
 
 class InicioPage extends StatefulWidget {
@@ -14,13 +20,23 @@ class InicioPage extends StatefulWidget {
 }
 
 class _InicioPageState extends State<InicioPage> {
-  String test = "";
   @override
   Widget build(BuildContext context) {
+    final inversorProvider = Provider.of<InversorProvider>(context);
+    var bateriaProvider = Provider.of<BateriaProvider>(context);
+
     final List<Inversor> inv = creaInversores();
+    for (Inversor item in inv) {
+      DBProvider.db.insertInversor(item);
+    }
+
     final List<Bateria> bat = creaBaterias();
-    Inversor invSeleccionado;
-    Bateria batSeleccionada;
+    for (Bateria item in bat) {
+      DBProvider.db.insertBateria(item);
+    }
+
+    Inversor seleccionInversor;
+    Bateria seleccionBateria;
 
     return Scaffold(
       body: Center(
@@ -49,28 +65,55 @@ class _InicioPageState extends State<InicioPage> {
       ),
       appBar: AppBar(
         title: const Text(
-          'Configuración Inversor SPD',
+          'Selección de Modelo',
           style: TextStyle(color: Colors.white),
         ),
-        backgroundColor: Colors.black,
+        backgroundColor: Colors.blue.shade600,
       ),
       backgroundColor: Colors.black,
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
           /*Guardo Inversor y Batería seleccionada*/
-          invSeleccionado = buscaInversor(inv, Seleccion.inversor);
-          batSeleccionada = buscaBateria(bat, Seleccion.bateria);
+          seleccionInversor = buscaInversor(inv, Estatica.seleccionInversor);
 
-          /* Hago la validación de la seleccion*/
-          if (validacion(invSeleccionado, batSeleccionada, bat, inv)) {
+          seleccionBateria = buscaBateria(bat, Estatica.seleccionBateria);
+
+          /* Hago la validación de la seleccion e instancio*/
+          if (_validacion(seleccionInversor, seleccionBateria, bat, inv)) {
+            inversorProvider.setInversor = seleccionInversor;
+            bateriaProvider.setBateria = seleccionBateria;
+            ElevatedButton(
+              child: const Text('Cambiar'),
+              onPressed: () {
+                showCupertinoDialog(
+                    context: context,
+                    builder: (context) {
+                      return CupertinoAlertDialog(
+                        title: const Text('sugerencia'),
+                        content: const Text('¿Está seguro de eliminarlo?'),
+                        actions: <Widget>[
+                          CupertinoDialogAction(
+                            child: const Text('Cancelar'),
+                            onPressed: () {},
+                          ),
+                          CupertinoDialogAction(
+                            child: const Text('Confirm'),
+                            onPressed: () {},
+                          ),
+                        ],
+                      );
+                    });
+              },
+            );
+
             Navigator.push(
               context,
-              MaterialPageRoute(
-                  builder: (context) => MedioPage(
-                        inversor: invSeleccionado,
-                        bateria: batSeleccionada,
-                        cantidad: num.parse(Seleccion.cantidad),
-                      )),
+              MaterialPageRoute(builder: (context) => const MedioPage()),
+            );
+          } else {
+            const CupertinoAlertDialog(
+              title: Text('Error'),
+              content: Text('No es posible la combinación. ¿Reintentar?'),
             );
           }
         },
@@ -83,16 +126,17 @@ class _InicioPageState extends State<InicioPage> {
     );
   }
 
-  bool validacion(invSeleccionado, batSeleccionada, bat, inv) {
+  bool _validacion(Inversor invSeleccionado, Bateria batSeleccionada,
+      List<Bateria> bat, List<Inversor> inv) {
     num aux;
 
     aux = invSeleccionado.tensionNominalInversor /
         batSeleccionada.tensionNominalBateria;
 
-    if (int.parse(Seleccion.cantidad) == aux ||
-        int.parse(Seleccion.cantidad) == (aux * 2) ||
-        int.parse(Seleccion.cantidad) == (aux * 3) ||
-        int.parse(Seleccion.cantidad) == (aux * 4)) {
+    if (int.parse(Estatica.seleccionCantidad) == aux ||
+        int.parse(Estatica.seleccionCantidad) == (aux * 2) ||
+        int.parse(Estatica.seleccionCantidad) == (aux * 3) ||
+        int.parse(Estatica.seleccionCantidad) == (aux * 4)) {
       return true;
     } else {
       return false;
@@ -111,16 +155,16 @@ class _InicioPageState extends State<InicioPage> {
     var inv = <Inversor>[];
 
     /**************Inversores 12V*************/
-    inv.add(Inversor('QM-1212-SPD', 12, 1200));
-    inv.add(Inversor('QM-2312-SPD', 12, 2300));
+    inv.add(Inversor(1, 'QM-1212-SPD', 12, 1200));
+    inv.add(Inversor(2, 'QM-2312-SPD', 12, 2300));
     /**************Inversores 24v*************/
-    inv.add(Inversor('QM-1224-SPD', 24, 1200));
-    inv.add(Inversor('QM-2324-SPD', 24, 2300));
-    inv.add(Inversor('QM-3524-SPD', 24, 3500));
+    inv.add(Inversor(3, 'QM-1224-SPD', 24, 1200));
+    inv.add(Inversor(4, 'QM-2324-SPD', 24, 2300));
+    inv.add(Inversor(5, 'QM-3524-SPD', 24, 3500));
     /**************Inversores 48V*************/
-    inv.add(Inversor('QM-1248-SPD', 48, 1200));
-    inv.add(Inversor('QM-2348-SPD', 48, 2300));
-    inv.add(Inversor('QM-4548-SPD', 48, 4500));
+    inv.add(Inversor(6, 'QM-1248-SPD', 48, 1200));
+    inv.add(Inversor(7, 'QM-2348-SPD', 48, 2300));
+    inv.add(Inversor(8, 'QM-4548-SPD', 48, 4500));
 
     return inv;
   }
@@ -174,6 +218,7 @@ class ListaInversores extends StatefulWidget {
 
 class _ListaInversores extends State<ListaInversores> {
   String dropdownValue = 'SELECCIONE EL INVERSOR';
+
   @override
   Widget build(BuildContext context) {
     return DropdownButton<String>(
@@ -192,7 +237,7 @@ class _ListaInversores extends State<ListaInversores> {
       onChanged: (String? newValue) {
         setState(() {
           dropdownValue = newValue!;
-          Seleccion.inversor = newValue;
+          Estatica.seleccionInversor = dropdownValue;
         });
       },
       items: <String>[
@@ -252,7 +297,7 @@ class _ListaBaterias extends State<ListaBaterias> {
       onChanged: (String? newValue) {
         setState(() {
           dropdownValue = newValue!;
-          Seleccion.bateria = newValue;
+          Estatica.seleccionBateria = newValue;
         });
       },
       items: <String>[
@@ -290,6 +335,7 @@ class ListaTensiones extends StatefulWidget {
 }
 
 class _ListaTensiones extends State<ListaTensiones> {
+  final seleccionProvider = Provider.of<SeleccionProvider>;
   String dropdownValue = 'SELECCIONE LA CANTIDAD';
   @override
   Widget build(BuildContext context) {
@@ -309,7 +355,7 @@ class _ListaTensiones extends State<ListaTensiones> {
       onChanged: (String? newValue) {
         setState(() {
           dropdownValue = newValue!;
-          Seleccion.cantidad = newValue;
+          Estatica.seleccionCantidad = dropdownValue;
         });
       },
       items: <String>[

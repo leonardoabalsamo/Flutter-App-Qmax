@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:qmax_inst/routes/routes.dart';
 import 'package:qmax_inst/src/pages/home_page.dart';
+import 'package:provider/provider.dart';
+import 'package:qmax_inst/src/providers/bateria_provider.dart';
+import 'package:qmax_inst/src/providers/inversor_provider.dart';
+
+import 'theme/theme.dart';
 
 void main() {
   runApp(const MyApp());
@@ -10,13 +16,20 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Integradores QMAX',
-      theme: ThemeData(
-        primarySwatch: Colors.grey,
-      ),
-      home: const HomePage(),
-    );
+    return MultiProvider(
+        providers: [
+          /*Providers*/
+          ChangeNotifierProvider(create: (_) => InversorProvider()),
+          ChangeNotifierProvider(create: (_) => BateriaProvider()),
+        ],
+        child: MaterialApp(
+            debugShowCheckedModeBanner: false,
+            title: 'Integradores QMAX',
+            theme: defaultTheme,
+            initialRoute: 'homePage',
+            routes: getApplicationRoutes(),
+            onGenerateRoute: (RouteSettings settings) {
+              return MaterialPageRoute(builder: (context) => const HomePage());
+            }));
   }
 }

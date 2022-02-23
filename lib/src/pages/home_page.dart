@@ -40,24 +40,33 @@ class _HomePageState extends State<HomePage> {
   }
 
   Column homePageColumn() {
-    return Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+    return Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+      const Divider(
+        color: Colors.white,
+        height: 20,
+        indent: 20,
+        endIndent: 20,
+      ),
+      Image.asset(
+        "assets/images/inv.png",
+        height: 250.0,
+        width: 250.0,
+      ),
+      const Divider(
+        color: Colors.white,
+        height: 20,
+        indent: 20,
+        endIndent: 20,
+      ),
       Image.asset(
         "assets/images/cargador.png",
-        height: 400.0,
-        width: 400.0,
+        height: 250.0,
+        width: 250.0,
       ),
       const Text(
-        'El fin de esta aplicación es conocer que configuraciones',
-        style: TextStyle(
-          color: Colors.white,
-        ),
+        'El fin de esta aplicación es conocer que configuraciones se deben modificar para cada tipo de solución',
+        style: TextStyle(color: Colors.white, fontSize: 20.0, wordSpacing: 3.0),
       ),
-      const Text(
-        'que se deben modificar para cada tipo de solución',
-        style: TextStyle(
-          color: Colors.white,
-        ),
-      )
     ]);
   }
 }

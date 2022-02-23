@@ -1,20 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:qmax_inst/src/models/bateria_model.dart';
-import 'package:qmax_inst/src/models/inversor_model.dart';
-import 'package:qmax_inst/src/models/seleccion_model.dart';
+import '../models/estatica_class.dart';
 import 'config_page.dart';
 
 class MedioPage extends StatefulWidget {
-  final Inversor inversor;
-  final Bateria bateria;
-  final num cantidad;
-
-  const MedioPage(
-      {Key? key,
-      required this.inversor,
-      required this.bateria,
-      required this.cantidad})
-      : super(key: key);
+  const MedioPage({
+    Key? key,
+  }) : super(key: key);
 
   @override
   _MedioPage createState() => _MedioPage();
@@ -50,29 +41,17 @@ class _MedioPage extends State<MedioPage> {
       ),
       appBar: AppBar(
         title: const Text(
-          'Configuración Inversor Qmax e-control SPD',
+          'Solución Instalada',
           style: TextStyle(color: Colors.white),
         ),
-        backgroundColor: Colors.grey[700],
+        backgroundColor: Colors.blue.shade600,
       ),
       backgroundColor: Colors.black38,
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          print(widget.inversor.modeloInversor);
-          print(widget.bateria.modeloBateria);
-          print(widget.cantidad);
-
           Navigator.push(
             context,
-            MaterialPageRoute(
-                builder: (context) => ConfigPage(
-                      inversor: widget.inversor,
-                      bateria: widget.bateria,
-                      cantidad: widget.cantidad,
-                      instalacion: Seleccion.tipoInstalacion,
-                      red: Seleccion.red,
-                      solucion: Seleccion.tipoSolucion,
-                    )),
+            MaterialPageRoute(builder: (context) => const ConfigPage()),
           );
         },
         label: const Text('Obtener Configuración'),
@@ -111,7 +90,7 @@ class _ListaTipo extends State<ListaTipo> {
       onChanged: (String? newValue) {
         setState(() {
           dropdownValue = newValue!;
-          Seleccion.tipoInstalacion = newValue;
+          Estatica.tipoInstalacion = newValue;
         });
       },
       items: <String>[
@@ -166,7 +145,7 @@ class _ListaRed extends State<ListaRed> {
       onChanged: (String? newValue) {
         setState(() {
           dropdownValue = newValue!;
-          Seleccion.red = newValue;
+          Estatica.red = newValue;
         });
       },
       items: <String>[
@@ -221,7 +200,7 @@ class _ListaSolucion extends State<ListaSolucion> {
       onChanged: (String? newValue) {
         setState(() {
           dropdownValue = newValue!;
-          Seleccion.tipoSolucion = newValue;
+          Estatica.tipoSolucion = newValue;
         });
       },
       items: <String>[

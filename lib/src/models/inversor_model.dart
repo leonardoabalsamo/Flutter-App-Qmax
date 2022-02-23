@@ -1,19 +1,20 @@
 class Inversor {
+  int id;
   String modelo;
-  num tensionNominal;
-  num potencia;
+  int tensionNominal;
+  int potencia;
 
-  Inversor(this.modelo, this.tensionNominal, this.potencia);
+  Inversor(this.id, this.modelo, this.tensionNominal, this.potencia);
 
   String get modeloInversor {
     return modelo;
   }
 
-  num get tensionNominalInversor {
+  int get tensionNominalInversor {
     return tensionNominal;
   }
 
-  num get potenciaInversor {
+  int get potenciaInversor {
     return potencia;
   }
 
@@ -21,12 +22,11 @@ class Inversor {
     modelo = value;
   }
 
-  set tensionNominalInversor(num value) {
+  set tensionNominalInversor(int value) {
     tensionNominal = value;
   }
 
-  set potenciaInversor(num value) {
+  set potenciaInversor(int value) {
     potencia = value;
   }
-
 }

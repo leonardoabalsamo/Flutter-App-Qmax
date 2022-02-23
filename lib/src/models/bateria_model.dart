@@ -1,12 +1,9 @@
-import 'dart:async';
-import 'package:sqflite/sqflite.dart';
-
 class Bateria {
-  final int id;
-  final String tipo;
+  int id;
+  String tipo;
   String modelo;
-  final double fondo;
-  final double flote;
+  double fondo;
+  double flote;
   int capacidad;
   int tensionNominal;
 
