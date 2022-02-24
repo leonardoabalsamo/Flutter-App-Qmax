@@ -20,7 +20,7 @@ class DBProvider {
   Future<Database> initDB() async {
     //Patch de donde almacenaremos la base de datos
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
-    final path = join(documentsDirectory.path, 'e_control_spd_db.db');
+    final path = join(documentsDirectory.path, 'instaladores_db.db');
     //_log.info('Path: $path');
 
     /// Crear base de datos
@@ -73,19 +73,30 @@ class DBProvider {
     return res;
   }
 
-  Future insertInversor(Inversor inv ) async {
+  Future insertInversor(Inversor inv) async {
+    final id = inv.id;
+    final modelo = inv.modeloInversor;
+    final nominal = inv.tensionNominalInversor;
+    final potencia = inv.potenciaInversor;
+    //opbtener la base de datos
+    final db = await database;
 
-      final id = inv.id;
-      final modelo = inv.modeloInversor;
-      final nominal = inv.tensionNominalInversor;
-      final potencia = inv.potenciaInversor;
-      //opbtener la base de datos
-      final db = await database;
-
-      await db.rawInsert('''
+    await db.rawInsert('''
       INSERT INTO inversores (id, modelo,nominal, potencia)
       VALUES( $id, '$modelo', '$nominal', '$potencia')
       ''');
-    }
-  
+  }
+
+  Future consultaInversor() async {
+    final List lista;
+
+    //opbtener la base de datos
+    final db = await database;
+
+    lista = await db.rawQuery('''
+      SELECT * FROM inversores 
+      ''');
+
+    return lista;
+  }
 }

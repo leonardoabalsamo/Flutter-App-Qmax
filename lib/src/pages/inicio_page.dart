@@ -26,14 +26,14 @@ class _InicioPageState extends State<InicioPage> {
     var bateriaProvider = Provider.of<BateriaProvider>(context);
 
     final List<Inversor> inv = creaInversores();
-    for (Inversor item in inv) {
-      DBProvider.db.insertInversor(item);
-    }
+    // for (Inversor item in inv) {
+    //   DBProvider.db.insertInversor(item);
+    // }
 
     final List<Bateria> bat = creaBaterias();
-    for (Bateria item in bat) {
-      DBProvider.db.insertBateria(item);
-    }
+    // for (Bateria item in bat) {
+    //   DBProvider.db.insertBateria(item);
+    // }
 
     Inversor seleccionInversor;
     Bateria seleccionBateria;
@@ -72,7 +72,7 @@ class _InicioPageState extends State<InicioPage> {
       ),
       backgroundColor: Colors.black,
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
+        onPressed: () async {
           /*Guardo Inversor y Batería seleccionada*/
           seleccionInversor = buscaInversor(inv, Estatica.seleccionInversor);
 
@@ -82,39 +82,13 @@ class _InicioPageState extends State<InicioPage> {
           if (_validacion(seleccionInversor, seleccionBateria, bat, inv)) {
             inversorProvider.setInversor = seleccionInversor;
             bateriaProvider.setBateria = seleccionBateria;
-            ElevatedButton(
-              child: const Text('Cambiar'),
-              onPressed: () {
-                showCupertinoDialog(
-                    context: context,
-                    builder: (context) {
-                      return CupertinoAlertDialog(
-                        title: const Text('sugerencia'),
-                        content: const Text('¿Está seguro de eliminarlo?'),
-                        actions: <Widget>[
-                          CupertinoDialogAction(
-                            child: const Text('Cancelar'),
-                            onPressed: () {},
-                          ),
-                          CupertinoDialogAction(
-                            child: const Text('Confirm'),
-                            onPressed: () {},
-                          ),
-                        ],
-                      );
-                    });
-              },
-            );
 
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => const MedioPage()),
             );
           } else {
-            const CupertinoAlertDialog(
-              title: Text('Error'),
-              content: Text('No es posible la combinación. ¿Reintentar?'),
-            );
+            await _showError(context);
           }
         },
         backgroundColor: Colors.blue.shade600,
@@ -143,11 +117,11 @@ class _InicioPageState extends State<InicioPage> {
     }
   }
 
-  Inversor buscaInversor(List<Inversor> array, String modelo) {
+  Inversor buscaInversor(List<Inversor> array, String? modelo) {
     return array.firstWhere((Inversor m) => m.modeloInversor == modelo);
   }
 
-  Bateria buscaBateria(List<Bateria> array, String bateria) {
+  Bateria buscaBateria(List<Bateria> array, String? bateria) {
     return array.firstWhere((Bateria b) => b.modeloBateria == bateria);
   }
 
@@ -206,6 +180,33 @@ class _InicioPageState extends State<InicioPage> {
         tensionNominal: 12));
 
     return bat;
+  }
+
+  Future _showError(BuildContext context) {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        contentPadding: const EdgeInsets.all(13.0),
+        content:  Row(
+          children: const <Widget>[
+            Expanded(
+              child:  Text(
+                "No es posible la combinación. Reintente",
+                style:  TextStyle(fontSize: 20),
+                textAlign:  TextAlign.center,
+              ),
+            ),
+          ],
+        ),
+        actions: <Widget>[
+          TextButton(
+              child: const Text('Aceptar'),
+              onPressed: () {
+                Navigator.pop(context);
+              }),
+        ],
+      ),
+    );
   }
 }
 
