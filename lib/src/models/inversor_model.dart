@@ -1,8 +1,8 @@
 class Inversor {
-  int id;
-  String modelo;
-  num tensionNominal;
-  int potencia;
+  late int id;
+  late String modelo;
+  late num tensionNominal;
+  late int potencia;
   var inv = <Inversor>[];
 
   Inversor(

@@ -4,7 +4,7 @@ import '../models/inversor_model.dart';
 import '../models/seleccion_model.dart';
 
 class SeleccionProvider extends ChangeNotifier {
-  late Seleccion seleccionSeleccionada;
+  //var seleccionSeleccionada = Seleccion(0, "", "", "");
 
   var bateriaSeleccionada = Bateria(
       id: 0,
@@ -18,19 +18,19 @@ class SeleccionProvider extends ChangeNotifier {
   var inversorSeleccionado =
       Inversor(id: 0, modelo: "", tensionNominal: 0, potencia: 0);
 
-  late int cantidadSeleccionada;
-  late String tipoSeleccionado;
-  late String redSeleccionada;
-  late String solucionSeleccionada;
+  // late int cantidadSeleccionada;
+  // late String tipoSeleccionado;
+  // late String redSeleccionada;
+  // late String solucionSeleccionada;
 
-  Seleccion get getSeleccion {
-    return seleccionSeleccionada;
-  }
+  // Seleccion get getSeleccion {
+  //   return seleccionSeleccionada;
+  // }
 
-  set setSeleccion(Seleccion S) {
-    seleccionSeleccionada = S;
-    notifyListeners();
-  }
+  // set setSeleccion(Seleccion S) {
+  //   seleccionSeleccionada = S;
+  //   notifyListeners();
+  // }
 
 //Funciones de los modelos
 
@@ -128,15 +128,26 @@ class SeleccionProvider extends ChangeNotifier {
       ),
       onChanged: (String? newValue) {
         setInversor = inversorSeleccionado.buscaInversor(newValue);
-        print("You selected $newValue");
         dropdownValue = newValue.toString();
 
-        // setState(() {
-        //   //dropdownValue = inversorSeleccionado.modeloInversor;
-        // });
+        setState(() {
+          dropdownValue = newValue!;
+
+          //dropdownValue = inversorSeleccionado.modeloInversor;
+        });
         setState((() {}));
       },
-      items: modeloInv.map<DropdownMenuItem<String>>((String value) {
+      items: <String>[
+        'SELECCIONE EL INVERSOR',
+        'QM-1212-SPD',
+        'QM-2312-SPD',
+        'QM-1224-SPD',
+        'QM-2324-SPD',
+        'QM-1248-SPD',
+        'QM-2348-SPD',
+        'QM-3524-SPD',
+        'QM-4548-SPD'
+      ].map<DropdownMenuItem<String>>((String value) {
         return DropdownMenuItem<String>(
           value: value,
           child: Column(
@@ -183,7 +194,13 @@ class SeleccionProvider extends ChangeNotifier {
         // });
         setState((() {}));
       },
-      items: modeloBat.map<DropdownMenuItem<String>>((String value) {
+      items: <String>[
+        'SELECCIONE LA BATERIA',
+        'TROJAN T105',
+        'TROJAN T605',
+        'VISION 6FM200X',
+        'VISION 6FM100X'
+      ].map<DropdownMenuItem<String>>((String value) {
         return DropdownMenuItem<String>(
           value: value,
           child: Column(
@@ -204,7 +221,6 @@ class SeleccionProvider extends ChangeNotifier {
   }
 
   DropdownButton<String> listaTensiones() {
-    cantidadSeleccionada = 0;
     String dropdownValue = 'SELECCIONE LA CANTIDAD';
     return DropdownButton<String>(
       dropdownColor: Colors.black,
@@ -220,15 +236,19 @@ class SeleccionProvider extends ChangeNotifier {
         color: Colors.black,
       ),
       onChanged: (String? newValue) {
-        // setState(() {
-        //   cantidadSeleccionada = int.parse(newValue!);
-        //   dropdownValue = newValue;
-
-        //   notifyListeners();
-        // });
         setState((() {}));
       },
-      items: modeloTension.map<DropdownMenuItem<String>>((String value) {
+      items: <String>[
+        'SELECCIONE LA CANTIDAD',
+        '1',
+        '2',
+        '4',
+        '6',
+        '8',
+        '12',
+        '16',
+        '32'
+      ].map<DropdownMenuItem<String>>((String value) {
         return DropdownMenuItem<String>(
           value: value,
           child: Column(
@@ -264,10 +284,6 @@ class SeleccionProvider extends ChangeNotifier {
         color: Colors.black,
       ),
       onChanged: (String? newValue) {
-        // setState(() {
-        //    dropdownValue = newValue!;
-        //    tipoSeleccionado = newValue;
-        // });
         setState((() {}));
       },
       items: <String>[
@@ -310,10 +326,7 @@ class SeleccionProvider extends ChangeNotifier {
         color: Colors.black,
       ),
       onChanged: (String? newValue) {
-        // setState(() {
-        //   dropdownValue = newValue!;
-        //   redSeleccionada = newValue;
-        // });
+        //redSeleccionada = newValue.toString();
         setState((() {}));
       },
       items: <String>[
@@ -356,6 +369,7 @@ class SeleccionProvider extends ChangeNotifier {
         color: Colors.black,
       ),
       onChanged: (String? newValue) {
+        //seleccionSeleccionada.setTipoSolucion = newValue.toString();
         setState((() {}));
       },
       items: <String>[
@@ -390,10 +404,10 @@ class SeleccionProvider extends ChangeNotifier {
     aux = inversorSeleccionado.tensionNominalInversor /
         bateriaSeleccionada.tensionNominalBateria;
 
-    if (cantidadSeleccionada == aux ||
-        cantidadSeleccionada == (aux * 2) ||
-        cantidadSeleccionada == (aux * 3) ||
-        cantidadSeleccionada == (aux * 4)) {
+    if (Seleccion.cantidad == aux ||
+        Seleccion.cantidad == (aux * 2) ||
+        Seleccion.cantidad == (aux * 3) ||
+        Seleccion.cantidad == (aux * 4)) {
       return true;
     } else {
       return false;

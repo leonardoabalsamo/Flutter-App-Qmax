@@ -1,41 +1,38 @@
 class Seleccion {
-  int _cantidad;
-  String _tipoInstalacion;
-  String _red;
-  String _tipoSolucion;
+  static int cantidad = 0;
+  static String tipoInstalacion = "";
+  static String red = "";
+  static String tipoSolucion = "";
 
-  Seleccion(
-      this._cantidad, this._tipoInstalacion, this._red, this._tipoSolucion);
+  // int get getCantidad {
+  //   return _cantidad;
+  // }
 
-  int get getCantidad {
-    return _cantidad;
-  }
+  // String get tipoInstalacion {
+  //   return _tipoInstalacion;
+  // }
 
-  String get tipoInstalacion {
-    return _tipoInstalacion;
-  }
+  // String get getRed {
+  //   return _red;
+  // }
 
-  String get red {
-    return _red;
-  }
+  // String get tipoSolucion {
+  //   return _tipoSolucion;
+  // }
 
-  String get tipoSolucion {
-    return _tipoSolucion;
-  }
+  // set setCantidad(int cant) {
+  //   _cantidad = cant;
+  // }
 
-  set setCantidad(int cant) {
-    _cantidad = cant;
-  }
+  // set setTipoInstalacion(String tipo) {
+  //   _tipoInstalacion = tipo;
+  // }
 
-  set setTipoInstalacion(String tipo) {
-    _tipoInstalacion = tipo;
-  }
+  // set setRed(String red) {
+  //   _red = red;
+  // }
 
-  set setRed(String red) {
-    _red = red;
-  }
-
-  set setTipoSolucion(String tipo) {
-    _tipoSolucion = tipo;
-  }
+  // set setTipoSolucion(String tipo) {
+  //   _tipoSolucion = tipo;
+  // }
 }

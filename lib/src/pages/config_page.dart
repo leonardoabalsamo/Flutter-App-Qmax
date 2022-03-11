@@ -3,8 +3,8 @@ import 'package:provider/provider.dart';
 import 'package:qmax_inst/src/models/estatica_class.dart';
 import '../models/bateria_model.dart';
 import '../models/inversor_model.dart';
-import '../providers/bateria_provider.dart';
-import '../providers/inversor_provider.dart';
+import '../models/seleccion_model.dart';
+import '../providers/seleccion_provider.dart';
 
 class ConfigPage extends StatefulWidget {
   const ConfigPage({
@@ -15,7 +15,6 @@ class ConfigPage extends StatefulWidget {
   _ConfigPage createState() => _ConfigPage();
 }
 
-
 class _ConfigPage extends State<ConfigPage> {
   @override
   void initState() {
@@ -24,8 +23,9 @@ class _ConfigPage extends State<ConfigPage> {
 
   @override
   Widget build(BuildContext context) {
-    Inversor inv = Provider.of<InversorProvider>(context).inversorSeleccionado;
-    Bateria bat = Provider.of<BateriaProvider>(context).getBateria;
+    // Inversor inv = Provider.of<InversorProvider>(context).inversorSeleccionado;
+    // Bateria bat = Provider.of<BateriaProvider>(context).getBateria;
+    var seleccionProvider = Provider.of<SeleccionProvider>(context);
 
     return Scaffold(
         body: Center(
@@ -48,7 +48,9 @@ class _ConfigPage extends State<ConfigPage> {
                     child: ListView(
                         padding: const EdgeInsets.all(20.0),
                         scrollDirection: Axis.vertical,
-                        children: _verificaConfiguracion(inv, bat)))
+                        children: _verificaConfiguracion(
+                            seleccionProvider.getInversor(),
+                            seleccionProvider.getBateria)))
               ],
             ),
           ]),
@@ -66,7 +68,7 @@ class _ConfigPage extends State<ConfigPage> {
 
   List<Widget> _verificaConfiguracion(Inversor inv, Bateria bat) {
     var retorno = <Widget>[];
-    int cant = int.parse(Estatica.seleccionCantidad);
+    int cant = Seleccion.cantidad;
 
     num aux, banco, finalbanco;
     aux = inv.tensionNominalInversor / bat.tensionNominalBateria;
@@ -160,7 +162,7 @@ class _ConfigPage extends State<ConfigPage> {
   //           padding: const EdgeInsets.all(20.0),
   //           scrollDirection: Axis.vertical,
   //           children: [
-              
+
   //           ]));
   //   return sb;
   // }

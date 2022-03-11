@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../models/estatica_class.dart';
+import '../models/seleccion_model.dart';
 import 'config_page.dart';
 
 class MedioPage extends StatefulWidget {
@@ -61,8 +61,6 @@ class _MedioPage extends State<MedioPage> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
-
-  
 }
 
 class ListaTipo extends StatefulWidget {
@@ -92,7 +90,7 @@ class _ListaTipo extends State<ListaTipo> {
       onChanged: (String? newValue) {
         setState(() {
           dropdownValue = newValue!;
-          Estatica.tipoInstalacion = newValue;
+          Seleccion.tipoInstalacion = newValue;
         });
       },
       items: <String>[
@@ -147,7 +145,7 @@ class _ListaRed extends State<ListaRed> {
       onChanged: (String? newValue) {
         setState(() {
           dropdownValue = newValue!;
-          Estatica.red = newValue;
+          Seleccion.red = newValue;
         });
       },
       items: <String>[
@@ -202,7 +200,7 @@ class _ListaSolucion extends State<ListaSolucion> {
       onChanged: (String? newValue) {
         setState(() {
           dropdownValue = newValue!;
-          Estatica.tipoSolucion = newValue;
+          Seleccion.tipoSolucion = newValue;
         });
       },
       items: <String>[
