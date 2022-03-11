@@ -4,6 +4,7 @@ import 'package:qmax_inst/src/pages/home_page.dart';
 import 'package:provider/provider.dart';
 import 'package:qmax_inst/src/providers/bateria_provider.dart';
 import 'package:qmax_inst/src/providers/inversor_provider.dart';
+import 'package:qmax_inst/src/providers/seleccion_provider.dart';
 
 import 'theme/theme.dart';
 
@@ -21,6 +22,7 @@ class MyApp extends StatelessWidget {
           /*Providers*/
           ChangeNotifierProvider(create: (_) => InversorProvider()),
           ChangeNotifierProvider(create: (_) => BateriaProvider()),
+          ChangeNotifierProvider(create: (_) => SeleccionProvider()),
         ],
         child: MaterialApp(
             debugShowCheckedModeBanner: false,

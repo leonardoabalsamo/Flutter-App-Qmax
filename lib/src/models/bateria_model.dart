@@ -5,7 +5,8 @@ class Bateria {
   double fondo;
   double flote;
   int capacidad;
-  int tensionNominal;
+  num tensionNominal;
+  var bat = <Bateria>[];
 
   Bateria(
       {required this.id,
@@ -16,11 +17,11 @@ class Bateria {
       required this.capacidad,
       required this.tensionNominal});
 
-  int get tensionNominalBateria {
+  num get tensionNominalBateria {
     return tensionNominal;
   }
 
-  set tensionNominalBateria(int value) {
+  set tensionNominalBateria(num value) {
     tensionNominal = value;
   }
 
@@ -40,6 +41,46 @@ class Bateria {
     modelo = value;
   }
 
+  Bateria buscaBateria(String? modelo) {
+    creaBaterias();
+    return bat.firstWhere((Bateria m) => m.modeloBateria == modelo);
+  }
+
+  creaBaterias() {
+    bat.add(Bateria(
+        id: 1,
+        tipo: 'PLOMO ACIDO ',
+        modelo: 'TROJAN T105',
+        fondo: 7.25,
+        flote: 6.8,
+        capacidad: 225,
+        tensionNominal: 6));
+    bat.add(Bateria(
+        id: 2,
+        tipo: 'PLOMO ACIDO ',
+        modelo: 'TROJAN T605',
+        fondo: 7.25,
+        flote: 6.8,
+        capacidad: 210,
+        tensionNominal: 6));
+    bat.add(Bateria(
+        id: 3,
+        tipo: 'AGM',
+        modelo: 'VISION 6FM100X',
+        fondo: 7.25,
+        flote: 6.8,
+        capacidad: 100,
+        tensionNominal: 12));
+    bat.add(Bateria(
+        id: 4,
+        tipo: 'AGM',
+        modelo: 'VISION 6FM200X',
+        fondo: 7.25,
+        flote: 6.8,
+        capacidad: 200,
+        tensionNominal: 12));
+  }
+
   Map<String, dynamic> toMap() {
     return {
       'id': id,
@@ -51,24 +92,4 @@ class Bateria {
       'tensionNominal': tensionNominal,
     };
   }
-/*
-  // Implement toString to make it easier to see information about
-  @override
-  String toString() {
-    return 'bateria {id: $id, tipo: $tipo, modelo: $modelo, fondo: $fondo, flote: $flote , capacidad: $capacidad , tensionNominal: $tensionNominal}';
-  }
-}
-
-Future<void> insertBat(Bateria bat) async {
-  // Obtiene una referencia de la base de datos
-  final Database db = await database;
-
-  // Inserta el Dog en la tabla correcta. También puede especificar el
-  // `conflictAlgorithm` para usar en caso de que el mismo Dog se inserte dos veces.
-  // En este caso, reemplaza cualquier dato anterior.
-  await db.insert(
-    'baterias',
-    bat.toMap(),
-    conflictAlgorithm: ConflictAlgorithm.replace,
-  );*/
 }

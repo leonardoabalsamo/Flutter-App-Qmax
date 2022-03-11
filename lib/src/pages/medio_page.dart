@@ -61,6 +61,8 @@ class _MedioPage extends State<MedioPage> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
+
+  
 }
 
 class ListaTipo extends StatefulWidget {

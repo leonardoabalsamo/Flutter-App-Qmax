@@ -15,10 +15,16 @@ class ConfigPage extends StatefulWidget {
   _ConfigPage createState() => _ConfigPage();
 }
 
+
 class _ConfigPage extends State<ConfigPage> {
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    Inversor inv = Provider.of<InversorProvider>(context).getInversor;
+    Inversor inv = Provider.of<InversorProvider>(context).inversorSeleccionado;
     Bateria bat = Provider.of<BateriaProvider>(context).getBateria;
 
     return Scaffold(
@@ -36,15 +42,15 @@ class _ConfigPage extends State<ConfigPage> {
                 ),
                 const Text('Configuración Recomendada: ',
                     style: TextStyle(color: Colors.white)),
+                const Divider(),
+                SizedBox(
+                    height: 800,
+                    child: ListView(
+                        padding: const EdgeInsets.all(20.0),
+                        scrollDirection: Axis.vertical,
+                        children: _verificaConfiguracion(inv, bat)))
               ],
             ),
-            const Divider(),
-            SizedBox(
-                height: 800,
-                child: ListView(
-                    padding: const EdgeInsets.all(20.0),
-                    scrollDirection: Axis.vertical,
-                    children: _verificaConfiguracion(inv, bat)))
           ]),
         ),
         appBar: AppBar(
@@ -55,11 +61,7 @@ class _ConfigPage extends State<ConfigPage> {
           backgroundColor: Colors.blue.shade600,
         ),
         backgroundColor: Colors.black,
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {},
-          backgroundColor: Colors.green.shade600,
-          child: const Icon(Icons.beenhere),
-        ));
+        floatingActionButton: FloatingActionButton(onPressed: () {}));
   }
 
   List<Widget> _verificaConfiguracion(Inversor inv, Bateria bat) {
@@ -150,4 +152,16 @@ class _ConfigPage extends State<ConfigPage> {
     }
     return retorno;
   }
+
+  // Widget _config(BuildContext context, Future<List<Widget>> _lista) {
+  //   Widget sb = SizedBox(
+  //       height: 800,
+  //       child: ListView(
+  //           padding: const EdgeInsets.all(20.0),
+  //           scrollDirection: Axis.vertical,
+  //           children: [
+              
+  //           ]));
+  //   return sb;
+  // }
 }
