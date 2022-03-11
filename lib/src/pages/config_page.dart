@@ -23,8 +23,6 @@ class _ConfigPage extends State<ConfigPage> {
 
   @override
   Widget build(BuildContext context) {
-    // Inversor inv = Provider.of<InversorProvider>(context).inversorSeleccionado;
-    // Bateria bat = Provider.of<BateriaProvider>(context).getBateria;
     var seleccionProvider = Provider.of<SeleccionProvider>(context);
 
     return Scaffold(
@@ -36,12 +34,13 @@ class _ConfigPage extends State<ConfigPage> {
             Column(
               children: [
                 Image.asset(
-                  "assets/images/bateria.png",
+                  "assets/images/inv.png",
                   height: 250.0,
                   width: 250.0,
                 ),
                 const Text('Configuración Recomendada: ',
-                    style: TextStyle(color: Colors.white)),
+                    style: TextStyle(
+                        color: Colors.white, fontSize: 20, wordSpacing: 10)),
                 const Divider(),
                 SizedBox(
                     height: 800,
@@ -81,20 +80,21 @@ class _ConfigPage extends State<ConfigPage> {
     num pasored;
     pasored = (bat.tensionNominalBateria * aux);
 
-    if (Estatica.tipoInstalacion == "ESTACIONARIA") {
-      if (Estatica.red == "SI") {
-        if (Estatica.tipoSolucion == "BACKUP") {
+    if (Seleccion.tipoInstalacion == "ESTACIONARIA") {
+      if (Seleccion.red == "SI") {
+        if (Seleccion.tipoSolucion == "BACKUP") {
           retorno.add(const Text("MODO DE FUNCIONAMIENTO:   INVERSOR-CARGADOR ",
               style: TextStyle(color: Colors.white)));
           retorno.add(const Divider());
           retorno.add(const Text("PERFIL DE ENTRADA:   ESTRICTA ",
               style: TextStyle(color: Colors.white)));
           retorno.add(const Divider());
-          retorno.add(Text('CAPACIDAD DEL BANCO: ' + finalbanco.toString(),
+          retorno.add(Text(
+              'CAPACIDAD DEL BANCO:   ' + finalbanco.toString() + ' Ah',
               style: const TextStyle(color: Colors.white)));
           retorno.add(const Divider());
 
-          retorno.add(Text('PERFIL:' + bat.modeloBateria,
+          retorno.add(Text('PERFIL BATERIA:   ' + bat.modeloBateria,
               style: const TextStyle(color: Colors.white)));
           retorno.add(const Divider());
         } else {
@@ -103,14 +103,16 @@ class _ConfigPage extends State<ConfigPage> {
           retorno.add(const Divider());
 
           retorno.add(Text(
-              "TENSION DE BATERIA DE CIERRE DERIVACION:  " + pasored.toString(),
+              "TENSION DE BATERIA DE CIERRE DERIVACION:  " +
+                  pasored.toString() +
+                  ' V',
               style: const TextStyle(color: Colors.white)));
           retorno.add(const Divider());
 
           retorno.add(Text(
               "TENSION DE BATERIA PARA APERTURA DE DERIVACION:  " +
                   retornored.toString() +
-                  retorno.toString(),
+                  ' V',
               style: const TextStyle(color: Colors.white)));
           retorno.add(const Divider());
 
@@ -118,11 +120,12 @@ class _ConfigPage extends State<ConfigPage> {
               style: TextStyle(color: Colors.white)));
           retorno.add(const Divider());
 
-          retorno.add(Text('CAPACIDAD DEL BANCO: ' + finalbanco.toString(),
+          retorno.add(Text(
+              'CAPACIDAD DEL BANCO:  ' + finalbanco.toString() + ' Ah',
               style: const TextStyle(color: Colors.white)));
           retorno.add(const Divider());
 
-          retorno.add(Text('PERFIL:' + bat.modeloBateria,
+          retorno.add(Text('PERFIL BATERIA:   ' + bat.modeloBateria,
               style: const TextStyle(color: Colors.white)));
           retorno.add(const Divider());
         }
@@ -135,7 +138,7 @@ class _ConfigPage extends State<ConfigPage> {
             style: TextStyle(color: Colors.white)));
         retorno.add(const Divider());
 
-        retorno.add(Text('PERFIL:' + bat.modeloBateria,
+        retorno.add(Text('PERFIL BATERIA:  ' + bat.modeloBateria + ' Ah',
             style: const TextStyle(color: Colors.white)));
         retorno.add(const Divider());
       }
@@ -148,7 +151,7 @@ class _ConfigPage extends State<ConfigPage> {
           style: TextStyle(color: Colors.white)));
       retorno.add(const Divider());
 
-      retorno.add(Text('PERFIL:' + bat.modeloBateria,
+      retorno.add(Text('PERFIL BATERIA:  ' + bat.modeloBateria + ' Ah',
           style: const TextStyle(color: Colors.white)));
       retorno.add(const Divider());
     }
