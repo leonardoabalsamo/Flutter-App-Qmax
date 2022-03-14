@@ -17,36 +17,47 @@ class _MedioPage extends State<MedioPage> {
     return Scaffold(
       body: Center(
         child: ListView(children: [
-          Container(
-            padding: const EdgeInsets.all(26.0),
+          const SizedBox(
+            height: 25,
           ),
           Column(
             children: [
               const ListaTipo(),
+              const SizedBox(
+                height: 25,
+              ),
               Image.asset(
                 "assets/images/instalacion.png",
-                height: 200.0,
-                width: 200.0,
+                height: 160.0,
+                width: 160.0,
+              ),
+              const SizedBox(
+                height: 25,
               ),
               const ListaRed(),
               Image.asset(
                 "assets/images/inversor_iq.png",
-                height: 200.0,
-                width: 200.0,
+                height: 180.0,
+                width: 180.0,
               ),
               const ListaSolucion(),
+              const SizedBox(
+                height: 25,
+              ),
+              Image.asset(
+                "assets/images/logo_bateria_t.png",
+                height: 90.0,
+                width: 90.0,
+              ),
             ],
           ),
         ]),
       ),
       appBar: AppBar(
         title: const Text(
-          'Solución Instalada',
-          style: TextStyle(color: Colors.white),
+          'SOLUCION INSTALADA',
         ),
-        backgroundColor: Colors.blue.shade600,
       ),
-      backgroundColor: Colors.black38,
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
           Navigator.push(
@@ -55,7 +66,6 @@ class _MedioPage extends State<MedioPage> {
           );
         },
         label: const Text('Obtener Configuración'),
-        backgroundColor: Colors.blue.shade600,
         icon: const Icon(Icons.arrow_forward),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
@@ -75,18 +85,11 @@ class _ListaTipo extends State<ListaTipo> {
   @override
   Widget build(BuildContext context) {
     return DropdownButton<String>(
-      dropdownColor: Colors.black,
-      value: dropdownValue,
-      icon: const Icon(Icons.arrow_downward),
-      elevation: 16,
       style: const TextStyle(
-        color: Colors.white,
-        backgroundColor: Colors.white,
+        fontSize: 20,
       ),
-      underline: Container(
-        height: 2,
-        color: Colors.black,
-      ),
+      value: dropdownValue,
+      isDense: true,
       onChanged: (String? newValue) {
         setState(() {
           dropdownValue = newValue!;
@@ -100,18 +103,11 @@ class _ListaTipo extends State<ListaTipo> {
       ].map<DropdownMenuItem<String>>((String value) {
         return DropdownMenuItem<String>(
           value: value,
-          child: Column(
-            children: [
-              Text(
-                value,
-                style: TextStyle(
-                    leadingDistribution: TextLeadingDistribution.even,
-                    color: Colors.white.withOpacity(0.8),
-                    backgroundColor: Colors.black,
-                    fontWeight: FontWeight.bold),
-              ),
-            ],
-          ),
+          child: SizedBox(
+              child: Text(
+            value,
+            textAlign: TextAlign.center,
+          )),
         );
       }).toList(),
     );
@@ -130,18 +126,11 @@ class _ListaRed extends State<ListaRed> {
   @override
   Widget build(BuildContext context) {
     return DropdownButton<String>(
-      dropdownColor: Colors.black,
-      value: dropdownValue,
-      icon: const Icon(Icons.arrow_downward),
-      elevation: 16,
       style: const TextStyle(
-        color: Colors.white,
-        backgroundColor: Colors.white,
+        fontSize: 20,
       ),
-      underline: Container(
-        height: 2,
-        color: Colors.black,
-      ),
+      value: dropdownValue,
+      isDense: true,
       onChanged: (String? newValue) {
         setState(() {
           dropdownValue = newValue!;
@@ -155,18 +144,11 @@ class _ListaRed extends State<ListaRed> {
       ].map<DropdownMenuItem<String>>((String value) {
         return DropdownMenuItem<String>(
           value: value,
-          child: Column(
-            children: [
-              Text(
-                value,
-                style: TextStyle(
-                    leadingDistribution: TextLeadingDistribution.even,
-                    color: Colors.white.withOpacity(0.8),
-                    backgroundColor: Colors.black,
-                    fontWeight: FontWeight.bold),
-              ),
-            ],
-          ),
+          child: SizedBox(
+              child: Text(
+            value,
+            textAlign: TextAlign.center,
+          )),
         );
       }).toList(),
     );
@@ -185,18 +167,11 @@ class _ListaSolucion extends State<ListaSolucion> {
   @override
   Widget build(BuildContext context) {
     return DropdownButton<String>(
-      dropdownColor: Colors.black,
-      value: dropdownValue,
-      icon: const Icon(Icons.arrow_downward),
-      elevation: 16,
       style: const TextStyle(
-        color: Colors.white,
-        backgroundColor: Colors.white,
+        fontSize: 20,
       ),
-      underline: Container(
-        height: 2,
-        color: Colors.black,
-      ),
+      value: dropdownValue,
+      isDense: true,
       onChanged: (String? newValue) {
         setState(() {
           dropdownValue = newValue!;
@@ -210,18 +185,11 @@ class _ListaSolucion extends State<ListaSolucion> {
       ].map<DropdownMenuItem<String>>((String value) {
         return DropdownMenuItem<String>(
           value: value,
-          child: Column(
-            children: [
-              Text(
-                value,
-                style: TextStyle(
-                    leadingDistribution: TextLeadingDistribution.even,
-                    color: Colors.white.withOpacity(0.8),
-                    backgroundColor: Colors.black,
-                    fontWeight: FontWeight.bold),
-              ),
-            ],
-          ),
+          child: SizedBox(
+              child: Text(
+            value,
+            textAlign: TextAlign.center,
+          )),
         );
       }).toList(),
     );

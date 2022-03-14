@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:qmax_inst/src/models/estatica_class.dart';
 import '../models/bateria_model.dart';
 import '../models/inversor_model.dart';
 import '../models/seleccion_model.dart';
 import '../providers/seleccion_provider.dart';
+import 'inicio_page.dart';
 
 class ConfigPage extends StatefulWidget {
   const ConfigPage({
@@ -28,22 +28,18 @@ class _ConfigPage extends State<ConfigPage> {
     return Scaffold(
         body: Center(
           child: ListView(children: [
-            Container(
-              padding: const EdgeInsets.all(26.0),
+            const SizedBox(
+              height: 10,
             ),
             Column(
               children: [
                 Image.asset(
                   "assets/images/inv.png",
-                  height: 250.0,
-                  width: 250.0,
+                  height: 280.0,
+                  width: 280.0,
                 ),
-                const Text('Configuración Recomendada: ',
-                    style: TextStyle(
-                        color: Colors.white, fontSize: 20, wordSpacing: 10)),
-                const Divider(),
                 SizedBox(
-                    height: 800,
+                    height: 600,
                     child: ListView(
                         padding: const EdgeInsets.all(20.0),
                         scrollDirection: Axis.vertical,
@@ -56,13 +52,18 @@ class _ConfigPage extends State<ConfigPage> {
         ),
         appBar: AppBar(
           title: const Text(
-            'Configuración Recomendada',
-            style: TextStyle(color: Colors.white),
+            'CONFIGURACIÓN RECOMENDADA',
+            style: TextStyle(fontSize: 16),
           ),
-          backgroundColor: Colors.blue.shade600,
         ),
-        backgroundColor: Colors.black,
-        floatingActionButton: FloatingActionButton(onPressed: () {}));
+        floatingActionButton: FloatingActionButton.extended(
+          onPressed: () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const InicioPage()));
+          },
+          icon: const Icon(Icons.arrow_back),
+          label: const Text('Regresar', style: TextStyle(fontSize: 20.0)),
+        ));
   }
 
   List<Widget> _verificaConfiguracion(Inversor inv, Bateria bat) {
@@ -75,7 +76,7 @@ class _ConfigPage extends State<ConfigPage> {
     finalbanco = bat.capacidadBateria * banco;
 
     num retornored;
-    retornored = bat.fondo * aux;
+    retornored = (bat.fondo * aux) - 0.3;
 
     num pasored;
     pasored = (bat.tensionNominalBateria * aux);
@@ -87,86 +88,134 @@ class _ConfigPage extends State<ConfigPage> {
               style: TextStyle(color: Colors.white)));
           retorno.add(const Divider());
           retorno.add(const Text("PERFIL DE ENTRADA:   ESTRICTA ",
-              style: TextStyle(color: Colors.white)));
+              style: TextStyle(
+                  fontFamily: 'Ubuntu',
+                  color: Colors.white,
+                  fontSize: 18,
+                  leadingDistribution: TextLeadingDistribution.proportional)));
           retorno.add(const Divider());
           retorno.add(Text(
               'CAPACIDAD DEL BANCO:   ' + finalbanco.toString() + ' Ah',
-              style: const TextStyle(color: Colors.white)));
+              style: const TextStyle(
+                  fontFamily: 'Ubuntu',
+                  color: Colors.white,
+                  fontSize: 18,
+                  leadingDistribution: TextLeadingDistribution.proportional)));
           retorno.add(const Divider());
 
           retorno.add(Text('PERFIL BATERIA:   ' + bat.modeloBateria,
-              style: const TextStyle(color: Colors.white)));
+              style: const TextStyle(
+                  fontFamily: 'Ubuntu',
+                  color: Colors.white,
+                  fontSize: 18,
+                  leadingDistribution: TextLeadingDistribution.proportional)));
           retorno.add(const Divider());
         } else {
           retorno.add(const Text("MODO: AUTOCONSUMO ",
-              style: TextStyle(color: Colors.white)));
+              style: TextStyle(
+                  fontFamily: 'Ubuntu',
+                  color: Colors.white,
+                  fontSize: 18,
+                  leadingDistribution: TextLeadingDistribution.proportional)));
           retorno.add(const Divider());
 
           retorno.add(Text(
               "TENSION DE BATERIA DE CIERRE DERIVACION:  " +
                   pasored.toString() +
                   ' V',
-              style: const TextStyle(color: Colors.white)));
+              style: const TextStyle(
+                  fontFamily: 'Ubuntu',
+                  color: Colors.white,
+                  fontSize: 18,
+                  leadingDistribution: TextLeadingDistribution.proportional)));
           retorno.add(const Divider());
 
           retorno.add(Text(
               "TENSION DE BATERIA PARA APERTURA DE DERIVACION:  " +
                   retornored.toString() +
                   ' V',
-              style: const TextStyle(color: Colors.white)));
+              style: const TextStyle(
+                  fontFamily: 'Ubuntu',
+                  color: Colors.white,
+                  fontSize: 18,
+                  leadingDistribution: TextLeadingDistribution.proportional)));
           retorno.add(const Divider());
 
           retorno.add(const Text("PERFIL DE ENTRADA: ESTRICTA ",
-              style: TextStyle(color: Colors.white)));
+              style: TextStyle(
+                  fontFamily: 'Ubuntu',
+                  color: Colors.white,
+                  fontSize: 18,
+                  leadingDistribution: TextLeadingDistribution.proportional)));
           retorno.add(const Divider());
 
           retorno.add(Text(
               'CAPACIDAD DEL BANCO:  ' + finalbanco.toString() + ' Ah',
-              style: const TextStyle(color: Colors.white)));
+              style: const TextStyle(
+                  fontFamily: 'Ubuntu',
+                  color: Colors.white,
+                  fontSize: 18,
+                  leadingDistribution: TextLeadingDistribution.proportional)));
           retorno.add(const Divider());
 
           retorno.add(Text('PERFIL BATERIA:   ' + bat.modeloBateria,
-              style: const TextStyle(color: Colors.white)));
+              style: const TextStyle(
+                  fontFamily: 'Ubuntu',
+                  color: Colors.white,
+                  fontSize: 18,
+                  leadingDistribution: TextLeadingDistribution.proportional)));
           retorno.add(const Divider());
         }
       } else {
         retorno.add(const Text("MODO: INVERSOR-CARGADOR ",
-            style: TextStyle(color: Colors.white)));
+            style: TextStyle(
+                fontFamily: 'Ubuntu',
+                color: Colors.white,
+                fontSize: 18,
+                leadingDistribution: TextLeadingDistribution.proportional)));
         retorno.add(const Divider());
 
         retorno.add(const Text("PERFIL DE ENTRADA: TOLERANTE ",
-            style: TextStyle(color: Colors.white)));
+            style: TextStyle(
+                fontFamily: 'Ubuntu',
+                color: Colors.white,
+                fontSize: 18,
+                leadingDistribution: TextLeadingDistribution.proportional)));
         retorno.add(const Divider());
 
         retorno.add(Text('PERFIL BATERIA:  ' + bat.modeloBateria + ' Ah',
-            style: const TextStyle(color: Colors.white)));
+            style: const TextStyle(
+                fontFamily: 'Ubuntu',
+                color: Colors.white,
+                fontSize: 18,
+                leadingDistribution: TextLeadingDistribution.proportional)));
         retorno.add(const Divider());
       }
     } else {
       retorno.add(const Text("MODO: SOLO CARGADOR ",
-          style: TextStyle(color: Colors.white)));
+          style: TextStyle(
+              fontFamily: 'Ubuntu',
+              color: Colors.white,
+              fontSize: 18,
+              leadingDistribution: TextLeadingDistribution.proportional)));
       retorno.add(const Divider());
 
       retorno.add(const Text("PERFIL DE ENTRADA: TOLERANTE ",
-          style: TextStyle(color: Colors.white)));
+          style: TextStyle(
+              fontFamily: 'Ubuntu',
+              color: Colors.white,
+              fontSize: 18,
+              leadingDistribution: TextLeadingDistribution.proportional)));
       retorno.add(const Divider());
 
       retorno.add(Text('PERFIL BATERIA:  ' + bat.modeloBateria + ' Ah',
-          style: const TextStyle(color: Colors.white)));
+          style: const TextStyle(
+              fontFamily: 'Ubuntu',
+              color: Colors.white,
+              fontSize: 18,
+              leadingDistribution: TextLeadingDistribution.proportional)));
       retorno.add(const Divider());
     }
     return retorno;
   }
-
-  // Widget _config(BuildContext context, Future<List<Widget>> _lista) {
-  //   Widget sb = SizedBox(
-  //       height: 800,
-  //       child: ListView(
-  //           padding: const EdgeInsets.all(20.0),
-  //           scrollDirection: Axis.vertical,
-  //           children: [
-
-  //           ]));
-  //   return sb;
-  // }
 }

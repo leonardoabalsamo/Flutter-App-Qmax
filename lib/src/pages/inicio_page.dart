@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+
 import 'package:provider/provider.dart';
 import 'package:qmax_inst/src/providers/seleccion_provider.dart';
+
 import '../models/bateria_model.dart';
 import '../models/inversor_model.dart';
 import '../models/seleccion_model.dart';
@@ -19,52 +21,60 @@ class _InicioPageState extends State<InicioPage> {
   @override
   Widget build(BuildContext context) {
     var seleccionProvider = Provider.of<SeleccionProvider>(context);
-    //final List<Inversor> inv = creaInversores();
-    // for (Inversor item in inv) {
-    //   DBProvider.db.insertInversor(item);
-    // }
-
-    //final List<Bateria> bat = creaBaterias();
-    // for (Bateria item in bat) {
-    //   DBProvider.db.insertBateria(item);
-    // }
-
     return Scaffold(
       body: Center(
         child: ListView(children: [
           Container(
-            padding: const EdgeInsets.all(26.0),
+            padding: const EdgeInsets.all(10),
           ),
           Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              //seleccionProvider.listaInversores(),
-              const ListaInversores(),
-              Image.asset(
-                "assets/images/inv.png",
-                height: 200.0,
-                width: 200.0,
+              const SizedBox(
+                width: 10,
+                height: 10,
               ),
-              //seleccionProvider.listaBaterias(),
-              const ListaBaterias(),
-              //seleccionProvider.listaTensiones(),
-              const ListaTensiones(),
+              const ListaInversores(),
+              const SizedBox(
+                width: 10,
+                height: 10,
+              ),
               Image.asset(
-                "assets/images/bateria.png",
-                height: 200.0,
-                width: 200.0,
-              )
+                'assets/images/inv.png',
+                height: 250,
+              ),
+              const ListaBaterias(),
+              const SizedBox(
+                width: 10,
+                height: 20,
+              ),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: Image.asset('assets/images/vision.png'),
+                  ),
+                  Expanded(
+                    flex: 2,
+                    child: Image.asset('assets/images/pylontech.png'),
+                  ),
+                  Expanded(
+                    child: Image.asset('assets/images/bateria.png'),
+                  ),
+                ],
+              ),
+              const ListaTensiones(),
             ],
           ),
         ]),
       ),
       appBar: AppBar(
         title: const Text(
-          'Selección de Modelo',
-          style: TextStyle(color: Colors.white),
+          'SELECCION DE MODELO',
         ),
-        backgroundColor: Colors.blue.shade600,
+        centerTitle: true,
       ),
-      backgroundColor: Colors.black,
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () async {
           if (seleccionProvider.validacion()) {
@@ -74,84 +84,16 @@ class _InicioPageState extends State<InicioPage> {
             );
           } else {
             await _showError(context);
-            // print(seleccionProvider.bateriaSeleccionada.modeloBateria);
-            // print(seleccionProvider.inversorSeleccionado.modeloInversor);
-            // print(seleccionProvider.cantidadSeleccionada);
           }
         },
-        backgroundColor: Colors.blue.shade600,
-        label: const Text('Continuar',
-            style: TextStyle(color: Colors.white, fontSize: 20.0)),
+        label: const Text(
+          'Continuar',
+        ),
         icon: const Icon(Icons.arrow_forward),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
-
-  // Inversor buscaInversor(List<Inversor> array, String? modelo) {
-  //   return array.firstWhere((Inversor m) => m.modeloInversor == modelo);
-  // }
-
-  // Bateria buscaBateria(List<Bateria> array, String? bateria) {
-  //   return array.firstWhere((Bateria b) => b.modeloBateria == bateria);
-  // }
-
-  // List<Inversor> creaInversores() {
-  //   var inv = <Inversor>[];
-
-  //   /**************Inversores 12V*************/
-  //   inv.add(Inversor(1, 'QM-1212-SPD', 12, 1200));
-  //   inv.add(Inversor(2, 'QM-2312-SPD', 12, 2300));
-  //   /**************Inversores 24v*************/
-  //   inv.add(Inversor(3, 'QM-1224-SPD', 24, 1200));
-  //   inv.add(Inversor(4, 'QM-2324-SPD', 24, 2300));
-  //   inv.add(Inversor(5, 'QM-3524-SPD', 24, 3500));
-  //   /**************Inversores 48V*************/
-  //   inv.add(Inversor(6, 'QM-1248-SPD', 48, 1200));
-  //   inv.add(Inversor(7, 'QM-2348-SPD', 48, 2300));
-  //   inv.add(Inversor(8, 'QM-4548-SPD', 48, 4500));
-
-  //   return inv;
-  // }
-
-  // List<Bateria> creaBaterias() {
-  //   var bat = <Bateria>[];
-
-  //   bat.add(Bateria(
-  //       id: 1,
-  //       tipo: 'PLOMO ACIDO ',
-  //       modelo: 'TROJAN T105',
-  //       fondo: 7.25,
-  //       flote: 6.8,
-  //       capacidad: 225,
-  //       tensionNominal: 6));
-  //   bat.add(Bateria(
-  //       id: 2,
-  //       tipo: 'PLOMO ACIDO ',
-  //       modelo: 'TROJAN T605',
-  //       fondo: 7.25,
-  //       flote: 6.8,
-  //       capacidad: 210,
-  //       tensionNominal: 6));
-  //   bat.add(Bateria(
-  //       id: 3,
-  //       tipo: 'AGM',
-  //       modelo: 'VISION 6FM100X',
-  //       fondo: 7.25,
-  //       flote: 6.8,
-  //       capacidad: 100,
-  //       tensionNominal: 12));
-  //   bat.add(Bateria(
-  //       id: 4,
-  //       tipo: 'AGM',
-  //       modelo: 'VISION 6FM200X',
-  //       fondo: 7.25,
-  //       flote: 6.8,
-  //       capacidad: 200,
-  //       tensionNominal: 12));
-
-  //   return bat;
-  // }
 
   Future _showError(BuildContext context) {
     return showDialog(
@@ -163,8 +105,9 @@ class _InicioPageState extends State<InicioPage> {
             Expanded(
               child: Text(
                 "No es posible la combinación. Reintente",
-                style: TextStyle(fontSize: 20),
-                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 20,
+                ),
               ),
             ),
           ],
@@ -196,18 +139,11 @@ class _ListaInversores extends State<ListaInversores> {
     var seleccionProvider = Provider.of<SeleccionProvider>(context);
     var invBusca = Inversor(id: 0, modelo: "", tensionNominal: 0, potencia: 0);
     return DropdownButton<String>(
-      dropdownColor: Colors.black,
-      value: dropdownValue,
-      icon: const Icon(Icons.arrow_downward),
-      elevation: 16,
       style: const TextStyle(
-        color: Colors.white,
-        backgroundColor: Colors.white,
+        fontSize: 20,
       ),
-      underline: Container(
-        height: 2,
-        color: Colors.blue.shade600,
-      ),
+      value: dropdownValue,
+      isDense: true,
       onChanged: (String? newValue) {
         setState(() {
           dropdownValue = newValue!;
@@ -227,18 +163,11 @@ class _ListaInversores extends State<ListaInversores> {
       ].map<DropdownMenuItem<String>>((String value) {
         return DropdownMenuItem<String>(
           value: value,
-          child: Column(
-            children: [
-              Text(
-                value,
-                style: TextStyle(
-                    leadingDistribution: TextLeadingDistribution.even,
-                    color: Colors.white.withOpacity(0.8),
-                    backgroundColor: Colors.black,
-                    fontWeight: FontWeight.bold),
-              ),
-            ],
-          ),
+          child: SizedBox(
+              child: Text(
+            value,
+            textAlign: TextAlign.center,
+          )),
         );
       }).toList(),
     );
@@ -266,17 +195,11 @@ class _ListaBaterias extends State<ListaBaterias> {
         tensionNominal: 0,
         tipo: "");
     return DropdownButton<String>(
-      dropdownColor: Colors.black,
-      value: dropdownValue,
-      icon: const Icon(Icons.arrow_downward),
-      elevation: 16,
       style: const TextStyle(
-        color: Colors.white,
+        fontSize: 20,
       ),
-      underline: Container(
-        height: 2,
-        color: Colors.black,
-      ),
+      value: dropdownValue,
+      isDense: true,
       onChanged: (String? newValue) {
         setState(() {
           dropdownValue = newValue!;
@@ -292,18 +215,11 @@ class _ListaBaterias extends State<ListaBaterias> {
       ].map<DropdownMenuItem<String>>((String value) {
         return DropdownMenuItem<String>(
           value: value,
-          child: Column(
-            children: [
-              Text(
-                value,
-                style: TextStyle(
-                    leadingDistribution: TextLeadingDistribution.even,
-                    color: Colors.white.withOpacity(0.8),
-                    backgroundColor: Colors.black,
-                    fontWeight: FontWeight.bold),
-              ),
-            ],
-          ),
+          child: SizedBox(
+              child: Text(
+            value,
+            textAlign: TextAlign.center,
+          )),
         );
       }).toList(),
     );
@@ -322,18 +238,12 @@ class _ListaTensiones extends State<ListaTensiones> {
   @override
   Widget build(BuildContext context) {
     return DropdownButton<String>(
-      dropdownColor: Colors.black,
-      value: dropdownValue,
-      icon: const Icon(Icons.arrow_downward),
-      elevation: 16,
       style: const TextStyle(
-        color: Colors.white,
-        backgroundColor: Colors.white,
+        decorationStyle: TextDecorationStyle.solid,
+        fontSize: 20,
       ),
-      underline: Container(
-        height: 2,
-        color: Colors.black,
-      ),
+      value: dropdownValue,
+      isDense: true,
       onChanged: (String? newValue) {
         setState(() {
           dropdownValue = newValue!;
@@ -353,18 +263,11 @@ class _ListaTensiones extends State<ListaTensiones> {
       ].map<DropdownMenuItem<String>>((String value) {
         return DropdownMenuItem<String>(
           value: value,
-          child: Column(
-            children: [
-              Text(
-                value,
-                style: TextStyle(
-                    leadingDistribution: TextLeadingDistribution.even,
-                    color: Colors.white.withOpacity(0.8),
-                    backgroundColor: Colors.black,
-                    fontWeight: FontWeight.bold),
-              ),
-            ],
-          ),
+          child: SizedBox(
+              child: Text(
+            value,
+            textAlign: TextAlign.center,
+          )),
         );
       }).toList(),
     );

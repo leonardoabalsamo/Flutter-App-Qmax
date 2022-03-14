@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:qmax_inst/theme/theme.dart';
+
 import 'package:qmax_inst/routes/routes.dart';
 import 'package:qmax_inst/src/pages/home_page.dart';
-import 'package:provider/provider.dart';
 import 'package:qmax_inst/src/providers/bateria_provider.dart';
 import 'package:qmax_inst/src/providers/inversor_provider.dart';
 import 'package:qmax_inst/src/providers/seleccion_provider.dart';
-
-import 'theme/theme.dart';
 
 void main() {
   runApp(const MyApp());
@@ -25,9 +25,8 @@ class MyApp extends StatelessWidget {
           ChangeNotifierProvider(create: (_) => SeleccionProvider()),
         ],
         child: MaterialApp(
-            debugShowCheckedModeBanner: false,
-            title: 'Integradores QMAX',
             theme: defaultTheme,
+            debugShowCheckedModeBanner: false,
             initialRoute: 'homePage',
             routes: getApplicationRoutes(),
             onGenerateRoute: (RouteSettings settings) {

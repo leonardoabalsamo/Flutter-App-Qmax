@@ -14,15 +14,9 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       body: homePageColumn(),
       appBar: AppBar(
-        title: const Center(
-          child: Text(
-            'Inicio Qmax e-control SPD',
-            style: TextStyle(color: Colors.white, fontSize: 20.0),
-          ),
-        ),
-        backgroundColor: Colors.blue.shade600,
+        title: const Text('INVERSORES LINEA SPD'),
+        centerTitle: true,
       ),
-      backgroundColor: Colors.black,
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
           Navigator.push(
@@ -30,42 +24,38 @@ class _HomePageState extends State<HomePage> {
             MaterialPageRoute(builder: (context) => const InicioPage()),
           );
         },
-        label: const Text('Continuar',
-            style: TextStyle(color: Colors.white, fontSize: 20.0)),
-        backgroundColor: Colors.blue.shade600,
-        icon: const Icon(Icons.thumb_up),
+        label: const Text(
+          'Continuar',
+        ),
+        icon: const Icon(Icons.arrow_right),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 
   Column homePageColumn() {
-    return Column(mainAxisAlignment: MainAxisAlignment.start, children: [
-      const Divider(
-        color: Colors.white,
-        height: 20,
-        indent: 20,
-        endIndent: 20,
+    return Column(children: [
+      const SizedBox(height: 100),
+      Row(
+        children: [
+          Expanded(
+            child: Image.asset('assets/images/inv.png'),
+          ),
+          Expanded(
+            child: Image.asset('assets/images/monitor.png'),
+          ),
+        ],
       ),
-      Image.asset(
-        "assets/images/inv.png",
-        height: 250.0,
-        width: 250.0,
+      const SizedBox(
+        height: 50,
       ),
-      const Divider(
-        color: Colors.white,
-        height: 20,
-        indent: 20,
-        endIndent: 20,
-      ),
-      Image.asset(
-        "assets/images/cargador.png",
-        height: 250.0,
-        width: 250.0,
-      ),
-      const Text(
-        'El fin de esta aplicación es conocer que configuraciones se deben modificar para cada tipo de solución',
-        style: TextStyle(color: Colors.white, fontSize: 20.0, wordSpacing: 3.0),
+      const Expanded(
+        child: Text(
+          "El fin de esta aplicación es conocer las configuraciones que se deben realizar para cada tipo de solución",
+          textAlign: TextAlign.center,
+          style: TextStyle(fontSize: 24),
+          textScaleFactor: 1,
+        ),
       ),
     ]);
   }

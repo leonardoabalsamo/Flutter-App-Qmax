@@ -1,29 +1,29 @@
 import 'package:flutter/material.dart';
 
-// final defaultDarkTheme = ThemeData.dark().copyWith(
-//   accentColor: Colors.red,
-//   primaryColor: Colors.black,
-//   floatingActionButtonTheme: FloatingActionButtonThemeData(
-//     backgroundColor: Colors.blue,
-//     foregroundColor: Colors.white,
-//   ),
-// );
+final defaultDarkTheme = ThemeData.dark().copyWith(
+  primaryColor: Colors.black,
+  floatingActionButtonTheme: const FloatingActionButtonThemeData(
+    backgroundColor: Colors.blue,
+    foregroundColor: Colors.white,
+  ),
+);
 
 final defaultTheme = ThemeData(
   brightness: Brightness.dark,
   fontFamily: 'Lato',
-  // textSelectionTheme: TextSelectionThemeData(
-  //   selectionColor: Color.fromRGBO(64, 151, 200, 1).withOpacity(.5),
-  //   cursorColor: Color.fromRGBO(64, 151, 200, 1).withOpacity(.6),
-  //   selectionHandleColor: Color.fromRGBO(64, 151, 200, 1).withOpacity(1),
-  // ),
+  textSelectionTheme: TextSelectionThemeData(
+    selectionColor: const Color.fromRGBO(64, 151, 200, 1).withOpacity(.5),
+    cursorColor: const Color.fromRGBO(64, 151, 200, 1).withOpacity(.6),
+    selectionHandleColor: const Color.fromRGBO(64, 151, 200, 1).withOpacity(1),
+  ),
   // textSelectionHandleColor: Colors.transparent,
   // accentColor: Color.fromRGBO(64, 151, 200, 1),
   indicatorColor: const Color.fromRGBO(64, 151, 200, 1),
-  // secondaryHeaderColor: Color.fromRGBO(64, 151, 200, 1),
+  secondaryHeaderColor: const Color.fromRGBO(64, 151, 200, 1),
   primaryColor: const Color.fromRGBO(35, 35, 35, 1), // Colors.black,
   cardColor: Colors.black,
   dividerColor: const Color.fromRGBO(64, 151, 200, 1),
+
   floatingActionButtonTheme: const FloatingActionButtonThemeData(
     backgroundColor: Color.fromRGBO(64, 151, 200, 1),
     foregroundColor: Colors.white,
@@ -48,5 +48,8 @@ final defaultTheme = ThemeData(
         color: Color.fromRGBO(64, 151, 200, 1),
         decoration: TextDecoration.none),
   ),
-  appBarTheme: const AppBarTheme(color: Color.fromRGBO(35, 35, 35, 1)),
+  appBarTheme: const AppBarTheme(
+    color: Color.fromRGBO(35, 35, 35, 1),
+    centerTitle: true,
+  ),
 );
