@@ -401,6 +401,9 @@ class SeleccionProvider extends ChangeNotifier {
   bool validacion() {
     num aux;
 
+    if (inversorSeleccionado.tensionNominalInversor <
+        bateriaSeleccionada.tensionNominalBateria) return false;
+
     aux = inversorSeleccionado.tensionNominalInversor /
         bateriaSeleccionada.tensionNominalBateria;
 

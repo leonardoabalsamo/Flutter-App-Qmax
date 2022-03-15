@@ -65,6 +65,14 @@ class Bateria {
         tensionNominal: 6));
     bat.add(Bateria(
         id: 3,
+        tipo: 'PLOMO ACIDO ',
+        modelo: 'TROJAN 27TMX',
+        fondo: 14.82,
+        flote: 13.50,
+        capacidad: 105,
+        tensionNominal: 12));
+    bat.add(Bateria(
+        id: 4,
         tipo: 'AGM',
         modelo: 'VISION 6FM100X',
         fondo: 7.25,
@@ -72,13 +80,37 @@ class Bateria {
         capacidad: 100,
         tensionNominal: 12));
     bat.add(Bateria(
-        id: 4,
+        id: 5,
         tipo: 'AGM',
         modelo: 'VISION 6FM200X',
         fondo: 7.25,
         flote: 6.8,
         capacidad: 200,
         tensionNominal: 12));
+    bat.add(Bateria(
+        id: 6,
+        tipo: 'LITIO',
+        modelo: 'PYLONTECH US2000C',
+        fondo: 53.5,
+        flote: 52.5,
+        capacidad: 2400,
+        tensionNominal: 48));
+    bat.add(Bateria(
+        id: 7,
+        tipo: 'LITIO',
+        modelo: 'PYLONTECH US3000C',
+        fondo: 53.5,
+        flote: 52.5,
+        capacidad: 3552,
+        tensionNominal: 48));
+    bat.add(Bateria(
+        id: 8,
+        tipo: 'LITIO',
+        modelo: 'PYLONTECH PHANTOM-S',
+        fondo: 53.5,
+        flote: 52.5,
+        capacidad: 2200,
+        tensionNominal: 48));
   }
 
   Map<String, dynamic> toMap() {

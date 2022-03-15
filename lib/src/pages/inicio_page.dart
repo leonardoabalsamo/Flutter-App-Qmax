@@ -175,9 +175,7 @@ class _ListaInversores extends State<ListaInversores> {
     var seleccionProvider = Provider.of<SeleccionProvider>(context);
     var invBusca = Inversor(id: 0, modelo: "", tensionNominal: 0, potencia: 0);
     return DropdownButton<String>(
-      style: const TextStyle(
-        fontSize: 18,
-      ),
+      style: const TextStyle(fontSize: 20, color: Colors.white),
       value: dropdownValue,
       isDense: true,
       borderRadius: BorderRadius.circular(10),
@@ -232,9 +230,7 @@ class _ListaBaterias extends State<ListaBaterias> {
         tensionNominal: 0,
         tipo: "");
     return DropdownButton<String>(
-      style: const TextStyle(
-        fontSize: 18,
-      ),
+      style: const TextStyle(fontSize: 20, color: Colors.white),
       value: dropdownValue,
       isDense: true,
       borderRadius: BorderRadius.circular(10),
@@ -248,8 +244,12 @@ class _ListaBaterias extends State<ListaBaterias> {
         'SELECCIONE LA BATERIA',
         'TROJAN T105',
         'TROJAN T605',
+        'TROJAN 27TMX',
         'VISION 6FM200X',
         'VISION 6FM100X',
+        'PYLONTECH US2000C',
+        'PYLONTECH US3000C',
+        'PYLONTECH PHANTOM-S',
       ].map<DropdownMenuItem<String>>((String value) {
         return DropdownMenuItem<String>(
           value: value,
@@ -276,10 +276,7 @@ class _ListaTensiones extends State<ListaTensiones> {
   @override
   Widget build(BuildContext context) {
     return DropdownButton<String>(
-      style: const TextStyle(
-        decorationStyle: TextDecorationStyle.solid,
-        fontSize: 18,
-      ),
+      style: const TextStyle(fontSize: 20, color: Colors.white),
       value: dropdownValue,
       isDense: true,
       borderRadius: BorderRadius.circular(10),

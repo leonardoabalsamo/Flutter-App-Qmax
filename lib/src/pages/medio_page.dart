@@ -89,9 +89,7 @@ class _ListaTipo extends State<ListaTipo> {
   @override
   Widget build(BuildContext context) {
     return DropdownButton<String>(
-      style: const TextStyle(
-        fontSize: 20,
-      ),
+      style: const TextStyle(fontSize: 20, color: Colors.white),
       borderRadius: BorderRadius.circular(10),
       value: dropdownValue,
       isDense: true,
@@ -131,9 +129,7 @@ class _ListaRed extends State<ListaRed> {
   @override
   Widget build(BuildContext context) {
     return DropdownButton<String>(
-      style: const TextStyle(
-        fontSize: 20,
-      ),
+      style: const TextStyle(fontSize: 20, color: Colors.white),
       borderRadius: BorderRadius.circular(10),
       value: dropdownValue,
       isDense: true,
@@ -185,9 +181,7 @@ class _ListaSolucion extends State<ListaSolucion> {
   @override
   Widget build(BuildContext context) {
     return DropdownButton<String>(
-      style: const TextStyle(
-        fontSize: 20,
-      ),
+      style: const TextStyle(fontSize: 20, color: Colors.white),
       borderRadius: BorderRadius.circular(10),
       value: dropdownValue,
       isDense: true,
