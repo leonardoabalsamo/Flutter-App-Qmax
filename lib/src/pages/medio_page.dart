@@ -24,30 +24,30 @@ class _MedioPage extends State<MedioPage> {
             children: [
               const ListaTipo(),
               const SizedBox(
-                height: 25,
+                height: 5,
               ),
               Image.asset(
                 "assets/images/instalacion.png",
-                height: 160.0,
+                height: 140.0,
                 width: 160.0,
               ),
               const SizedBox(
-                height: 25,
+                height: 5,
               ),
               const ListaRed(),
               Image.asset(
                 "assets/images/inversor_iq.png",
-                height: 180.0,
+                height: 120.0,
                 width: 180.0,
               ),
               const ListaSolucion(),
               const SizedBox(
-                height: 25,
+                height: 5,
               ),
               Image.asset(
                 "assets/images/logo_bateria_t.png",
-                height: 90.0,
-                width: 90.0,
+                height: 70.0,
+                width: 70.0,
               ),
             ],
           ),
@@ -55,7 +55,7 @@ class _MedioPage extends State<MedioPage> {
       ),
       appBar: AppBar(
         title: const Text(
-          'SOLUCION INSTALADA',
+          'SOLUCION PLANTEADA',
         ),
       ),
       floatingActionButton: FloatingActionButton.extended(
@@ -88,6 +88,7 @@ class _ListaTipo extends State<ListaTipo> {
       style: const TextStyle(
         fontSize: 20,
       ),
+      borderRadius: BorderRadius.circular(10),
       value: dropdownValue,
       isDense: true,
       onChanged: (String? newValue) {
@@ -129,6 +130,7 @@ class _ListaRed extends State<ListaRed> {
       style: const TextStyle(
         fontSize: 20,
       ),
+      borderRadius: BorderRadius.circular(10),
       value: dropdownValue,
       isDense: true,
       onChanged: (String? newValue) {
@@ -170,6 +172,7 @@ class _ListaSolucion extends State<ListaSolucion> {
       style: const TextStyle(
         fontSize: 20,
       ),
+      borderRadius: BorderRadius.circular(10),
       value: dropdownValue,
       isDense: true,
       onChanged: (String? newValue) {

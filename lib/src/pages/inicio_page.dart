@@ -32,8 +32,7 @@ class _InicioPageState extends State<InicioPage> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const SizedBox(
-                width: 10,
-                height: 10,
+                height: 5,
               ),
               const ListaInversores(),
               const SizedBox(
@@ -42,12 +41,11 @@ class _InicioPageState extends State<InicioPage> {
               ),
               Image.asset(
                 'assets/images/inv.png',
-                height: 250,
+                height: 140,
               ),
               const ListaBaterias(),
               const SizedBox(
-                width: 10,
-                height: 20,
+                height: 5,
               ),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -74,6 +72,37 @@ class _InicioPageState extends State<InicioPage> {
           'SELECCION DE MODELO',
         ),
         centerTitle: true,
+        actions: [
+          IconButton(
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) => AlertDialog(
+                    contentPadding: const EdgeInsets.all(10.0),
+                    content: Row(
+                      children: const <Widget>[
+                        Expanded(
+                          child: Text(
+                            "La selección no puede superar los 4 bancos de baterías en paralelo por desbalance en carga y descarga. ",
+                            style: TextStyle(
+                              fontSize: 16,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    actions: <Widget>[
+                      TextButton(
+                          child: const Text('Aceptar'),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          }),
+                    ],
+                  ),
+                );
+              },
+              icon: const Icon(Icons.help))
+        ],
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () async {
@@ -99,14 +128,14 @@ class _InicioPageState extends State<InicioPage> {
     return showDialog(
       context: context,
       builder: (BuildContext context) => AlertDialog(
-        contentPadding: const EdgeInsets.all(13.0),
+        contentPadding: const EdgeInsets.all(10.0),
         content: Row(
           children: const <Widget>[
             Expanded(
               child: Text(
-                "No es posible la combinación. Reintente",
+                "No es posible la combinación indicada. Reintente",
                 style: TextStyle(
-                  fontSize: 20,
+                  fontSize: 14,
                 ),
               ),
             ),
@@ -140,7 +169,7 @@ class _ListaInversores extends State<ListaInversores> {
     var invBusca = Inversor(id: 0, modelo: "", tensionNominal: 0, potencia: 0);
     return DropdownButton<String>(
       style: const TextStyle(
-        fontSize: 20,
+        fontSize: 18,
       ),
       value: dropdownValue,
       isDense: true,
@@ -196,7 +225,7 @@ class _ListaBaterias extends State<ListaBaterias> {
         tipo: "");
     return DropdownButton<String>(
       style: const TextStyle(
-        fontSize: 20,
+        fontSize: 18,
       ),
       value: dropdownValue,
       isDense: true,
@@ -240,7 +269,7 @@ class _ListaTensiones extends State<ListaTensiones> {
     return DropdownButton<String>(
       style: const TextStyle(
         decorationStyle: TextDecorationStyle.solid,
-        fontSize: 20,
+        fontSize: 18,
       ),
       value: dropdownValue,
       isDense: true,

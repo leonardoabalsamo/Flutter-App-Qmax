@@ -35,8 +35,7 @@ class _ConfigPage extends State<ConfigPage> {
               children: [
                 Image.asset(
                   "assets/images/inv.png",
-                  height: 280.0,
-                  width: 280.0,
+                  height: 140.0,
                 ),
                 SizedBox(
                     height: 600,

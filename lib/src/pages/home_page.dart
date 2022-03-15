@@ -14,6 +14,37 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       body: homePageColumn(),
       appBar: AppBar(
+        actions: [
+          IconButton(
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) => AlertDialog(
+                    contentPadding: const EdgeInsets.all(10.0),
+                    content: Row(
+                      children: const <Widget>[
+                        Expanded(
+                          child: Text(
+                            "La nueva App brinda una forma ágil y rápida para configurar los Inversores SP Digital según la solución planteada ",
+                            style: TextStyle(
+                              fontSize: 16,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    actions: <Widget>[
+                      TextButton(
+                          child: const Text('Aceptar'),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          }),
+                    ],
+                  ),
+                );
+              },
+              icon: const Icon(Icons.help))
+        ],
         title: const Text('INVERSORES LINEA SPD'),
         centerTitle: true,
       ),
@@ -25,7 +56,7 @@ class _HomePageState extends State<HomePage> {
           );
         },
         label: const Text(
-          'Continuar',
+          'Ingresar',
         ),
         icon: const Icon(Icons.arrow_right),
       ),
@@ -47,13 +78,13 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
       const SizedBox(
-        height: 50,
+        height: 5,
       ),
       const Expanded(
         child: Text(
-          "El fin de esta aplicación es conocer las configuraciones que se deben realizar para cada tipo de solución",
+          "¡Bienvenido!",
           textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 24),
+          style: TextStyle(fontSize: 28),
           textScaleFactor: 1,
         ),
       ),
