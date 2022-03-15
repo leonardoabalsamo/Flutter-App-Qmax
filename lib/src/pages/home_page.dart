@@ -45,7 +45,8 @@ class _HomePageState extends State<HomePage> {
               },
               icon: const Icon(Icons.help))
         ],
-        title: const Text('INVERSORES LINEA SPD'),
+        title:
+            const Text('INVERSORES LINEA SPD', style: TextStyle(fontSize: 12)),
         centerTitle: true,
       ),
       floatingActionButton: FloatingActionButton.extended(
@@ -64,18 +65,15 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Column homePageColumn() {
-    return Column(children: [
+  Center homePageColumn() {
+    return Center(
+        child: Column(children: [
       const SizedBox(height: 100),
-      Row(
-        children: [
-          Expanded(
-            child: Image.asset('assets/images/inv.png'),
-          ),
-          Expanded(
-            child: Image.asset('assets/images/monitor.png'),
-          ),
-        ],
+      Expanded(
+        child: Image.asset('assets/images/inv.png'),
+      ),
+      Expanded(
+        child: Image.asset('assets/images/monitor.png'),
       ),
       const SizedBox(
         height: 5,
@@ -88,6 +86,6 @@ class _HomePageState extends State<HomePage> {
           textScaleFactor: 1,
         ),
       ),
-    ]);
+    ]));
   }
 }

@@ -23,31 +23,32 @@ class _InicioPageState extends State<InicioPage> {
     var seleccionProvider = Provider.of<SeleccionProvider>(context);
     return Scaffold(
       body: Center(
-        child: ListView(children: [
-          Container(
-            padding: const EdgeInsets.all(10),
-          ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const SizedBox(
-                height: 5,
-              ),
-              const ListaInversores(),
-              const SizedBox(
-                width: 10,
-                height: 10,
-              ),
-              Image.asset(
+        child: Expanded(
+            child: Column(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(10),
+            ),
+            const SizedBox(
+              height: 5,
+            ),
+            const ListaInversores(),
+            const SizedBox(
+              width: 10,
+              height: 10,
+            ),
+            Expanded(
+              child: Image.asset(
                 'assets/images/inv.png',
                 height: 140,
               ),
-              const ListaBaterias(),
-              const SizedBox(
-                height: 5,
-              ),
-              Row(
+            ),
+            const ListaBaterias(),
+            const SizedBox(
+              height: 5,
+            ),
+            Expanded(
+              child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Expanded(
@@ -62,14 +63,20 @@ class _InicioPageState extends State<InicioPage> {
                   ),
                 ],
               ),
-              const ListaTensiones(),
-            ],
-          ),
-        ]),
+            ),
+            const ListaTensiones(),
+            const Expanded(
+              child: SizedBox(
+                height: 10,
+              ),
+            )
+          ],
+        )),
       ),
       appBar: AppBar(
         title: const Text(
           'SELECCION DE MODELO',
+          style: TextStyle(fontSize: 12),
         ),
         centerTitle: true,
         actions: [
@@ -173,6 +180,7 @@ class _ListaInversores extends State<ListaInversores> {
       ),
       value: dropdownValue,
       isDense: true,
+      borderRadius: BorderRadius.circular(10),
       onChanged: (String? newValue) {
         setState(() {
           dropdownValue = newValue!;
@@ -229,6 +237,7 @@ class _ListaBaterias extends State<ListaBaterias> {
       ),
       value: dropdownValue,
       isDense: true,
+      borderRadius: BorderRadius.circular(10),
       onChanged: (String? newValue) {
         setState(() {
           dropdownValue = newValue!;
@@ -273,6 +282,7 @@ class _ListaTensiones extends State<ListaTensiones> {
       ),
       value: dropdownValue,
       isDense: true,
+      borderRadius: BorderRadius.circular(10),
       onChanged: (String? newValue) {
         setState(() {
           dropdownValue = newValue!;

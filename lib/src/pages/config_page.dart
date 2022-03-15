@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../providers/seleccion_provider.dart';
+
 import '../models/bateria_model.dart';
 import '../models/inversor_model.dart';
 import '../models/seleccion_model.dart';
-import '../providers/seleccion_provider.dart';
 import 'inicio_page.dart';
 
 class ConfigPage extends StatefulWidget {
@@ -52,7 +53,7 @@ class _ConfigPage extends State<ConfigPage> {
         appBar: AppBar(
           title: const Text(
             'CONFIGURACIÓN RECOMENDADA',
-            style: TextStyle(fontSize: 16),
+            style: TextStyle(fontSize: 12),
           ),
         ),
         floatingActionButton: FloatingActionButton.extended(
@@ -90,7 +91,7 @@ class _ConfigPage extends State<ConfigPage> {
               style: TextStyle(
                   fontFamily: 'Ubuntu',
                   color: Colors.white,
-                  fontSize: 18,
+                  fontSize: 15,
                   leadingDistribution: TextLeadingDistribution.proportional)));
           retorno.add(const Divider());
           retorno.add(Text(
@@ -98,7 +99,7 @@ class _ConfigPage extends State<ConfigPage> {
               style: const TextStyle(
                   fontFamily: 'Ubuntu',
                   color: Colors.white,
-                  fontSize: 18,
+                  fontSize: 15,
                   leadingDistribution: TextLeadingDistribution.proportional)));
           retorno.add(const Divider());
 
@@ -106,7 +107,7 @@ class _ConfigPage extends State<ConfigPage> {
               style: const TextStyle(
                   fontFamily: 'Ubuntu',
                   color: Colors.white,
-                  fontSize: 18,
+                  fontSize: 15,
                   leadingDistribution: TextLeadingDistribution.proportional)));
           retorno.add(const Divider());
         } else {
@@ -114,7 +115,7 @@ class _ConfigPage extends State<ConfigPage> {
               style: TextStyle(
                   fontFamily: 'Ubuntu',
                   color: Colors.white,
-                  fontSize: 18,
+                  fontSize: 15,
                   leadingDistribution: TextLeadingDistribution.proportional)));
           retorno.add(const Divider());
 
@@ -125,7 +126,7 @@ class _ConfigPage extends State<ConfigPage> {
               style: const TextStyle(
                   fontFamily: 'Ubuntu',
                   color: Colors.white,
-                  fontSize: 18,
+                  fontSize: 15,
                   leadingDistribution: TextLeadingDistribution.proportional)));
           retorno.add(const Divider());
 
@@ -136,7 +137,7 @@ class _ConfigPage extends State<ConfigPage> {
               style: const TextStyle(
                   fontFamily: 'Ubuntu',
                   color: Colors.white,
-                  fontSize: 18,
+                  fontSize: 15,
                   leadingDistribution: TextLeadingDistribution.proportional)));
           retorno.add(const Divider());
 
@@ -144,7 +145,7 @@ class _ConfigPage extends State<ConfigPage> {
               style: TextStyle(
                   fontFamily: 'Ubuntu',
                   color: Colors.white,
-                  fontSize: 18,
+                  fontSize: 15,
                   leadingDistribution: TextLeadingDistribution.proportional)));
           retorno.add(const Divider());
 
@@ -153,7 +154,7 @@ class _ConfigPage extends State<ConfigPage> {
               style: const TextStyle(
                   fontFamily: 'Ubuntu',
                   color: Colors.white,
-                  fontSize: 18,
+                  fontSize: 15,
                   leadingDistribution: TextLeadingDistribution.proportional)));
           retorno.add(const Divider());
 
@@ -161,7 +162,7 @@ class _ConfigPage extends State<ConfigPage> {
               style: const TextStyle(
                   fontFamily: 'Ubuntu',
                   color: Colors.white,
-                  fontSize: 18,
+                  fontSize: 15,
                   leadingDistribution: TextLeadingDistribution.proportional)));
           retorno.add(const Divider());
         }
@@ -170,7 +171,7 @@ class _ConfigPage extends State<ConfigPage> {
             style: TextStyle(
                 fontFamily: 'Ubuntu',
                 color: Colors.white,
-                fontSize: 18,
+                fontSize: 15,
                 leadingDistribution: TextLeadingDistribution.proportional)));
         retorno.add(const Divider());
 
@@ -178,7 +179,7 @@ class _ConfigPage extends State<ConfigPage> {
             style: TextStyle(
                 fontFamily: 'Ubuntu',
                 color: Colors.white,
-                fontSize: 18,
+                fontSize: 15,
                 leadingDistribution: TextLeadingDistribution.proportional)));
         retorno.add(const Divider());
 
@@ -186,7 +187,7 @@ class _ConfigPage extends State<ConfigPage> {
             style: const TextStyle(
                 fontFamily: 'Ubuntu',
                 color: Colors.white,
-                fontSize: 18,
+                fontSize: 15,
                 leadingDistribution: TextLeadingDistribution.proportional)));
         retorno.add(const Divider());
       }
@@ -195,7 +196,7 @@ class _ConfigPage extends State<ConfigPage> {
           style: TextStyle(
               fontFamily: 'Ubuntu',
               color: Colors.white,
-              fontSize: 18,
+              fontSize: 15,
               leadingDistribution: TextLeadingDistribution.proportional)));
       retorno.add(const Divider());
 
@@ -203,7 +204,7 @@ class _ConfigPage extends State<ConfigPage> {
           style: TextStyle(
               fontFamily: 'Ubuntu',
               color: Colors.white,
-              fontSize: 18,
+              fontSize: 15,
               leadingDistribution: TextLeadingDistribution.proportional)));
       retorno.add(const Divider());
 
@@ -211,7 +212,7 @@ class _ConfigPage extends State<ConfigPage> {
           style: const TextStyle(
               fontFamily: 'Ubuntu',
               color: Colors.white,
-              fontSize: 18,
+              fontSize: 15,
               leadingDistribution: TextLeadingDistribution.proportional)));
       retorno.add(const Divider());
     }

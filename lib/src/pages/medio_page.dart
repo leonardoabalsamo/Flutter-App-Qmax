@@ -16,47 +16,51 @@ class _MedioPage extends State<MedioPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: ListView(children: [
-          const SizedBox(
-            height: 25,
-          ),
-          Column(
+        child: Expanded(
+          child: Column(
             children: [
+              const SizedBox(
+                height: 15,
+              ),
               const ListaTipo(),
               const SizedBox(
                 height: 5,
               ),
-              Image.asset(
+              Expanded(
+                  child: Image.asset(
                 "assets/images/instalacion.png",
-                height: 140.0,
-                width: 160.0,
-              ),
+                // height: 140.0,
+                // width: 160.0,
+              )),
               const SizedBox(
                 height: 5,
               ),
               const ListaRed(),
-              Image.asset(
+              Expanded(
+                  child: Image.asset(
                 "assets/images/inversor_iq.png",
-                height: 120.0,
-                width: 180.0,
-              ),
+                // height: 120.0,
+                // width: 180.0,
+              )),
               const ListaSolucion(),
               const SizedBox(
                 height: 5,
               ),
-              Image.asset(
+              Expanded(
+                  child: Image.asset(
                 "assets/images/logo_bateria_t.png",
-                height: 70.0,
-                width: 70.0,
+                // height: 70.0,
+                // width: 70.0,
+              )),
+              const SizedBox(
+                height: 55,
               ),
             ],
           ),
-        ]),
+        ),
       ),
       appBar: AppBar(
-        title: const Text(
-          'SOLUCION PLANTEADA',
-        ),
+        title: const Text('SOLUCION PLANTEADA', style: TextStyle(fontSize: 12)),
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
@@ -68,7 +72,7 @@ class _MedioPage extends State<MedioPage> {
         label: const Text('Obtener Configuración'),
         icon: const Icon(Icons.arrow_forward),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 }
@@ -155,6 +159,18 @@ class _ListaRed extends State<ListaRed> {
       }).toList(),
     );
   }
+
+  // List<String>? cargaItems() {
+  //   var lista = <String>[
+  //     'RED ELECTRICA',
+  //     'SI',
+  //     'NO',
+  //   ];
+  //   if (Seleccion.tipoInstalacion == 'VEHICULOS') {
+  //     return null;
+  //   } else
+  //     return lista;
+  // }
 }
 
 class ListaSolucion extends StatefulWidget {
