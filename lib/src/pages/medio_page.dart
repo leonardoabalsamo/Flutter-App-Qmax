@@ -16,47 +16,45 @@ class _MedioPage extends State<MedioPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Expanded(
-          child: Column(
-            children: [
-              const SizedBox(
-                height: 15,
-              ),
-              const ListaTipo(),
-              const SizedBox(
-                height: 5,
-              ),
-              Expanded(
-                  child: Image.asset(
-                "assets/images/instalacion.png",
-                // height: 140.0,
-                // width: 160.0,
-              )),
-              const SizedBox(
-                height: 5,
-              ),
-              const ListaRed(),
-              Expanded(
-                  child: Image.asset(
-                "assets/images/inversor_iq.png",
-                // height: 120.0,
-                // width: 180.0,
-              )),
-              const ListaSolucion(),
-              const SizedBox(
-                height: 5,
-              ),
-              Expanded(
-                  child: Image.asset(
-                "assets/images/logo_bateria_t.png",
-                // height: 70.0,
-                // width: 70.0,
-              )),
-              const SizedBox(
-                height: 55,
-              ),
-            ],
-          ),
+        child: Column(
+          children: [
+            const SizedBox(
+              height: 15,
+            ),
+            const ListaTipo(),
+            const SizedBox(
+              height: 5,
+            ),
+            Expanded(
+                child: Image.asset(
+              "assets/images/instalacion.png",
+              // height: 140.0,
+              // width: 160.0,
+            )),
+            const SizedBox(
+              height: 5,
+            ),
+            const ListaRed(),
+            Expanded(
+                child: Image.asset(
+              "assets/images/inversor_iq.png",
+              // height: 120.0,
+              // width: 180.0,
+            )),
+            const ListaSolucion(),
+            const SizedBox(
+              height: 5,
+            ),
+            Expanded(
+                child: Image.asset(
+              "assets/images/logo_bateria_t.png",
+              // height: 70.0,
+              // width: 70.0,
+            )),
+            const SizedBox(
+              height: 55,
+            ),
+          ],
         ),
       ),
       appBar: AppBar(
@@ -75,6 +73,33 @@ class _MedioPage extends State<MedioPage> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
+  //   Future _showError(BuildContext context) {
+  //   return showDialog(
+  //     context: context,
+  //     builder: (BuildContext context) => AlertDialog(
+  //       contentPadding: const EdgeInsets.all(10.0),
+  //       content: Row(
+  //         children: const <Widget>[
+  //           Expanded(
+  //             child: Text(
+  //               "No es posible la combinación indicada. Reintente",
+  //               style: TextStyle(
+  //                 fontSize: 14,
+  //               ),
+  //             ),
+  //           ),
+  //         ],
+  //       ),
+  //       actions: <Widget>[
+  //         TextButton(
+  //             child: const Text('Aceptar'),
+  //             onPressed: () {
+  //               Navigator.pop(context);
+  //             }),
+  //       ],
+  //     ),
+  //   );
+  // }
 }
 
 class ListaTipo extends StatefulWidget {

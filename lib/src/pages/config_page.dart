@@ -1,4 +1,13 @@
+// ignore_for_file: unused_import
+
+import 'dart:io';
+import 'dart:async';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:open_file/open_file.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import '../providers/seleccion_provider.dart';
 
@@ -6,6 +15,8 @@ import '../models/bateria_model.dart';
 import '../models/inversor_model.dart';
 import '../models/seleccion_model.dart';
 import 'inicio_page.dart';
+
+//const String _url = 'https://www.qmax.com.ar/#!art/doc/255';
 
 class ConfigPage extends StatefulWidget {
   const ConfigPage({
@@ -38,6 +49,16 @@ class _ConfigPage extends State<ConfigPage> {
                   "assets/images/inv.png",
                   height: 140.0,
                 ),
+                Center(
+                  child: ElevatedButton(
+                    child: const Text('Abrir PDF'),
+                    onPressed: () async {
+                      var file = await getAssetByName(
+                          "manuales/manual_inversor_spd.pdf");
+                      OpenFile.open(file.path, type: "application/pdf");
+                    },
+                  ),
+                ),
                 SizedBox(
                     height: 600,
                     child: ListView(
@@ -45,7 +66,7 @@ class _ConfigPage extends State<ConfigPage> {
                         scrollDirection: Axis.vertical,
                         children: _verificaConfiguracion(
                             seleccionProvider.getInversor(),
-                            seleccionProvider.getBateria)))
+                            seleccionProvider.getBateria))),
               ],
             ),
           ]),
@@ -58,6 +79,10 @@ class _ConfigPage extends State<ConfigPage> {
         ),
         floatingActionButton: FloatingActionButton.extended(
           onPressed: () {
+            Seleccion.cantidad = 0;
+            Seleccion.red = "";
+            Seleccion.tipoInstalacion = "";
+            Seleccion.tipoSolucion = "";
             Navigator.push(context,
                 MaterialPageRoute(builder: (context) => const InicioPage()));
           },
@@ -84,8 +109,12 @@ class _ConfigPage extends State<ConfigPage> {
     if (Seleccion.tipoInstalacion == "ESTACIONARIA") {
       if (Seleccion.red == "SI") {
         if (Seleccion.tipoSolucion == "BACKUP") {
-          retorno.add(const Text("MODO DE FUNCIONAMIENTO:   INVERSOR-CARGADOR ",
-              style: TextStyle(color: Colors.white)));
+          retorno.add(const Text("MODO DE FUNCIONAMIENTO:   INV/CARG ",
+              style: TextStyle(
+                  fontFamily: 'Ubuntu',
+                  color: Colors.white,
+                  fontSize: 15,
+                  leadingDistribution: TextLeadingDistribution.proportional)));
           retorno.add(const Divider());
           retorno.add(const Text("PERFIL DE ENTRADA:   ESTRICTA ",
               style: TextStyle(
@@ -110,6 +139,22 @@ class _ConfigPage extends State<ConfigPage> {
                   fontSize: 15,
                   leadingDistribution: TextLeadingDistribution.proportional)));
           retorno.add(const Divider());
+
+          /////////          BACKUP
+          ///////////////////////////////////////////////////////
+
+          // Map<int, String> data = {
+          //   2: '0', // modo
+          //   167: '0', // perfil de entrada
+          //   10: finalbanco.toString(), // capacidad banco
+          //   13: 'PerfilBateria' // perfil bat
+          // };
+
+          // final String jsonString = jsonEncode(data);
+          // print(jsonString);
+
+          ///////////////////////////////////////////////////////
+
         } else {
           retorno.add(const Text("MODO: AUTOCONSUMO ",
               style: TextStyle(
@@ -191,7 +236,8 @@ class _ConfigPage extends State<ConfigPage> {
                 leadingDistribution: TextLeadingDistribution.proportional)));
         retorno.add(const Divider());
       }
-    } else {
+    }
+    if (Seleccion.tipoInstalacion == "VEHICULOS") {
       retorno.add(const Text("MODO: SOLO CARGADOR ",
           style: TextStyle(
               fontFamily: 'Ubuntu',
@@ -216,6 +262,20 @@ class _ConfigPage extends State<ConfigPage> {
               leadingDistribution: TextLeadingDistribution.proportional)));
       retorno.add(const Divider());
     }
+
     return retorno;
   }
+}
+
+Future<File> getAssetByName(String sourceName) async {
+  var sampleData = await rootBundle.load("assets/$sourceName");
+  final path = await _localPath;
+  var file = File('$path/manual_inversor_spd.pdf'); //File('$path/$sourceName');
+  file = await file.writeAsBytes(sampleData.buffer.asUint8List());
+  return file;
+}
+
+Future<String> get _localPath async {
+  final directory = await getApplicationDocumentsDirectory();
+  return directory.path;
 }

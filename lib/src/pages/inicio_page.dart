@@ -23,56 +23,57 @@ class _InicioPageState extends State<InicioPage> {
     var seleccionProvider = Provider.of<SeleccionProvider>(context);
     return Scaffold(
       body: Center(
-        child: Expanded(
-            child: Column(
-          children: [
-            Container(
-              padding: const EdgeInsets.all(10),
+          //child: Expanded(
+          child: Column(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(10),
+          ),
+          const SizedBox(
+            height: 5,
+          ),
+          const ListaInversores(),
+          const SizedBox(
+            width: 10,
+            height: 10,
+          ),
+          Expanded(
+            child: Image.asset(
+              'assets/images/inv.png',
+              height: 140,
             ),
-            const SizedBox(
-              height: 5,
+          ),
+          const ListaBaterias(),
+          const SizedBox(
+            height: 5,
+          ),
+          Expanded(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: Image.asset('assets/images/vision.png'),
+                ),
+                Expanded(
+                  flex: 2,
+                  child: Image.asset('assets/images/pylontech.png'),
+                ),
+                Expanded(
+                  child: Image.asset('assets/images/bateria.png'),
+                ),
+              ],
             ),
-            const ListaInversores(),
-            const SizedBox(
-              width: 10,
+          ),
+          const ListaTensiones(),
+          const Expanded(
+            child: SizedBox(
               height: 10,
             ),
-            Expanded(
-              child: Image.asset(
-                'assets/images/inv.png',
-                height: 140,
-              ),
-            ),
-            const ListaBaterias(),
-            const SizedBox(
-              height: 5,
-            ),
-            Expanded(
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Expanded(
-                    child: Image.asset('assets/images/vision.png'),
-                  ),
-                  Expanded(
-                    flex: 2,
-                    child: Image.asset('assets/images/pylontech.png'),
-                  ),
-                  Expanded(
-                    child: Image.asset('assets/images/bateria.png'),
-                  ),
-                ],
-              ),
-            ),
-            const ListaTensiones(),
-            const Expanded(
-              child: SizedBox(
-                height: 10,
-              ),
-            )
-          ],
-        )),
-      ),
+          )
+        ],
+      )
+          //),
+          ),
       appBar: AppBar(
         title: const Text(
           'SELECCION DE MODELO',
