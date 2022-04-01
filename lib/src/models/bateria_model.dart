@@ -49,7 +49,7 @@ class Bateria {
   creaBaterias() {
     bat.add(Bateria(
         id: 1,
-        tipo: 'PLOMO ACIDO ',
+        tipo: 'PB-ACIDO',
         modelo: 'TROJAN T105',
         fondo: 7.25,
         flote: 6.8,
@@ -57,7 +57,7 @@ class Bateria {
         tensionNominal: 6));
     bat.add(Bateria(
         id: 2,
-        tipo: 'PLOMO ACIDO ',
+        tipo: 'PB-ACIDO',
         modelo: 'TROJAN T605',
         fondo: 7.25,
         flote: 6.8,
@@ -65,7 +65,7 @@ class Bateria {
         tensionNominal: 6));
     bat.add(Bateria(
         id: 3,
-        tipo: 'PLOMO ACIDO ',
+        tipo: 'PB-ACIDO',
         modelo: 'TROJAN 27TMX',
         fondo: 14.82,
         flote: 13.50,
