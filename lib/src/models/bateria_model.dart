@@ -93,7 +93,7 @@ class Bateria {
         modelo: 'PYLONTECH US2000C',
         fondo: 53.5,
         flote: 52.5,
-        capacidad: 2400,
+        capacidad: 50,
         tensionNominal: 48));
     bat.add(Bateria(
         id: 7,
@@ -101,7 +101,7 @@ class Bateria {
         modelo: 'PYLONTECH US3000C',
         fondo: 53.5,
         flote: 52.5,
-        capacidad: 3552,
+        capacidad: 74,
         tensionNominal: 48));
     bat.add(Bateria(
         id: 8,
@@ -109,7 +109,7 @@ class Bateria {
         modelo: 'PYLONTECH PHANTOM-S',
         fondo: 53.5,
         flote: 52.5,
-        capacidad: 2200,
+        capacidad: 50,
         tensionNominal: 48));
   }
 

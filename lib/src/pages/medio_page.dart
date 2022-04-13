@@ -111,7 +111,7 @@ class _MedioPage extends State<MedioPage> {
             switch (seleccionProvider.tipoSolucion) {
               case 'BACKUP':
                 return check;
-              case 'INTERACTIVO':
+              case 'AUTOCONSUMO':
                 return check;
               default:
                 check = false;
