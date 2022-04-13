@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import '../models/seleccion_model.dart';
+import 'package:provider/provider.dart';
+import '../providers/seleccion_provider.dart';
 import 'config_page.dart';
 
 class MedioPage extends StatefulWidget {
@@ -28,8 +29,6 @@ class _MedioPage extends State<MedioPage> {
             Expanded(
                 child: Image.asset(
               "assets/images/instalacion.png",
-              // height: 140.0,
-              // width: 160.0,
             )),
             const SizedBox(
               height: 5,
@@ -38,8 +37,6 @@ class _MedioPage extends State<MedioPage> {
             Expanded(
                 child: Image.asset(
               "assets/images/inversor_iq.png",
-              // height: 120.0,
-              // width: 180.0,
             )),
             const ListaSolucion(),
             const SizedBox(
@@ -48,8 +45,6 @@ class _MedioPage extends State<MedioPage> {
             Expanded(
                 child: Image.asset(
               "assets/images/logo_bateria_t.png",
-              // height: 70.0,
-              // width: 70.0,
             )),
             const SizedBox(
               height: 55,
@@ -62,10 +57,39 @@ class _MedioPage extends State<MedioPage> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const ConfigPage()),
-          );
+          bool check = validaInst();
+          if (check == true) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const ConfigPage()),
+            );
+          } else {
+            showDialog(
+              context: context,
+              builder: (BuildContext context) => AlertDialog(
+                contentPadding: const EdgeInsets.all(10.0),
+                content: Row(
+                  children: const <Widget>[
+                    Expanded(
+                      child: Text(
+                        "La selección no es correcta, reintente. ",
+                        style: TextStyle(
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                actions: <Widget>[
+                  TextButton(
+                      child: const Text('Aceptar'),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      }),
+                ],
+              ),
+            );
+          }
         },
         label: const Text('Obtener Configuración'),
         icon: const Icon(Icons.arrow_forward),
@@ -73,33 +97,39 @@ class _MedioPage extends State<MedioPage> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
-  //   Future _showError(BuildContext context) {
-  //   return showDialog(
-  //     context: context,
-  //     builder: (BuildContext context) => AlertDialog(
-  //       contentPadding: const EdgeInsets.all(10.0),
-  //       content: Row(
-  //         children: const <Widget>[
-  //           Expanded(
-  //             child: Text(
-  //               "No es posible la combinación indicada. Reintente",
-  //               style: TextStyle(
-  //                 fontSize: 14,
-  //               ),
-  //             ),
-  //           ),
-  //         ],
-  //       ),
-  //       actions: <Widget>[
-  //         TextButton(
-  //             child: const Text('Aceptar'),
-  //             onPressed: () {
-  //               Navigator.pop(context);
-  //             }),
-  //       ],
-  //     ),
-  //   );
-  // }
+
+  bool validaInst() {
+    bool check = true;
+
+    var seleccionProvider =
+        Provider.of<SeleccionProvider>(context, listen: false);
+
+    switch (seleccionProvider.tipoInstalacion) {
+      case 'ESTACIONARIA':
+        switch (seleccionProvider.red) {
+          case 'SI':
+            switch (seleccionProvider.tipoSolucion) {
+              case 'BACKUP':
+                return check;
+              case 'INTERACTIVO':
+                return check;
+              default:
+                check = false;
+                return check;
+            }
+          case 'NO':
+            return check;
+          default:
+            check = false;
+            return check;
+        }
+      case 'VEHICULOS':
+        return check;
+      default:
+        check = false;
+        return check;
+    }
+  }
 }
 
 class ListaTipo extends StatefulWidget {
@@ -113,6 +143,8 @@ class _ListaTipo extends State<ListaTipo> {
   String dropdownValue = 'TIPO DE INSTALACION';
   @override
   Widget build(BuildContext context) {
+    var seleccionProvider =
+        Provider.of<SeleccionProvider>(context, listen: true);
     return DropdownButton<String>(
       style: const TextStyle(fontSize: 20, color: Colors.white),
       borderRadius: BorderRadius.circular(10),
@@ -121,7 +153,8 @@ class _ListaTipo extends State<ListaTipo> {
       onChanged: (String? newValue) {
         setState(() {
           dropdownValue = newValue!;
-          Seleccion.tipoInstalacion = newValue;
+          seleccionProvider.tipoInstalacion = newValue;
+          seleccionProvider.notifyListeners();
         });
       },
       items: <String>[
@@ -153,45 +186,72 @@ class _ListaRed extends State<ListaRed> {
   String dropdownValue = 'RED ELECTRICA';
   @override
   Widget build(BuildContext context) {
-    return DropdownButton<String>(
-      style: const TextStyle(fontSize: 20, color: Colors.white),
-      borderRadius: BorderRadius.circular(10),
-      value: dropdownValue,
-      isDense: true,
-      onChanged: (String? newValue) {
-        setState(() {
-          dropdownValue = newValue!;
-          Seleccion.red = newValue;
-        });
-      },
-      items: <String>[
-        'RED ELECTRICA',
-        'SI',
-        'NO',
-      ].map<DropdownMenuItem<String>>((String value) {
-        return DropdownMenuItem<String>(
-          value: value,
-          child: SizedBox(
-              child: Text(
-            value,
-            textAlign: TextAlign.center,
-          )),
-        );
-      }).toList(),
-    );
-  }
+    var seleccionProvider =
+        Provider.of<SeleccionProvider>(context, listen: true);
+    String tipoinst = seleccionProvider.tipoInstalacion;
 
-  // List<String>? cargaItems() {
-  //   var lista = <String>[
-  //     'RED ELECTRICA',
-  //     'SI',
-  //     'NO',
-  //   ];
-  //   if (Seleccion.tipoInstalacion == 'VEHICULOS') {
-  //     return null;
-  //   } else
-  //     return lista;
-  // }
+    if (tipoinst == 'VEHICULOS') {
+      return DropdownButton(
+        items: <String>['..'].map<DropdownMenuItem<String>>((String value) {
+          return DropdownMenuItem<String>(
+            value: value,
+            child: SizedBox(
+                child: Text(
+              value,
+              textAlign: TextAlign.center,
+            )),
+          );
+        }).toList(),
+        onChanged: null,
+        disabledHint: Text('CONTINUA VEHICULOS'),
+      );
+    }
+    if (tipoinst == 'ESTACIONARIA') {
+      return DropdownButton<String>(
+        style: const TextStyle(fontSize: 20, color: Colors.white),
+        borderRadius: BorderRadius.circular(10),
+        value: dropdownValue,
+        isDense: true,
+        onChanged: (String? newValue) {
+          setState(() {
+            dropdownValue = newValue!;
+            seleccionProvider.red = newValue;
+            seleccionProvider.notifyListeners();
+          });
+        },
+        items: <String>[
+          'RED ELECTRICA',
+          'SI',
+          'NO',
+        ].map<DropdownMenuItem<String>>((String value) {
+          return DropdownMenuItem<String>(
+            value: value,
+            child: SizedBox(
+                child: Text(
+              value,
+              textAlign: TextAlign.center,
+            )),
+          );
+        }).toList(),
+      );
+    } else {
+      //No seleccionó
+      return DropdownButton(
+        items: <String>['..'].map<DropdownMenuItem<String>>((String value) {
+          return DropdownMenuItem<String>(
+            value: value,
+            child: SizedBox(
+                child: Text(
+              value,
+              textAlign: TextAlign.center,
+            )),
+          );
+        }).toList(),
+        onChanged: null,
+        disabledHint: Text(' SELECCIONE TIPO DE INSTALACION'),
+      );
+    }
+  }
 }
 
 class ListaSolucion extends StatefulWidget {
@@ -205,31 +265,125 @@ class _ListaSolucion extends State<ListaSolucion> {
   String dropdownValue = 'TIPO DE SOLUCION';
   @override
   Widget build(BuildContext context) {
-    return DropdownButton<String>(
-      style: const TextStyle(fontSize: 20, color: Colors.white),
-      borderRadius: BorderRadius.circular(10),
-      value: dropdownValue,
-      isDense: true,
-      onChanged: (String? newValue) {
-        setState(() {
-          dropdownValue = newValue!;
-          Seleccion.tipoSolucion = newValue;
-        });
-      },
-      items: <String>[
-        'TIPO DE SOLUCION',
-        'BACKUP',
-        'AUTOCONSUMO',
-      ].map<DropdownMenuItem<String>>((String value) {
-        return DropdownMenuItem<String>(
-          value: value,
-          child: SizedBox(
-              child: Text(
-            value,
-            textAlign: TextAlign.center,
-          )),
+    var seleccionProvider =
+        Provider.of<SeleccionProvider>(context, listen: true);
+    String tipoinst = seleccionProvider.tipoInstalacion;
+    String red = seleccionProvider.red;
+    DropdownButton desplegable;
+
+    if (tipoinst == 'TIPO DE INSTALACION') {
+      desplegable = DropdownButton(
+        items: <String>['..'].map<DropdownMenuItem<String>>((String value) {
+          return DropdownMenuItem<String>(
+            value: value,
+            child: SizedBox(
+                child: Text(
+              value,
+              textAlign: TextAlign.center,
+            )),
+          );
+        }).toList(),
+        onChanged: null,
+        disabledHint: Text(' SELECCIONE TIPO DE INSTALACION'),
+      );
+      if (red == 'RED ELECTRICA') {
+        desplegable = DropdownButton(
+          items: <String>['..'].map<DropdownMenuItem<String>>((String value) {
+            return DropdownMenuItem<String>(
+              value: value,
+              child: SizedBox(
+                  child: Text(
+                value,
+                textAlign: TextAlign.center,
+              )),
+            );
+          }).toList(),
+          onChanged: null,
+          disabledHint: Text('SELECCIONE RED ELECTRICA'),
         );
-      }).toList(),
-    );
+      }
+    }
+
+    if (red == 'NO') {
+      desplegable = DropdownButton(
+        items: <String>['..'].map<DropdownMenuItem<String>>((String value) {
+          return DropdownMenuItem<String>(
+            value: value,
+            child: SizedBox(
+                child: Text(
+              value,
+              textAlign: TextAlign.center,
+            )),
+          );
+        }).toList(),
+        onChanged: null,
+        disabledHint: Text('CONTINUA GRUPO ELECTROGENO'),
+      );
+    }
+
+    if (tipoinst == 'VEHICULOS') {
+      desplegable = DropdownButton(
+        items: <String>['..'].map<DropdownMenuItem<String>>((String value) {
+          return DropdownMenuItem<String>(
+            value: value,
+            child: SizedBox(
+                child: Text(
+              value,
+              textAlign: TextAlign.center,
+            )),
+          );
+        }).toList(),
+        onChanged: null,
+        disabledHint: Text('CONTINUA VEHICULOS'),
+      );
+    }
+    if (tipoinst == 'ESTACIONARIA' && red == 'SI') {
+      //Estacionaria + red
+      desplegable = DropdownButton<String>(
+        style: const TextStyle(fontSize: 20, color: Colors.white),
+        borderRadius: BorderRadius.circular(10),
+        value: dropdownValue,
+        isDense: true,
+        onChanged: (String? newValue) {
+          setState(() {
+            dropdownValue = newValue!;
+            seleccionProvider.tipoSolucion = dropdownValue;
+            seleccionProvider.notifyListeners();
+          });
+        },
+        items: <String>[
+          'TIPO DE SOLUCION',
+          'BACKUP',
+          'AUTOCONSUMO',
+        ].map<DropdownMenuItem<String>>((String value) {
+          return DropdownMenuItem<String>(
+            value: value,
+            child: SizedBox(
+                child: Text(
+              value,
+              textAlign: TextAlign.center,
+            )),
+          );
+        }).toList(),
+      );
+    } else {
+      //No seleccionó
+      desplegable = DropdownButton(
+        items: <String>['..'].map<DropdownMenuItem<String>>((String value) {
+          return DropdownMenuItem<String>(
+            value: value,
+            child: SizedBox(
+                child: Text(
+              value,
+              textAlign: TextAlign.center,
+            )),
+          );
+        }).toList(),
+        onChanged: null,
+        disabledHint: Text(' SELECCIONE TIPO DE INSTALACION'),
+      );
+    }
+
+    return desplegable;
   }
 }

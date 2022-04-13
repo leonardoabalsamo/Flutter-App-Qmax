@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
 import '../models/bateria_model.dart';
 import '../models/inversor_model.dart';
-import '../models/seleccion_model.dart';
 
 class SeleccionProvider extends ChangeNotifier {
+  String inversor = 'SELECCIONE EL INVERSOR';
+  String bateria = 'SELECCIONE LA BATERIA';
+  String cantBat = 'SELECCIONE LA CANTIDAD';
+  String tipoInstalacion = 'TIPO DE INSTALACION';
+  String red = 'RED ELECTRICA';
+  String tipoSolucion = 'TIPO DE SOLUCION';
+
   var bateriaSeleccionada = Bateria(
       id: 0,
       tipo: "",
@@ -15,18 +21,6 @@ class SeleccionProvider extends ChangeNotifier {
 
   var inversorSeleccionado =
       Inversor(id: 0, modelo: "", tensionNominal: 0, potencia: 0);
-
-  Map<String, dynamic> data = {
-    '1': 2, // Permiso de escritura ||||||
-    '2':
-        0, // Modo de funcionamiento |||| 0=Inv/Carg - 1=Solo Cargador - 2=Autoconsumo
-    '167': 0, // Perfil de entrada ||||||| 0=Estricta - 1=Tolerante
-    '10': 0, // capacidad banco  ||||||||| Min: 50 - Max: 20000
-    '13':
-        'PerfilBateria', // Perfil bat|| PB-ACIDO: 0 - PB-CALCIO:1 - GEL:2 - AGM:3 - SELLADA1:4 - SELLADA2:5 - LITIO:6
-    '180': 0, // V bat paso a red ||||||||
-    '182': 0, // V bat retorno de red |||||
-  };
 
 //Funciones de los modelos
   Bateria get getBateria {
@@ -47,7 +41,7 @@ class SeleccionProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-// Metodos para las pages
+// Metodo validacion de bancos
   bool validacion() {
     num aux;
 
@@ -57,15 +51,16 @@ class SeleccionProvider extends ChangeNotifier {
     aux = inversorSeleccionado.tensionNominalInversor /
         bateriaSeleccionada.tensionNominalBateria;
 
-    if (Seleccion.cantidad == aux ||
-        Seleccion.cantidad == (aux * 2) ||
-        Seleccion.cantidad == (aux * 3) ||
-        Seleccion.cantidad == (aux * 4)) {
+    //print('Valor de aux: ' + aux.toString());
+
+    if (num.parse(cantBat) == aux ||
+        num.parse(cantBat) == (aux * 2) ||
+        num.parse(cantBat) == (aux * 3) ||
+        num.parse(cantBat) == (aux * 4)) {
+      //print('Cantidad de baterias: ' + cantBat);
       return true;
     } else {
       return false;
     }
   }
-
-  void setState(Null Function() param0) {}
 }

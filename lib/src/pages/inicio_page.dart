@@ -5,7 +5,6 @@ import 'package:qmax_inst/src/providers/seleccion_provider.dart';
 
 import '../models/bateria_model.dart';
 import '../models/inversor_model.dart';
-import '../models/seleccion_model.dart';
 import 'medio_page.dart';
 
 class InicioPage extends StatefulWidget {
@@ -20,10 +19,10 @@ class InicioPage extends StatefulWidget {
 class _InicioPageState extends State<InicioPage> {
   @override
   Widget build(BuildContext context) {
-    var seleccionProvider = Provider.of<SeleccionProvider>(context);
+    var seleccionProvider =
+        Provider.of<SeleccionProvider>(context, listen: true);
     return Scaffold(
       body: Center(
-          //child: Expanded(
           child: Column(
         children: [
           Container(
@@ -32,7 +31,7 @@ class _InicioPageState extends State<InicioPage> {
           const SizedBox(
             height: 5,
           ),
-          const ListaInversores(),
+          ListaInversores(),
           const SizedBox(
             width: 10,
             height: 10,
@@ -43,7 +42,7 @@ class _InicioPageState extends State<InicioPage> {
               height: 140,
             ),
           ),
-          const ListaBaterias(),
+          ListaBaterias(),
           const SizedBox(
             height: 5,
           ),
@@ -64,16 +63,14 @@ class _InicioPageState extends State<InicioPage> {
               ],
             ),
           ),
-          const ListaTensiones(),
+          ListaTensiones(),
           const Expanded(
             child: SizedBox(
               height: 10,
             ),
           )
         ],
-      )
-          //),
-          ),
+      )),
       appBar: AppBar(
         title: const Text(
           'SELECCION DE MODELO',
@@ -173,7 +170,8 @@ class _ListaInversores extends State<ListaInversores> {
 
   @override
   Widget build(BuildContext context) {
-    var seleccionProvider = Provider.of<SeleccionProvider>(context);
+    var seleccionProvider =
+        Provider.of<SeleccionProvider>(context, listen: true);
     var invBusca = Inversor(id: 0, modelo: "", tensionNominal: 0, potencia: 0);
     return DropdownButton<String>(
       style: const TextStyle(fontSize: 20, color: Colors.white),
@@ -183,6 +181,7 @@ class _ListaInversores extends State<ListaInversores> {
       onChanged: (String? newValue) {
         setState(() {
           dropdownValue = newValue!;
+          seleccionProvider.inversor = newValue;
           seleccionProvider.setInversor = invBusca.buscaInversor(newValue);
         });
       },
@@ -219,9 +218,13 @@ class ListaBaterias extends StatefulWidget {
 
 class _ListaBaterias extends State<ListaBaterias> {
   String dropdownValue = 'SELECCIONE LA BATERIA';
+
   @override
   Widget build(BuildContext context) {
-    var seleccionProvider = Provider.of<SeleccionProvider>(context);
+    var seleccionProvider =
+        Provider.of<SeleccionProvider>(context, listen: true);
+    String inv = seleccionProvider.inversor;
+
     var buscaBat = Bateria(
         id: 0,
         capacidad: 0,
@@ -230,38 +233,56 @@ class _ListaBaterias extends State<ListaBaterias> {
         modelo: "",
         tensionNominal: 0,
         tipo: "");
-    return DropdownButton<String>(
-      style: const TextStyle(fontSize: 20, color: Colors.white),
-      value: dropdownValue,
-      isDense: true,
-      borderRadius: BorderRadius.circular(10),
-      onChanged: (String? newValue) {
-        setState(() {
-          dropdownValue = newValue!;
-          seleccionProvider.setBateria = buscaBat.buscaBateria(newValue);
-        });
-      },
-      items: <String>[
-        'SELECCIONE LA BATERIA',
-        'TROJAN T105',
-        'TROJAN T605',
-        'TROJAN 27TMX',
-        'VISION 6FM200X',
-        'VISION 6FM100X',
-        'PYLONTECH US2000C',
-        'PYLONTECH US3000C',
-        'PYLONTECH PHANTOM-S',
-      ].map<DropdownMenuItem<String>>((String value) {
-        return DropdownMenuItem<String>(
-          value: value,
-          child: SizedBox(
-              child: Text(
-            value,
-            textAlign: TextAlign.center,
-          )),
-        );
-      }).toList(),
-    );
+    if (inv == 'SELECCIONE EL INVERSOR') {
+      return DropdownButton(
+        items: <String>['..'].map<DropdownMenuItem<String>>((String value) {
+          return DropdownMenuItem<String>(
+            value: value,
+            child: SizedBox(
+                child: Text(
+              value,
+              textAlign: TextAlign.center,
+            )),
+          );
+        }).toList(),
+        onChanged: null,
+        disabledHint: Text('SELECCIONE EL INVERSOR'),
+      );
+    } else {
+      return DropdownButton<String>(
+        style: const TextStyle(fontSize: 20, color: Colors.white),
+        value: dropdownValue,
+        isDense: true,
+        borderRadius: BorderRadius.circular(10),
+        onChanged: (String? newValue) {
+          setState(() {
+            dropdownValue = newValue!;
+            seleccionProvider.bateria = newValue;
+            seleccionProvider.setBateria = buscaBat.buscaBateria(newValue);
+          });
+        },
+        items: <String>[
+          'SELECCIONE LA BATERIA',
+          'TROJAN T105',
+          'TROJAN T605',
+          'TROJAN 27TMX',
+          'VISION 6FM200X',
+          'VISION 6FM100X',
+          'PYLONTECH US2000C',
+          'PYLONTECH US3000C',
+          'PYLONTECH PHANTOM-S',
+        ].map<DropdownMenuItem<String>>((String value) {
+          return DropdownMenuItem<String>(
+            value: value,
+            child: SizedBox(
+                child: Text(
+              value,
+              textAlign: TextAlign.center,
+            )),
+          );
+        }).toList(),
+      );
+    }
   }
 }
 
@@ -276,37 +297,74 @@ class _ListaTensiones extends State<ListaTensiones> {
   String dropdownValue = 'SELECCIONE LA CANTIDAD';
   @override
   Widget build(BuildContext context) {
-    return DropdownButton<String>(
-      style: const TextStyle(fontSize: 20, color: Colors.white),
-      value: dropdownValue,
-      isDense: true,
-      borderRadius: BorderRadius.circular(10),
-      onChanged: (String? newValue) {
-        setState(() {
-          dropdownValue = newValue!;
-          Seleccion.cantidad = int.parse(newValue);
-        });
-      },
-      items: <String>[
-        'SELECCIONE LA CANTIDAD',
-        '1',
-        '2',
-        '4',
-        '6',
-        '8',
-        '12',
-        '16',
-        '32'
-      ].map<DropdownMenuItem<String>>((String value) {
-        return DropdownMenuItem<String>(
-          value: value,
-          child: SizedBox(
-              child: Text(
-            value,
-            textAlign: TextAlign.center,
-          )),
-        );
-      }).toList(),
-    );
+    var seleccionProvider =
+        Provider.of<SeleccionProvider>(context, listen: true);
+    String bat = seleccionProvider.bateria;
+    String inv = seleccionProvider.inversor;
+    if (inv == 'SELECCIONE EL INVERSOR') {
+      return DropdownButton(
+        items: <String>['..'].map<DropdownMenuItem<String>>((String value) {
+          return DropdownMenuItem<String>(
+            value: value,
+            child: SizedBox(
+                child: Text(
+              value,
+              textAlign: TextAlign.center,
+            )),
+          );
+        }).toList(),
+        onChanged: null,
+        disabledHint: Text('SELECCIONE EL INVERSOR'),
+      );
+    }
+    if (bat == 'SELECCIONE LA BATERIA') {
+      return DropdownButton(
+        items: <String>['..'].map<DropdownMenuItem<String>>((String value) {
+          return DropdownMenuItem<String>(
+            value: value,
+            child: SizedBox(
+                child: Text(
+              value,
+              textAlign: TextAlign.center,
+            )),
+          );
+        }).toList(),
+        onChanged: null,
+        disabledHint: Text('SELECCIONE LA BATERIA'),
+      );
+    } else {
+      return DropdownButton<String>(
+        style: const TextStyle(fontSize: 20, color: Colors.white),
+        value: dropdownValue,
+        isDense: true,
+        borderRadius: BorderRadius.circular(10),
+        onChanged: (String? newValue) {
+          setState(() {
+            dropdownValue = newValue!;
+            seleccionProvider.cantBat = newValue;
+          });
+        },
+        items: <String>[
+          'SELECCIONE LA CANTIDAD',
+          '1',
+          '2',
+          '4',
+          '6',
+          '8',
+          '12',
+          '16',
+          '32'
+        ].map<DropdownMenuItem<String>>((String value) {
+          return DropdownMenuItem<String>(
+            value: value,
+            child: SizedBox(
+                child: Text(
+              value,
+              textAlign: TextAlign.center,
+            )),
+          );
+        }).toList(),
+      );
+    }
   }
 }
