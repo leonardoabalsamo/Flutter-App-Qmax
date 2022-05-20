@@ -15,87 +15,262 @@ class MedioPage extends StatefulWidget {
 class _MedioPage extends State<MedioPage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Column(
-          children: [
-            const SizedBox(
-              height: 15,
+    var seleccionProvider =
+        Provider.of<SeleccionProvider>(context, listen: true);
+    if (seleccionProvider.tipoInstalacion != 'TIPO DE INSTALACION') {
+      if (seleccionProvider.red != 'RED ELECTRICA') {
+        return Scaffold(
+          body: Center(
+            child: Column(
+              children: [
+                const SizedBox(
+                  height: 15,
+                ),
+                const ListaTipo(),
+                const SizedBox(
+                  height: 5,
+                ),
+                Expanded(
+                    child: Image.asset(
+                  "assets/images/instalacion.png",
+                )),
+                const SizedBox(
+                  height: 5,
+                ),
+                const ListaRed(),
+                Expanded(
+                    child: Image.asset(
+                  "assets/images/inversor_iq.png",
+                )),
+                const ListaSolucion(),
+                const SizedBox(
+                  height: 5,
+                ),
+                Expanded(
+                    child: Image.asset(
+                  "assets/images/logo_bateria_t.png",
+                )),
+                const SizedBox(
+                  height: 55,
+                ),
+              ],
             ),
-            const ListaTipo(),
-            const SizedBox(
-              height: 5,
+          ),
+          appBar: AppBar(
+            title: const Text('SOLUCION PLANTEADA',
+                style: TextStyle(fontSize: 12)),
+          ),
+          floatingActionButton: FloatingActionButton.extended(
+            onPressed: () {
+              bool check = validaInst();
+              if (check == true) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const ConfigPage()),
+                );
+              } else {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) => AlertDialog(
+                    contentPadding: const EdgeInsets.all(10.0),
+                    content: Row(
+                      children: const <Widget>[
+                        Expanded(
+                          child: Text(
+                            "La selección no es correcta, reintente. ",
+                            style: TextStyle(
+                              fontSize: 16,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    actions: <Widget>[
+                      TextButton(
+                          child: const Text('Aceptar'),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          }),
+                    ],
+                  ),
+                );
+              }
+            },
+            label: const Text('Obtener Configuración'),
+            icon: const Icon(Icons.arrow_forward),
+          ),
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.centerDocked,
+        );
+      } else {
+        return Scaffold(
+          body: Center(
+            child: Column(
+              children: [
+                const SizedBox(
+                  height: 15,
+                ),
+                const ListaTipo(),
+                const SizedBox(
+                  height: 5,
+                ),
+                Expanded(
+                    child: Image.asset(
+                  "assets/images/instalacion.png",
+                )),
+                const SizedBox(
+                  height: 5,
+                ),
+                const ListaRed(),
+                Expanded(
+                    child: Image.asset(
+                  "assets/images/inversor_iq.png",
+                )),
+                //const ListaSolucion(),
+                const SizedBox(
+                  height: 5,
+                ),
+                Expanded(
+                    child: Image.asset(
+                  "assets/images/logo_bateria_t.png",
+                )),
+                const SizedBox(
+                  height: 55,
+                ),
+              ],
             ),
-            Expanded(
-                child: Image.asset(
-              "assets/images/instalacion.png",
-            )),
-            const SizedBox(
-              height: 5,
-            ),
-            const ListaRed(),
-            Expanded(
-                child: Image.asset(
-              "assets/images/inversor_iq.png",
-            )),
-            const ListaSolucion(),
-            const SizedBox(
-              height: 5,
-            ),
-            Expanded(
-                child: Image.asset(
-              "assets/images/logo_bateria_t.png",
-            )),
-            const SizedBox(
-              height: 55,
-            ),
-          ],
+          ),
+          appBar: AppBar(
+            title: const Text('SOLUCION PLANTEADA',
+                style: TextStyle(fontSize: 12)),
+          ),
+          floatingActionButton: FloatingActionButton.extended(
+            onPressed: () {
+              bool check = validaInst();
+              if (check == true) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const ConfigPage()),
+                );
+              } else {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) => AlertDialog(
+                    contentPadding: const EdgeInsets.all(10.0),
+                    content: Row(
+                      children: const <Widget>[
+                        Expanded(
+                          child: Text(
+                            "La selección no es correcta, reintente. ",
+                            style: TextStyle(
+                              fontSize: 16,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    actions: <Widget>[
+                      TextButton(
+                          child: const Text('Aceptar'),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          }),
+                    ],
+                  ),
+                );
+              }
+            },
+            label: const Text('Obtener Configuración'),
+            icon: const Icon(Icons.arrow_forward),
+          ),
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.centerDocked,
+        );
+      }
+    } else {
+      return Scaffold(
+        body: Center(
+          child: Column(
+            children: [
+              const SizedBox(
+                height: 15,
+              ),
+              const ListaTipo(),
+              const SizedBox(
+                height: 5,
+              ),
+              Expanded(
+                  child: Image.asset(
+                "assets/images/instalacion.png",
+              )),
+              const SizedBox(
+                height: 5,
+              ),
+              //const ListaRed(),
+              Expanded(
+                  child: Image.asset(
+                "assets/images/inversor_iq.png",
+              )),
+              //const ListaSolucion(),
+              const SizedBox(
+                height: 5,
+              ),
+              Expanded(
+                  child: Image.asset(
+                "assets/images/logo_bateria_t.png",
+              )),
+              const SizedBox(
+                height: 55,
+              ),
+            ],
+          ),
         ),
-      ),
-      appBar: AppBar(
-        title: const Text('SOLUCION PLANTEADA', style: TextStyle(fontSize: 12)),
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          bool check = validaInst();
-          if (check == true) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const ConfigPage()),
-            );
-          } else {
-            showDialog(
-              context: context,
-              builder: (BuildContext context) => AlertDialog(
-                contentPadding: const EdgeInsets.all(10.0),
-                content: Row(
-                  children: const <Widget>[
-                    Expanded(
-                      child: Text(
-                        "La selección no es correcta, reintente. ",
-                        style: TextStyle(
-                          fontSize: 16,
+        appBar: AppBar(
+          title:
+              const Text('SOLUCION PLANTEADA', style: TextStyle(fontSize: 12)),
+        ),
+        floatingActionButton: FloatingActionButton.extended(
+          onPressed: () {
+            bool check = validaInst();
+            if (check == true) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const ConfigPage()),
+              );
+            } else {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) => AlertDialog(
+                  contentPadding: const EdgeInsets.all(10.0),
+                  content: Row(
+                    children: const <Widget>[
+                      Expanded(
+                        child: Text(
+                          "La selección no es correcta, reintente. ",
+                          style: TextStyle(
+                            fontSize: 16,
+                          ),
                         ),
                       ),
-                    ),
+                    ],
+                  ),
+                  actions: <Widget>[
+                    TextButton(
+                        child: const Text('Aceptar'),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        }),
                   ],
                 ),
-                actions: <Widget>[
-                  TextButton(
-                      child: const Text('Aceptar'),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      }),
-                ],
-              ),
-            );
-          }
-        },
-        label: const Text('Obtener Configuración'),
-        icon: const Icon(Icons.arrow_forward),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-    );
+              );
+            }
+          },
+          label: const Text('Obtener Configuración'),
+          icon: const Icon(Icons.arrow_forward),
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      );
+    }
   }
 
   bool validaInst() {

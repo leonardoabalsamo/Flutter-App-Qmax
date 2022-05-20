@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:qmax_inst/src/pages/one_page.dart';
 import 'package:qmax_inst/theme/theme.dart';
 
 import 'package:qmax_inst/routes/routes.dart';
-import 'package:qmax_inst/src/pages/home_page.dart';
 import 'package:qmax_inst/src/providers/bateria_provider.dart';
 import 'package:qmax_inst/src/providers/inversor_provider.dart';
 import 'package:qmax_inst/src/providers/seleccion_provider.dart';
@@ -27,10 +27,10 @@ class MyApp extends StatelessWidget {
         child: MaterialApp(
             theme: defaultTheme,
             debugShowCheckedModeBanner: false,
-            initialRoute: 'homePage',
+            initialRoute: 'onePage',
             routes: getApplicationRoutes(),
             onGenerateRoute: (RouteSettings settings) {
-              return MaterialPageRoute(builder: (context) => const HomePage());
+              return MaterialPageRoute(builder: (context) => const onePage());
             }));
   }
 }

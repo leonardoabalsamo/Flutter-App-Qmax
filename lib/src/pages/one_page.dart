@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:qmax_inst/src/pages/inicio_page.dart';
-import 'package:qmax_inst/src/pages/inicio_page_regulador.dart';
-import 'package:qmax_inst/src/providers/seleccion_provider.dart';
+import 'package:qmax_inst/src/pages/home_page.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+import 'inicio_page_instalador.dart';
+
+class onePage extends StatefulWidget {
+  const onePage({Key? key}) : super(key: key);
 
   @override
-  _HomePageState createState() => _HomePageState();
+  _onePage createState() => _onePage();
 }
 
-class _HomePageState extends State<HomePage> {
+class _onePage extends State<onePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,7 +29,7 @@ class _HomePageState extends State<HomePage> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             const Text(
-                              "La nueva App brinda una forma ágil y rápida para configurar los Equipos QMAX",
+                              "La nueva App brinda una forma ágil y rápida de dimensionar sistemas",
                               textAlign: TextAlign.center,
                               style: TextStyle(color: Colors.white),
                             ),
@@ -50,7 +49,7 @@ class _HomePageState extends State<HomePage> {
               },
               icon: const Icon(Icons.help))
         ],
-        title: const Text('INVERSORES REGULADORES [ SPD ]',
+        title: const Text('APLICACION INSTALADORES',
             style: TextStyle(fontSize: 12)),
         centerTitle: true,
       ),
@@ -58,22 +57,20 @@ class _HomePageState extends State<HomePage> {
   }
 
   Center homePageColumn() {
-    var seleccionProvider =
-        Provider.of<SeleccionProvider>(context, listen: true);
     return Center(
         child:
             Column(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-      SizedBox(
-        height: 20,
+      Text(
+        "¡Bienvenido!",
+        textAlign: TextAlign.center,
+        style: TextStyle(fontSize: 38),
+        textScaleFactor: 1,
       ),
       Text(
-        "Seleccione el Producto",
+        "Seleccione la Opción",
         textAlign: TextAlign.center,
         style: TextStyle(fontSize: 22),
         textScaleFactor: 1,
-      ),
-      SizedBox(
-        height: 20,
       ),
       ElevatedButton(
         style: ElevatedButton.styleFrom(
@@ -81,13 +78,12 @@ class _HomePageState extends State<HomePage> {
             shadowColor: Colors.transparent,
             padding: EdgeInsets.all(30)),
         onPressed: () {
-          seleccionProvider.regulador = false;
           Navigator.push(context,
-              MaterialPageRoute(builder: (context) => const InicioPage()));
+              MaterialPageRoute(builder: (context) => const HomePage()));
         },
         child: Image.asset(
-          'assets/images/inv.png',
-          height: 150,
+          'assets/images/logogris.png',
+          height: 100,
         ),
       ),
       ElevatedButton(
@@ -97,19 +93,19 @@ class _HomePageState extends State<HomePage> {
           padding: EdgeInsets.all(10),
         ),
         onPressed: () {
-          seleccionProvider.regulador = true; //Flag Regulador
           Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => const InicioPageRegulador()));
+                  builder: (context) => const InicioInstaladorPage()));
         },
         child: Image.asset(
-          'assets/images/mpptdisplay.png',
-          height: 150,
+          'assets/images/inst.png',
+          height: 120,
+          width: 120,
         ),
       ),
       SizedBox(
-        height: 50,
+        height: 20,
       )
     ]));
   }

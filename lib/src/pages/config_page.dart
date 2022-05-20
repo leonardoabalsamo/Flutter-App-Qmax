@@ -88,6 +88,7 @@ class _ConfigPage extends State<ConfigPage> {
           seleccionProvider.red = "";
           seleccionProvider.tipoInstalacion = "";
           seleccionProvider.tipoSolucion = "";
+          seleccionProvider.setBat = '';
           Navigator.push(context,
               MaterialPageRoute(builder: (context) => const InicioPage()));
         },
@@ -98,58 +99,163 @@ class _ConfigPage extends State<ConfigPage> {
   Center vista(context) {
     var seleccionProvider =
         Provider.of<SeleccionProvider>(context, listen: true);
-    return Center(
-      child: ListView(
-        children: [
-          const SizedBox(
-            height: 2,
-          ),
-          Column(
-            children: [
-              Image.asset(
-                "assets/images/inv.png",
-                height: 120.0,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  ElevatedButton(
-                    child: const Text('Manual'),
-                    onPressed: () async {
-                      var file = await getAssetByName(
-                          "manuales/manual_inversor_spd.pdf");
-                      OpenFile.open(file.path, type: "application/pdf");
-                    },
-                  ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  ElevatedButton(
-                    child: const Text('Descargar Configuración'),
-                    onPressed: () async {
-                      //Cargo el mapa json
-                      Map<String, dynamic> _json = await getJson(
-                          seleccionProvider.getInversor(),
-                          seleccionProvider.getBateria);
-                      //Escribo el archivo
-                      _writeJson(_json);
-                    },
-                  ),
-                ],
-              ),
-              SizedBox(
-                  height: 600,
-                  child: ListView(
-                      padding: const EdgeInsets.all(20.0),
-                      scrollDirection: Axis.vertical,
-                      children: _verificaConfiguracion(
-                          seleccionProvider.getInversor(),
-                          seleccionProvider.getBateria))),
-            ],
-          ),
-        ],
-      ),
-    );
+    print(seleccionProvider.regulador);
+
+    if (seleccionProvider.regulador == false) {
+      //retorno modelo inversor
+      return Center(
+        child: ListView(
+          children: [
+            const SizedBox(
+              height: 2,
+            ),
+            Column(
+              children: [
+                Image.asset(
+                  "assets/images/inv.png",
+                  height: 120.0,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+                      child: const Text('Manual'),
+                      onPressed: () async {
+                        var file =
+                            await getAssetByName("manual_inversor_spd.pdf");
+                        OpenFile.open(file.path, type: "application/pdf");
+                      },
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    ElevatedButton(
+                      child: const Text('Descargar Configuración'),
+                      onPressed: () async {
+                        //Cargo el mapa json
+                        Map<String, dynamic> _json = await getJson(
+                            seleccionProvider.getInversor(),
+                            seleccionProvider.getBateria);
+                        //Escribo el archivo
+                        _writeJson(_json);
+                      },
+                    ),
+                  ],
+                ),
+                SizedBox(
+                    height: 600,
+                    child: ListView(
+                        padding: const EdgeInsets.all(20.0),
+                        scrollDirection: Axis.vertical,
+                        children: _verificaConfiguracion(
+                            seleccionProvider.getInversor(),
+                            seleccionProvider.getBateria))),
+              ],
+            ),
+          ],
+        ),
+      );
+    } else {
+      //retorno regulador
+      return Center(
+        child: ListView(
+          children: [
+            const SizedBox(
+              height: 2,
+            ),
+            Column(
+              children: [
+                Image.asset(
+                  "assets/images/mpptdisplay.png",
+                  height: 120.0,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+                      child: const Text('Manual'),
+                      onPressed: () async {
+                        var file =
+                            await getAssetByName("manual_regulador_mppt.pdf");
+                        OpenFile.open(file.path, type: "application/pdf");
+                      },
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    ElevatedButton(
+                      child: const Text('Descargar Configuración'),
+                      onPressed: () async {
+                        //Cargo el mapa json
+                        Map<String, dynamic> _json = await getJson(
+                            seleccionProvider.getInversor(),
+                            seleccionProvider.getBateria);
+                        //Escribo el archivo
+                        _writeJson(_json);
+                      },
+                    ),
+                  ],
+                ),
+                SizedBox(
+                    height: 600,
+                    child: ListView(
+                        padding: const EdgeInsets.all(20.0),
+                        scrollDirection: Axis.vertical,
+                        children: _verificaConfiguracionReg())),
+              ],
+            ),
+          ],
+        ),
+      );
+    }
+  }
+
+  List<Widget> _verificaConfiguracionReg() {
+    var seleccionProvider =
+        Provider.of<SeleccionProvider>(context, listen: false);
+    var retorno = <Widget>[];
+
+    retorno.add(const Text("Detección de tensión automática:   Desactivada ",
+        style: TextStyle(
+            fontFamily: 'Ubuntu',
+            color: Colors.white,
+            fontSize: 14,
+            leadingDistribution: TextLeadingDistribution.proportional)));
+    retorno.add(const Divider());
+    retorno.add(Text("Tensión nominal: " + seleccionProvider.tensionBanco + "V",
+        style: TextStyle(
+            fontFamily: 'Ubuntu',
+            color: Colors.white,
+            fontSize: 14,
+            leadingDistribution: TextLeadingDistribution.proportional)));
+    retorno.add(const Divider());
+
+    retorno.add(Text(
+        'Capacidad del banco:   ' +
+            seleccionProvider.capacidadBanco.toString() +
+            'Ah',
+        style: const TextStyle(
+            fontFamily: 'Ubuntu',
+            color: Colors.white,
+            fontSize: 14,
+            leadingDistribution: TextLeadingDistribution.proportional)));
+    retorno.add(const Divider());
+
+    retorno.add(Text('Perfil:   ' + seleccionProvider.bateriaSeleccionada.tipo,
+        style: const TextStyle(
+            fontFamily: 'Ubuntu',
+            color: Colors.white,
+            fontSize: 14,
+            leadingDistribution: TextLeadingDistribution.proportional)));
+    retorno.add(const Divider());
+
+    retorno.add(Text('Capacidad del banco para etapa 1:   15%',
+        style: const TextStyle(
+            fontFamily: 'Ubuntu',
+            color: Colors.white,
+            fontSize: 14,
+            leadingDistribution: TextLeadingDistribution.proportional)));
+    return retorno;
   }
 
   List<Widget> _verificaConfiguracion(Inversor inv, Bateria bat) {
@@ -176,72 +282,81 @@ class _ConfigPage extends State<ConfigPage> {
   Future getJson(Inversor inv, Bateria bat) async {
     var seleccionProvider =
         Provider.of<SeleccionProvider>(context, listen: false);
-    int cant = int.parse(seleccionProvider.cantBat);
     Map<String, dynamic> _json = {};
 
-    num aux, banco, finalbanco;
-    aux = inv.tensionNominalInversor / bat.tensionNominalBateria;
-    banco = cant / aux;
-    finalbanco = bat.capacidadBateria * banco;
+    if (seleccionProvider.regulador = false) {
+      //SELECCIONÓ INVERSOR
 
-    num retornored;
-    retornored = (bat.fondo * aux) - 0.3;
+      int cant = int.parse(seleccionProvider.cantBat);
 
-    num pasored;
-    pasored = (bat.tensionNominalBateria * aux);
+      num aux, banco, finalbanco;
+      aux = inv.tensionNominalInversor / bat.tensionNominalBateria;
+      banco = cant / aux;
+      finalbanco = bat.capacidadBateria * banco;
 
-    if (seleccionProvider.tipoInstalacion == "ESTACIONARIA") {
-      if (seleccionProvider.red == "SI") {
-        if (seleccionProvider.tipoSolucion == "BACKUP") {
-          //backup
+      num retornored;
+      retornored = (bat.fondo * aux) - 0.3;
+
+      num pasored;
+      pasored = (bat.tensionNominalBateria * aux);
+
+      if (seleccionProvider.tipoInstalacion == "ESTACIONARIA") {
+        if (seleccionProvider.red == "SI") {
+          if (seleccionProvider.tipoSolucion == "BACKUP") {
+            //backup
+            _json = {
+              '1': 2, // Permiso de escritura
+              '2': 0, // Modo de funcionamiento
+              '167': 0, // Perfil de entrada
+              '10': finalbanco, // capacidad banco
+              '13': bat.validaTipo(),
+              '180': pasored, // V bat paso a red ||||||||
+              '182': retornored, // V bat retorno de red |||||
+            };
+          } else {
+            //interactivo
+            _json = {
+              '1': 2, // Permiso de escritura
+              '2': 1, // Modo de funcionamiento
+              '167': 1, // Perfil de entrada
+              '10': finalbanco, // capacidad banco
+              '13': bat.validaTipo(),
+              '180': pasored, // V bat paso a red ||||||||
+              '182': retornored, // V bat retorno de red |||||
+            };
+          }
+        } else {
+          //inv/cargador
+          //no tiene red
           _json = {
             '1': 2, // Permiso de escritura
             '2': 0, // Modo de funcionamiento
-            '167': 0, // Perfil de entrada
-            '10': finalbanco, // capacidad banco
-            '13': bat
-                .tipo, // PB-ACIDO: 0 - PB-CALCIO:1 - GEL:2 - AGM:3 - SELLADA1:4 - SELLADA2:5 - LITIO:6
-            '180': pasored, // V bat paso a red ||||||||
-            '182': retornored, // V bat retorno de red |||||
-          };
-        } else {
-          //interactivo
-          _json = {
-            '1': 2, // Permiso de escritura
-            '2': 1, // Modo de funcionamiento
             '167': 1, // Perfil de entrada
             '10': finalbanco, // capacidad banco
-            '13': bat
-                .tipo, // PB-ACIDO: 0 - PB-CALCIO:1 - GEL:2 - AGM:3 - SELLADA1:4 - SELLADA2:5 - LITIO:6
+            '13': bat.validaTipo(),
             '180': pasored, // V bat paso a red ||||||||
             '182': retornored, // V bat retorno de red |||||
           };
         }
       } else {
-        //inv/cargador
-        //no tiene red
+        //Vehiculos
         _json = {
           '1': 2, // Permiso de escritura
           '2': 0, // Modo de funcionamiento
           '167': 1, // Perfil de entrada
           '10': finalbanco, // capacidad banco
-          '13': bat
-              .tipo, // PB-ACIDO: 0 - PB-CALCIO:1 - GEL:2 - AGM:3 - SELLADA1:4 - SELLADA2:5 - LITIO:6
+          '13': bat.validaTipo(),
           '180': pasored, // V bat paso a red ||||||||
           '182': retornored, // V bat retorno de red |||||
         };
       }
     } else {
-      //Vehiculos
+      //SELECCIONÓ REGULADOR
+
       _json = {
         '1': 2, // Permiso de escritura
-        '2': 0, // Modo de funcionamiento
-        '167': 1, // Perfil de entrada
-        '10': finalbanco, // capacidad banco
-        '13': bat
-            .tipo, // PB-ACIDO: 0 - PB-CALCIO:1 - GEL:2 - AGM:3 - SELLADA1:4 - SELLADA2:5 - LITIO:6
-        '180': pasored, // V bat paso a red ||||||||
-        '182': retornored, // V bat retorno de red |||||
+        '10': seleccionProvider.capacidadBanco, // capacidad banco
+        '13': bat.validaTipo(),
       };
     }
 
@@ -509,9 +624,10 @@ class _ConfigPage extends State<ConfigPage> {
 }
 
 Future<File> getAssetByName(String sourceName) async {
-  var sampleData = await rootBundle.load("assets/$sourceName");
+  var sampleData = await rootBundle.load("assets/manuales/$sourceName");
   final path = await _localPath;
-  var file = File('$path/manual_inversor_spd.pdf'); //File('$path/$sourceName');
+  var file = File('$path/$sourceName');
+  //var file = File('$path/manual_inversor_spd.pdf');
   file = await file.writeAsBytes(sampleData.buffer.asUint8List());
   return file;
 }

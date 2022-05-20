@@ -1,3 +1,5 @@
+//import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import '../models/bateria_model.dart';
 import '../models/inversor_model.dart';
@@ -9,6 +11,11 @@ class SeleccionProvider extends ChangeNotifier {
   String tipoInstalacion = 'TIPO DE INSTALACION';
   String red = 'RED ELECTRICA';
   String tipoSolucion = 'TIPO DE SOLUCION';
+  String tensionBanco = 'SELECCIONE LA TENSION';
+  num cantidadBancos = 0;
+  num capacidadBanco = 0;
+
+  bool regulador = false;
 
   var bateriaSeleccionada = Bateria(
       id: 0,
@@ -25,6 +32,16 @@ class SeleccionProvider extends ChangeNotifier {
 //Funciones de los modelos
   Bateria get getBateria {
     return bateriaSeleccionada;
+  }
+
+  set setRegulador(bool reg) {
+    regulador = reg;
+    notifyListeners();
+  }
+
+  set setBat(String bat) {
+    cantBat = bat;
+    notifyListeners();
   }
 
   set setBateria(Bateria bat) {
@@ -52,6 +69,38 @@ class SeleccionProvider extends ChangeNotifier {
         bateriaSeleccionada.tensionNominalBateria;
 
     //print('Valor de aux: ' + aux.toString());
+
+    if (num.parse(cantBat) == aux ||
+        num.parse(cantBat) == (aux * 2) ||
+        num.parse(cantBat) == (aux * 3) ||
+        num.parse(cantBat) == (aux * 4)) {
+      //print('Cantidad de baterias: ' + cantBat);
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  bool validacionReg() {
+    
+    // cantidad de bancos = (tension nominal bateria * cantidad baterias)/tensionBanco
+
+    cantidadBancos =
+        (bateriaSeleccionada.tensionNominalBateria * num.parse(cantBat)) /
+            num.parse(tensionBanco);
+
+    capacidadBanco = cantidadBancos * bateriaSeleccionada.capacidad;
+
+    print('Cantidad de Bancos: ' + cantidadBancos.toString());
+    print('Capacidad del banco: ' + capacidadBanco.toString());
+
+    num aux = (bateriaSeleccionada.tensionNominalBateria) * num.parse(cantBat);
+
+    if (num.parse(tensionBanco) < bateriaSeleccionada.tensionNominalBateria)
+      return false;
+
+    //Validación de tensiones
+    aux = num.parse(tensionBanco) / bateriaSeleccionada.tensionNominalBateria;
 
     if (num.parse(cantBat) == aux ||
         num.parse(cantBat) == (aux * 2) ||

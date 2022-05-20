@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+/*
 final defaultDarkTheme = ThemeData.dark().copyWith(
   primaryColor: Colors.black,
   floatingActionButtonTheme: const FloatingActionButtonThemeData(
@@ -7,7 +8,7 @@ final defaultDarkTheme = ThemeData.dark().copyWith(
     foregroundColor: Colors.white,
   ),
 );
-
+*/
 final defaultTheme = ThemeData(
   brightness: Brightness.dark,
   fontFamily: 'Lato',
@@ -16,8 +17,8 @@ final defaultTheme = ThemeData(
     cursorColor: const Color.fromRGBO(64, 151, 200, 1).withOpacity(.6),
     selectionHandleColor: const Color.fromRGBO(64, 151, 200, 1).withOpacity(1),
   ),
-  // textSelectionHandleColor: Colors.transparent,
-  // accentColor: Color.fromRGBO(64, 151, 200, 1),
+  //textSelectionHandleColor: Colors.transparent,
+  //accentColor: Color.fromRGBO(64, 151, 200, 1),
   indicatorColor: const Color.fromRGBO(64, 151, 200, 1),
   secondaryHeaderColor: const Color.fromRGBO(64, 151, 200, 1),
   primaryColor: const Color.fromRGBO(35, 35, 35, 1), // Colors.black,

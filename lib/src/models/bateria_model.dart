@@ -124,4 +124,33 @@ class Bateria {
       'tensionNominal': tensionNominal,
     };
   }
+
+  //Valida tipo de bateria
+  // PB-ACIDO: 0 - PB-CALCIO:1 - GEL:2 - AGM:3 - SELLADA1:4 - SELLADA2:5 - LITIO:6
+  int validaTipo() {
+    switch (this.tipo) {
+      case 'PB-ACIDO':
+        return 0;
+      case 'PB-CALCIO':
+        return 1;
+
+      case 'GEL':
+        return 2;
+
+      case 'AGM':
+        return 3;
+
+      case 'SELLADA1':
+        return 4;
+
+      case 'SELLADA2':
+        return 5;
+
+      case 'LITIO':
+        return 6;
+
+      default:
+        return 0;
+    }
+  }
 }
