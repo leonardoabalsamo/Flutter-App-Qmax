@@ -1,74 +1,69 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:qmax_inst/src/pages/red_page.dart';
 import 'package:qmax_inst/src/providers/dimensionamiento_provider.dart';
 import '../models/class_app.dart';
-import 'grupo_page.dart';
+import 'kit_page_dimensionamiento.dart';
 
-class InicioInstaladorPage extends StatefulWidget {
-  const InicioInstaladorPage({
+class RedPage extends StatefulWidget {
+  const RedPage({
     Key? key,
   }) : super(key: key);
 
   @override
-  _InicioPageInstaladorState createState() => _InicioPageInstaladorState();
+  _RedPage createState() => _RedPage();
 }
 
-class _InicioPageInstaladorState extends State<InicioInstaladorPage> {
+class _RedPage extends State<RedPage> {
+  @override
   @override
   Widget build(BuildContext context) {
     var dimensionamientoProvider =
         Provider.of<DimensionamientoProvider>(context, listen: true);
-
     return Scaffold(
         body: Center(
-            child: Column(
-          children: [
-            Container(
-              padding: const EdgeInsets.all(10),
-            ),
-            Text('Para avanzar con el dimensionamiento..'),
-            SizedBox(
-              height: 25,
-            ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                checkRed(),
-                SizedBox(
-                  height: 25,
-                ),
-                Image.asset(
-                  'assets/images/fact.jpeg',
-                  height: 100,
-                ),
-                SizedBox(
-                  height: 25,
-                ),
-                checkGrupo(),
-                Image.asset(
-                  'assets/images/logo_grupo_electrogeno_t.png',
-                  height: 100,
-                ),
-              ],
-            ),
-          ],
-        )),
+            child: Container(
+                padding: const EdgeInsets.all(10),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Verifique el consumo en la factura ',
+                      style: TextStyle(fontSize: 18),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Image.asset(
+                      'assets/images/fact.jpeg',
+                      height: 200,
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    slideBarEnergia(),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Text(
+                      'Seleccione la Ubicación:  ',
+                      style: TextStyle(fontSize: 18),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    ListaUbicaciones(),
+                  ],
+                ))),
         appBar: dimAppBar(context),
         floatingActionButton: FloatingActionButton.extended(
           onPressed: () async {
-            if (dimensionamientoProvider.Grupo &&
-                dimensionamientoProvider.Red) {
-              await _showError(context);
-            } else if (dimensionamientoProvider.Red) {
+            print('VALOR FACTURA: ' +
+                dimensionamientoProvider.valorFactura.toString());
+            if (dimensionamientoProvider.valorFactura != 0 &&
+                dimensionamientoProvider.UbicacionSeleccionada != "") {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => RedPage()),
-              );
-            } else if (dimensionamientoProvider.Grupo) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => GrupoPage()),
+                MaterialPageRoute(builder: (context) => const KitPage()),
               );
             } else {
               await _showError(context);
@@ -142,7 +137,7 @@ Future _showError(BuildContext context) {
         children: const <Widget>[
           Expanded(
             child: Text(
-              "¡Seleccione correctamente!",
+              "¡Debe seleccionar todos los campos!",
               style: TextStyle(
                 fontSize: 14,
               ),
