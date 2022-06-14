@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:qmax_inst/src/pages/config_page.dart';
 import 'package:qmax_inst/src/pages/home_page.dart';
 import 'package:qmax_inst/src/pages/inicio_page.dart';
+import 'package:qmax_inst/src/pages/kit_page_dimensionamiento.dart';
 import 'package:qmax_inst/src/pages/medio_page.dart';
 
 import '../src/pages/inicio_page_instalador.dart';
@@ -19,5 +20,6 @@ Map<String, WidgetBuilder> getApplicationRoutes() {
         const InicioPageRegulador(),
     'medioPage': (BuildContext context) => const MedioPage(),
     'configPage': (BuildContext context) => const ConfigPage(),
+    'kitPage': (BuildContext context) => const KitPage(),
   };
 }
