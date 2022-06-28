@@ -236,7 +236,14 @@ class _ListaUbicaciones extends State<ListaUbicaciones> {
         setState(() {
           dropdownValue = newValue!;
           dimensionamientoProvider.UbicacionSeleccionada = newValue;
-          dimensionamientoProvider.kitRed();
+          for (String key in dimensionamientoProvider.hsSolaresJson.keys) {
+            if (key == dimensionamientoProvider.UbicacionSeleccionada) {
+              dimensionamientoProvider.Insolacion =
+                  dimensionamientoProvider.hsSolaresJson[key]?.toDouble();
+            }
+            ;
+          }
+          //dimensionamientoProvider.kitRed();
           dimensionamientoProvider.notifyListeners();
         });
       },

@@ -61,6 +61,7 @@ class _RedPage extends State<RedPage> {
                 dimensionamientoProvider.valorFactura.toString());
             if (dimensionamientoProvider.valorFactura != 0 &&
                 dimensionamientoProvider.UbicacionSeleccionada != "") {
+              dimensionamientoProvider.kitRed();
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => const KitPage()),

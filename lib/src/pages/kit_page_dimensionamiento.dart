@@ -18,28 +18,22 @@ class _KitPage extends State<KitPage> {
   Widget build(BuildContext context) {
     var dimensionamientoProvider =
         Provider.of<DimensionamientoProvider>(context, listen: true);
+
+    var contadorItem = dimensionamientoProvider.texto.length;
     //Tiene datos muestra kits
     return Scaffold(
         body: Center(
           child: ListView(
-            padding: const EdgeInsets.all(30),
-            children: [
-              ListViewConsumos(),
-            ],
-          ),
+              padding: const EdgeInsets.all(20.0),
+              scrollDirection: Axis.vertical,
+              children: dimensionamientoProvider.texto),
         ),
-        appBar: dimAppBar(),
-        floatingActionButton: FloatingActionButton.extended(
-          onPressed: () async {},
-          label: const Text(
-            'Continuar',
-          ),
-          icon: const Icon(Icons.arrow_forward),
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat);
+        appBar: dimAppBar());
   }
 
   AppBar dimAppBar() {
+    var dimensionamientoProvider =
+        Provider.of<DimensionamientoProvider>(context, listen: true);
     return AppBar(
       title: const Text(
         'DIMENSIONAMIENTO KITPAGE',
@@ -77,228 +71,18 @@ class _KitPage extends State<KitPage> {
             },
             icon: const Icon(Icons.help))
       ],
-    );
-  }
-}
-
-class ListViewConsumos extends StatefulWidget {
-  const ListViewConsumos({Key? key}) : super(key: key);
-
-  @override
-  State<ListViewConsumos> createState() => _ListViewConsumos();
-}
-
-enum SingingCharacter {
-  LamparaLed,
-  Bomba,
-  Notebook,
-  Heladera,
-  Freezer,
-  Lavarropas,
-  Aire2200FG,
-  Aire3500FG,
-  TvLed,
-  Cafetera,
-  CargadorCel,
-  RouterWifi,
-  VentiladorTecho,
-  VentiladorPie,
-}
-
-class _ListViewConsumos extends State<ListViewConsumos> {
-  SingingCharacter? _character = SingingCharacter.LamparaLed;
-  int? grupo1, grupo2, grupo3, grupo4, grupo5, grupo6, grupo7, grupo8;
-  int? grupo9, grupo10, grupo11, grupo12, grupo13, grupo14;
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        Divider(),
-        ListTile(
-          title: const Text('Lampara'),
-          leading: Radio<SingingCharacter>(
-            value: SingingCharacter.LamparaLed,
-            groupValue: _character,
-            onChanged: (SingingCharacter? value) {
-              setState(() {
-                _character = value;
-              });
-            },
-          ),
-        ),
-        Divider(),
-        ListTile(
-          title: const Text('Bomba 3/4 HP'),
-          leading: Radio<SingingCharacter>(
-            value: SingingCharacter.Bomba,
-            groupValue: _character,
-            onChanged: (SingingCharacter? value) {
-              setState(() {
-                _character = value;
-              });
-            },
-          ),
-        ),
-        Divider(),
-        ListTile(
-          title: const Text('Notebook'),
-          leading: Radio<SingingCharacter>(
-            value: SingingCharacter.Notebook,
-            groupValue: _character,
-            onChanged: (SingingCharacter? value) {
-              setState(() {
-                _character = value;
-              });
-            },
-          ),
-        ),
-        Divider(),
-        ListTile(
-          title: const Text('Heladera'),
-          leading: Radio<SingingCharacter>(
-            value: SingingCharacter.Heladera,
-            groupValue: _character,
-            onChanged: (SingingCharacter? value) {
-              setState(() {
-                _character = value;
-              });
-            },
-          ),
-        ),
-        Divider(),
-        ListTile(
-          title: const Text('Freezer'),
-          leading: Radio<SingingCharacter>(
-            value: SingingCharacter.Freezer,
-            groupValue: _character,
-            onChanged: (SingingCharacter? value) {
-              setState(() {
-                _character = value;
-              });
-            },
-          ),
-        ),
-        Divider(),
-        ListTile(
-          title: const Text('Lavarropas'),
-          leading: Radio<SingingCharacter>(
-            value: SingingCharacter.Lavarropas,
-            groupValue: _character,
-            onChanged: (SingingCharacter? value) {
-              setState(() {
-                _character = value;
-              });
-            },
-          ),
-        ),
-        Divider(),
-        ListTile(
-          title: const Text('Aire 2200 FG'),
-          leading: Radio<SingingCharacter>(
-            value: SingingCharacter.Aire2200FG,
-            groupValue: _character,
-            onChanged: (SingingCharacter? value) {
-              setState(() {
-                _character = value;
-              });
-            },
-          ),
-        ),
-        Divider(),
-        ListTile(
-          title: const Text('Aire 3500 FG'),
-          leading: Radio<SingingCharacter>(
-            value: SingingCharacter.Aire3500FG,
-            groupValue: _character,
-            onChanged: (SingingCharacter? value) {
-              setState(() {
-                _character = value;
-              });
-            },
-          ),
-        ),
-        Divider(),
-        ListTile(
-          title: const Text('Tv Led'),
-          leading: Radio<SingingCharacter>(
-            value: SingingCharacter.TvLed,
-            groupValue: _character,
-            onChanged: (SingingCharacter? value) {
-              setState(() {
-                _character = value;
-              });
-            },
-          ),
-        ),
-        Divider(),
-        ListTile(
-          title: const Text('Cafetera'),
-          leading: Radio<SingingCharacter>(
-            value: SingingCharacter.Cafetera,
-            groupValue: _character,
-            onChanged: (SingingCharacter? value) {
-              setState(() {
-                _character = value;
-              });
-            },
-          ),
-        ),
-        Divider(),
-        ListTile(
-          title: const Text('Cargador Cel'),
-          leading: Radio<SingingCharacter>(
-            value: SingingCharacter.CargadorCel,
-            groupValue: _character,
-            onChanged: (SingingCharacter? value) {
-              setState(() {
-                _character = value;
-              });
-            },
-          ),
-        ),
-        Divider(),
-        ListTile(
-          title: const Text('Router Wifi'),
-          leading: Radio<SingingCharacter>(
-            value: SingingCharacter.RouterWifi,
-            groupValue: _character,
-            onChanged: (SingingCharacter? value) {
-              setState(() {
-                _character = value;
-              });
-            },
-          ),
-        ),
-        Divider(),
-        ListTile(
-          title: const Text('Ventilador Techo'),
-          leading: Radio<SingingCharacter>(
-            value: SingingCharacter.VentiladorTecho,
-            groupValue: _character,
-            onChanged: (SingingCharacter? value) {
-              setState(() {
-                _character = value;
-              });
-            },
-          ),
-        ),
-        Divider(),
-        ListTile(
-          title: const Text('Ventilador Pie'),
-          leading: Radio<SingingCharacter>(
-            value: SingingCharacter.VentiladorPie,
-            groupValue: _character,
-            onChanged: (SingingCharacter? value) {
-              setState(() {
-                _character = value;
-              });
-            },
-          ),
-        ),
-        SizedBox(
-          height: 40,
-        ),
-      ],
+      leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () {
+            Navigator.of(context).pop();
+            dimensionamientoProvider.texto.clear();
+            dimensionamientoProvider.UbicacionSeleccionada = '';
+            dimensionamientoProvider.PotenciaPaneles = 0;
+            dimensionamientoProvider.BancoBateria = 0;
+            dimensionamientoProvider.totalEnergia = 0;
+            dimensionamientoProvider.EnergiaDiaria = 0;
+            dimensionamientoProvider.valorFactura = 0;
+          }),
     );
   }
 }
