@@ -1,6 +1,7 @@
 //import 'dart:ffi';
 
 import 'package:flutter/material.dart';
+import 'package:qmax_inst/sql_helper.dart';
 
 class DimensionamientoProvider extends ChangeNotifier {
   bool Red = false;
@@ -9,6 +10,9 @@ class DimensionamientoProvider extends ChangeNotifier {
   String UbicacionSeleccionada = '';
   var seleccion = <bool>[];
   var texto = <Widget>[];
+
+  //probando la suma y resta
+  var indicesSeleccionados = <int>[];
 
   double valorFactura = 0;
   double EnergiaDiaria = 0;
@@ -24,12 +28,29 @@ class DimensionamientoProvider extends ChangeNotifier {
   var Consumos = <String>[];
   var Kit = <Widget>[];
 
-  Map<String, double> _consumosSeleccionados = {};
+  Map<String, int> _consumosSeleccionados = {};
 
   inicioSeleccion() {
     for (int i = 0; i < consumosJson.length; i++) {
       seleccion.add(false);
     }
+  }
+
+  Future<int> creaConsumo(descripcion, potencia) async {
+    final id = await SQLHelper.createConsumo(descripcion, potencia);
+    return id;
+  }
+
+  Future<int> creaBateria(
+      tipo, modelo, fondo, flote, capacidad, tensionNominal) async {
+    final id = await SQLHelper.createBateria(
+        tipo, modelo, fondo, flote, capacidad, tensionNominal);
+    return id;
+  }
+
+  Future<int> creaInversor(modelo, potencia, tensionNominal) async {
+    final id = await SQLHelper.createInversor(modelo, potencia, tensionNominal);
+    return id;
   }
 
   Map<String, double> hsSolaresJson = {
@@ -59,7 +80,7 @@ class DimensionamientoProvider extends ChangeNotifier {
     'Tierra del Fuego': 3.82,
   };
 
-  Map<String, double> consumosJson = {
+  Map<String, int> consumosJson = {
     'Heladera': 1000,
     'Freezer': 1200,
     'Lampara Led': 72,
@@ -276,7 +297,7 @@ class DimensionamientoProvider extends ChangeNotifier {
   }
 
   //Agrega nuevo registro al Map
-  AgregaConsumo(String consumo, double valor) {
+  AgregaConsumo(String consumo, int valor) {
     //_consumosSeleccionados.update("$consumo", (value) => valor);
     _consumosSeleccionados.addAll({consumo: valor});
   }

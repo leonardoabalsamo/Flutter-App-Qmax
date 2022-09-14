@@ -1,8 +1,10 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:path/path.dart';
 import 'package:provider/provider.dart';
+import 'package:qmax_inst/sql_helper.dart';
 import 'package:qmax_inst/src/pages/kit_page_dimensionamiento.dart';
 import 'package:qmax_inst/src/providers/dimensionamiento_provider.dart';
-
 import '../models/class_app.dart';
 
 class GrupoPage extends StatefulWidget {
@@ -27,7 +29,9 @@ class _GrupoPage extends State<GrupoPage> {
           children: [
             ElevatedButton(
                 onPressed: () {
-                  dimensionamientoProvider.Reset();
+                  setState(() {
+                    dimensionamientoProvider.Reset();
+                  });
                 },
                 child: Text('Reset')),
             FloatingActionButton.extended(
@@ -144,64 +148,289 @@ class _ListConsumosState extends State<ListConsumos> {
   Widget build(BuildContext context) {
     var dimensionamientoProvider =
         Provider.of<DimensionamientoProvider>(context, listen: true);
-    var indicesSeleccionados = [];
     var contadoritem = dimensionamientoProvider.consumosJson.length;
     dimensionamientoProvider.inicioSeleccion();
 
-    return Card(
-      elevation: 20.0,
-      margin: EdgeInsets.only(bottom: 80),
-      child: Column(children: [
-        Text(
-          'Seleccione la Ubicación:  ',
-          style: TextStyle(fontSize: 18),
-        ),
-        SizedBox(
-          height: 20,
-        ),
-        ListaUbicaciones(),
-        SizedBox(
-          height: 20,
-        ),
-        Expanded(
-            child: ListView.builder(
-          itemCount: contadoritem,
-          itemBuilder: (context, index) {
-            return Column(children: [
-              CheckboxListTile(
-                  activeColor: const Color.fromRGBO(64, 151, 200, 1),
-                  title: Text(
-                      '${dimensionamientoProvider.consumosJson.keys.elementAt(index)}'),
-                  subtitle: Text(
-                      '${dimensionamientoProvider.consumosJson.values.elementAt(index)} W'),
-                  value: dimensionamientoProvider.seleccion[index],
-                  selected: dimensionamientoProvider.seleccion[index],
-                  onChanged: (bool? value) {
-                    setState(() {
-                      dimensionamientoProvider.seleccion[index] = value!;
-                      valor = dimensionamientoProvider.consumosJson.values
-                          .elementAt(index);
+    return Container(
+      decoration: BoxDecoration(color: Colors.black),
+      //elevation: 20.0,
+      margin: EdgeInsets.all(0),
+      child: Column(
+        children: [
+          Container(
+              child: Column(
+            children: [
+              SizedBox(
+                height: 25,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.location_on),
+                  Text(
+                    ' UBICACIÓN DE INSTALACIÓN ',
+                    style: TextStyle(fontSize: 22, fontFamily: 'Roboto'),
+                  ),
+                  Icon(Icons.light_mode_outlined)
+                ],
+              ),
+              SizedBox(
+                height: 30,
+              ),
+              ListaUbicaciones(),
+              SizedBox(
+                height: 5,
+              ),
+              Divider(
+                color: Colors.white,
+                thickness: 4,
+                indent: 20,
+                endIndent: 20,
+              ),
+              SizedBox(
+                height: 25,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.light_outlined,
+                  ),
+                  Text(
+                    ' SELECCIÓN DE CONSUMOS ',
+                    style: TextStyle(fontSize: 22, fontFamily: 'Roboto'),
+                  ),
+                  Icon(Icons.batch_prediction_rounded)
+                ],
+              ),
+              SizedBox(
+                height: 25,
+              ),
+            ],
+          )),
+          Expanded(
+            child: Container(
+              decoration: new BoxDecoration(
+                  color: Colors.blue.shade400,
+                  borderRadius: BorderRadius.circular(10.0)),
+              margin: EdgeInsets.only(bottom: 80),
+              child: ListView.builder(
+                itemCount: contadoritem,
+                itemBuilder: (context, index) {
+                  return CheckboxListTile(
+                      dense: true,
+                      activeColor: Color.fromARGB(255, 6, 0, 0),
+                      tileColor: Color.fromARGB(255, 255, 255, 255),
+                      isThreeLine: true, // false hace mas grande el casillero
+                      secondary: Icon(Icons.add_circle_outline_sharp),
+                      selectedTileColor: Colors.white,
+                      side: BorderSide(
+                          width: 2.0,
+                          color: Color.fromARGB(255, 255, 255, 255)),
+                      contentPadding: EdgeInsets.all(8),
 
-                      if (dimensionamientoProvider.seleccion.contains(index)) {
-                        indicesSeleccionados.remove(index); // unselect
-                        dimensionamientoProvider.Resta(valor);
-                      }
+                      //NOMBRE DEL CONSUMO
+                      title: Text(
+                        '${dimensionamientoProvider.consumosJson.keys.elementAt(index)}',
+                        style: TextStyle(fontSize: 20),
+                        textAlign: TextAlign.center,
+                      ),
 
-                      if (!dimensionamientoProvider.seleccion.contains(index)) {
-                        indicesSeleccionados.add(index); // select
-                        dimensionamientoProvider.Suma(valor);
-                      }
-                    });
-                    //Siempre SUMA, HAY QUE VERLO
-                    print('Valor: ' + '${valor}');
-                    print('TOTAL : ' +
-                        '${dimensionamientoProvider.totalEnergia}');
-                  }),
-              Divider(),
-            ]);
-          },
-        )),
-      ]),
+                      //POTENCIA CONSUMIDA
+                      subtitle: Text(
+                        'Consumo: ${dimensionamientoProvider.consumosJson.values.elementAt(index)} Wh',
+                        style: TextStyle(fontSize: 14),
+                        textAlign: TextAlign.center,
+                      ),
+                      value: dimensionamientoProvider.seleccion[index],
+                      selected: dimensionamientoProvider.seleccion[index],
+                      onChanged: (bool? value) {
+                        setState(() {
+                          // //SEGUIR CON ESTE TEMA; HAY QUE EVITAR QUE SUME SIEMPRE;
+                          dimensionamientoProvider.seleccion[index] =
+                              value!; // aca arroja true o false nada más
+
+                          //Me guardo el valor ->
+                          valor = dimensionamientoProvider.consumosJson.values
+                              .elementAt(index)
+                              .toDouble();
+
+                          if (dimensionamientoProvider.indicesSeleccionados
+                              .contains(index)) {
+                            dimensionamientoProvider.indicesSeleccionados
+                                .remove(index); // borra
+                            dimensionamientoProvider.Resta(valor);
+                            SQLHelper.deleteConsumo(dimensionamientoProvider
+                                .consumosJson.keys
+                                .elementAt(index));
+                            print('ESTABA SELECCIONADO!!!!!!!!! Y LO RESTA');
+                            print('Valor: ' + '${valor}');
+                            print('TOTAL : ' +
+                                '${dimensionamientoProvider.totalEnergia}');
+                          }
+
+                          if (!dimensionamientoProvider.indicesSeleccionados
+                              .contains(index)) {
+                            dimensionamientoProvider.indicesSeleccionados
+                                .add(index); // select
+                            dimensionamientoProvider.Suma(valor);
+                            SQLHelper.createConsumo(
+                                dimensionamientoProvider.consumosJson.keys
+                                    .elementAt(index),
+                                dimensionamientoProvider.consumosJson.values
+                                    .elementAt(index));
+                            print('NO ESTABA SELECCIONADO Y LO SUMA');
+
+                            print('Valor: ' + '${valor}');
+                            print('TOTAL : ' +
+                                '${dimensionamientoProvider.totalEnergia}');
+                          }
+                        });
+                      });
+                },
+              ),
+            ),
+          ),
+        ],
+      ),
     );
+
+    // return Card(
+    //   //elevation: 20.0,
+    //   margin: EdgeInsets.only(bottom: 80),
+    //   child: Column(
+    //     children: [
+    //       Expanded(
+    //           flex: 1,
+    //           child: Column(
+    //             children: [
+    //               SizedBox(
+    //                 height: 25,
+    //               ),
+    //               Row(
+    //                 mainAxisAlignment: MainAxisAlignment.center,
+    //                 children: [
+    //                   Icon(Icons.location_on),
+    //                   Text(
+    //                     ' UBICACIÓN DE INSTALACIÓN ',
+    //                     style: TextStyle(fontSize: 22, fontFamily: 'Roboto'),
+    //                   ),
+    //                   Icon(Icons.light_mode_outlined)
+    //                 ],
+    //               ),
+    //               SizedBox(
+    //                 height: 30,
+    //               ),
+    //               ListaUbicaciones(),
+    //               SizedBox(
+    //                 height: 5,
+    //               ),
+    //               Divider(
+    //                 color: Colors.white,
+    //                 thickness: 4,
+    //                 indent: 20,
+    //                 endIndent: 20,
+    //               ),
+    //               SizedBox(
+    //                 height: 25,
+    //               ),
+    //               Row(
+    //                 mainAxisAlignment: MainAxisAlignment.center,
+    //                 children: [
+    //                   Icon(
+    //                     Icons.light_outlined,
+    //                   ),
+    //                   Text(
+    //                     ' SELECCIÓN DE CONSUMOS ',
+    //                     style: TextStyle(fontSize: 22, fontFamily: 'Roboto'),
+    //                   ),
+    //                   Icon(Icons.batch_prediction_rounded)
+    //                 ],
+    //               ),
+    //               SizedBox(
+    //                 height: 25,
+    //               ),
+    //             ],
+    //           )),
+    //       Expanded(
+    //         flex: 2,
+    //         child: ListView.builder(
+    //           itemCount: contadoritem,
+    //           itemBuilder: (context, index) {
+    //             return CheckboxListTile(
+    //                 dense: true,
+    //                 activeColor: const Color.fromRGBO(64, 151, 200, 1),
+    //                 tileColor: Color.fromRGBO(64, 151, 200, 1),
+    //                 isThreeLine: true, // false hace mas grande el casillero
+    //                 secondary: Icon(Icons.add_circle_outline_sharp),
+    //                 selectedTileColor: Colors.white,
+    //                 side: BorderSide(
+    //                     width: 17.0, color: Color.fromARGB(255, 255, 255, 255)),
+    //                 contentPadding: EdgeInsets.all(8),
+
+    //                 //NOMBRE DEL CONSUMO
+    //                 title: Text(
+    //                   '${dimensionamientoProvider.consumosJson.keys.elementAt(index)}',
+    //                   style: TextStyle(fontSize: 20),
+    //                   textAlign: TextAlign.center,
+    //                 ),
+
+    //                 //POTENCIA CONSUMIDA
+    //                 subtitle: Text(
+    //                   'Consumo: ${dimensionamientoProvider.consumosJson.values.elementAt(index)} Wh',
+    //                   style: TextStyle(fontSize: 14),
+    //                   textAlign: TextAlign.center,
+    //                 ),
+    //                 value: dimensionamientoProvider.seleccion[index],
+    //                 selected: dimensionamientoProvider.seleccion[index],
+    //                 onChanged: (bool? value) {
+    //                   setState(() {
+    //                     // //SEGUIR CON ESTE TEMA; HAY QUE EVITAR QUE SUME SIEMPRE;
+    //                     dimensionamientoProvider.seleccion[index] =
+    //                         value!; // aca arroja true o false nada más
+
+    //                     //Me guardo el valor ->
+    //                     valor = dimensionamientoProvider.consumosJson.values
+    //                         .elementAt(index)
+    //                         .toDouble();
+
+    //                     if (dimensionamientoProvider.indicesSeleccionados
+    //                         .contains(index)) {
+    //                       dimensionamientoProvider.indicesSeleccionados
+    //                           .remove(index); // borra
+    //                       dimensionamientoProvider.Resta(valor);
+    //                       SQLHelper.deleteConsumo(dimensionamientoProvider
+    //                           .consumosJson.keys
+    //                           .elementAt(index));
+    //                       print('ESTABA SELECCIONADO!!!!!!!!! Y LO RESTA');
+    //                       print('Valor: ' + '${valor}');
+    //                       print('TOTAL : ' +
+    //                           '${dimensionamientoProvider.totalEnergia}');
+    //                     }
+
+    //                     if (!dimensionamientoProvider.indicesSeleccionados
+    //                         .contains(index)) {
+    //                       dimensionamientoProvider.indicesSeleccionados
+    //                           .add(index); // select
+    //                       dimensionamientoProvider.Suma(valor);
+    //                       SQLHelper.createConsumo(
+    //                           dimensionamientoProvider.consumosJson.keys
+    //                               .elementAt(index),
+    //                           dimensionamientoProvider.consumosJson.values
+    //                               .elementAt(index));
+    //                       print('NO ESTABA SELECCIONADO Y LO SUMA');
+
+    //                       print('Valor: ' + '${valor}');
+    //                       print('TOTAL : ' +
+    //                           '${dimensionamientoProvider.totalEnergia}');
+    //                     }
+    //                   });
+    //                 });
+    //           },
+    //         ),
+    //       ),
+    //     ],
+    //   ),
+    // );
   }
 }

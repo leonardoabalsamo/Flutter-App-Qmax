@@ -51,7 +51,7 @@ class _HomePageState extends State<HomePage> {
               icon: const Icon(Icons.help))
         ],
         title: const Text('INVERSORES REGULADORES [ SPD ]',
-            style: TextStyle(fontSize: 12)),
+            style: TextStyle(fontSize: 12, fontFamily: 'Roboto')),
         centerTitle: true,
       ),
     );
@@ -69,7 +69,11 @@ class _HomePageState extends State<HomePage> {
       Text(
         "Seleccione el Producto",
         textAlign: TextAlign.center,
-        style: TextStyle(fontSize: 22),
+        style: TextStyle(
+            fontSize: 32,
+            fontWeight: FontWeight.w300,
+            //fontStyle: FontStyle.italic,
+            fontFamily: 'Roboto'),
         textScaleFactor: 1,
       ),
       SizedBox(

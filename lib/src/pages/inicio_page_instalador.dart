@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:qmax_inst/sql_helper.dart';
 import 'package:qmax_inst/src/pages/red_page.dart';
 import 'package:qmax_inst/src/providers/dimensionamiento_provider.dart';
+import 'package:sqflite/sqflite.dart';
 import '../models/class_app.dart';
 import 'grupo_page.dart';
 
@@ -15,8 +17,36 @@ class InicioInstaladorPage extends StatefulWidget {
 }
 
 class _InicioPageInstaladorState extends State<InicioInstaladorPage> {
+  void cargaDB() async {
+/*
+    SQLHelper.createConsumo('Heladera', 1000);
+    SQLHelper.createConsumo('Freezer', 1200);
+    SQLHelper.createConsumo('Lampara Led', 72);
+    SQLHelper.createConsumo('Lavarropas', 500);
+    SQLHelper.createConsumo('Cafetera', 188);
+    SQLHelper.createConsumo('Bomba 3/4HP', 750);
+    SQLHelper.createConsumo('Cargador Cel', 5);
+    SQLHelper.createConsumo('Notebook', 80);
+    SQLHelper.createConsumo('Televisor LED', 80);
+    SQLHelper.createConsumo('Router Wifi', 100);
+    SQLHelper.createConsumo('Ventilador Techo', 120);
+    SQLHelper.createConsumo('Ventilador Pie', 160);
+    SQLHelper.createConsumo('Aire Acondicionado 2200Fg', 3200);
+*/
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    cargaDB();
+  }
+
   @override
   Widget build(BuildContext context) {
+    //SQLHelper.createBateria('PB-ACIDO', 'TROJAN T105', 7.25, 6.8, 225, 6);
+    //SQLHelper.createInversor('QM-1212-SPD', 1200, 12);
+    //SQLHelper.createUbicacion('Capital Federal', 5.1);
+
     var dimensionamientoProvider =
         Provider.of<DimensionamientoProvider>(context, listen: true);
 
@@ -24,33 +54,39 @@ class _InicioPageInstaladorState extends State<InicioInstaladorPage> {
         body: Center(
             child: Column(
           children: [
-            Container(
-              padding: const EdgeInsets.all(10),
-            ),
-            Text('Para avanzar con el dimensionamiento..'),
             SizedBox(
               height: 25,
             ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                checkRed(),
-                SizedBox(
-                  height: 25,
-                ),
-                Image.asset(
-                  'assets/images/fact.jpeg',
-                  height: 100,
-                ),
-                SizedBox(
-                  height: 25,
-                ),
-                checkGrupo(),
-                Image.asset(
-                  'assets/images/logo_grupo_electrogeno_t.png',
-                  height: 100,
-                ),
-              ],
+            Container(
+              padding: const EdgeInsets.all(10),
+            ),
+            Text(
+              'Para avanzar con el dimensionamiento..',
+              style: TextStyle(fontSize: 16, fontFamily: 'Roboto'),
+            ),
+            SizedBox(
+              height: 25,
+            ),
+            checkRed(),
+            SizedBox(
+              height: 25,
+            ),
+            Expanded(
+              flex: 1,
+              child: Image.asset(
+                'assets/images/fact.jpeg',
+              ),
+            ),
+            SizedBox(
+              height: 25,
+            ),
+            checkGrupo(),
+            Expanded(
+              flex: 2,
+              child: Image.asset(
+                'assets/images/logo_grupo_electrogeno_t.png',
+                scale: 1.2,
+              ),
             ),
           ],
         )),
@@ -129,6 +165,7 @@ AppBar dimAppBar(BuildContext context) {
           Navigator.of(context).pop();
           dimensionamientoProvider.Red = false;
           dimensionamientoProvider.Grupo = false;
+          SQLHelper.deleteConsumos();
         }),
   );
 }

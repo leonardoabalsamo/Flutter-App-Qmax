@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
@@ -221,14 +222,27 @@ class ListaUbicaciones extends StatefulWidget {
 }
 
 class _ListaUbicaciones extends State<ListaUbicaciones> {
-  String dropdownValue = 'Ubicación';
+  String dropdownValue = 'Buenos Aires';
   @override
   Widget build(BuildContext context) {
     var dimensionamientoProvider =
         Provider.of<DimensionamientoProvider>(context, listen: true);
 
     return DropdownButton<String>(
-      style: const TextStyle(fontSize: 20, color: Colors.white),
+      style: const TextStyle(
+        color: Colors.white,
+        leadingDistribution: TextLeadingDistribution.proportional,
+        height: 0,
+        letterSpacing: 1.0,
+      ),
+      itemHeight: kMinInteractiveDimension,
+      alignment: AlignmentDirectional.center,
+      icon: const Icon(
+        Icons.arrow_drop_down,
+      ),
+      iconSize: 30,
+      underline: SizedBox(),
+      iconEnabledColor: Colors.white,
       value: dropdownValue,
       isDense: true,
       borderRadius: BorderRadius.circular(10),
@@ -248,10 +262,7 @@ class _ListaUbicaciones extends State<ListaUbicaciones> {
         });
       },
       items: // dimensionamientoProvider.getConsumos
-
           <String>[
-        'Ubicación',
-        'Capital Federal',
         'Buenos Aires',
         'Catamarca',
         'Cordoba',
@@ -278,11 +289,14 @@ class _ListaUbicaciones extends State<ListaUbicaciones> {
       ].map<DropdownMenuItem<String>>((String value) {
         return DropdownMenuItem<String>(
           value: value,
-          child: SizedBox(
-              child: Text(
+          child: Text(
             value,
-            textAlign: TextAlign.center,
-          )),
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w400,
+              color: Colors.white,
+            ),
+          ),
         );
       }).toList(),
     );
@@ -303,10 +317,11 @@ class _ListadoConsumos extends State<ListadoConsumos> {
     var dimensionamientoProvider =
         Provider.of<DimensionamientoProvider>(context, listen: true);
     return CheckboxListTile(
+      tileColor: Colors.amber,
       title: const Text('Heladera'),
       value: valor, //timeDilation != 1.0,
       checkColor: Colors.blue,
-      selectedTileColor: Colors.black,
+      selectedTileColor: Colors.blue,
       onChanged: (bool? value) {
         setState(() {
           //timeDilation = value! ? 10.0 : 1.0;

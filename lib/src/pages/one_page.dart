@@ -21,35 +21,33 @@ class _onePage extends State<onePage> {
               onPressed: () {
                 showDialog(
                   context: context,
-                  builder: (BuildContext context) => FittedBox(
-                    child: AlertDialog(
-                      contentPadding: const EdgeInsets.all(10.0),
-                      content: Expanded(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Text(
-                              "La nueva App brinda una forma ágil y rápida de dimensionar sistemas",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(color: Colors.white),
+                  builder: (BuildContext context) => AlertDialog(
+                    contentPadding: const EdgeInsets.all(20.0),
+                    content: Row(
+                      children: const <Widget>[
+                        Expanded(
+                          child: Text(
+                            "La Aplicación brinda opciones de configuración y/o dimensionamiento de sistemas",
+                            style: TextStyle(
+                              fontSize: 16,
                             ),
-                          ],
+                          ),
                         ),
-                      ),
-                      actions: <Widget>[
-                        TextButton(
-                            child: const Text('Aceptar'),
-                            onPressed: () {
-                              Navigator.pop(context);
-                            }),
                       ],
                     ),
+                    actions: <Widget>[
+                      TextButton(
+                          child: const Text('Continuar'),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          }),
+                    ],
                   ),
                 );
               },
               icon: const Icon(Icons.help))
         ],
-        title: const Text('APLICACION INSTALADORES',
+        title: const Text('APLICACION INTEGRADORES',
             style: TextStyle(fontSize: 12)),
         centerTitle: true,
       ),
@@ -58,55 +56,76 @@ class _onePage extends State<onePage> {
 
   Center homePageColumn() {
     return Center(
-        child:
-            Column(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-      Text(
-        "¡Bienvenido!",
-        textAlign: TextAlign.center,
-        style: TextStyle(fontSize: 38),
-        textScaleFactor: 1,
-      ),
-      Text(
-        "Seleccione la Opción",
-        textAlign: TextAlign.center,
-        style: TextStyle(fontSize: 22),
-        textScaleFactor: 1,
-      ),
-      ElevatedButton(
-        style: ElevatedButton.styleFrom(
-            primary: Colors.black,
-            shadowColor: Colors.transparent,
-            padding: EdgeInsets.all(30)),
-        onPressed: () {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => const HomePage()));
-        },
-        child: Image.asset(
-          'assets/images/logogris.png',
-          height: 100,
+        child: Container(
+      child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
+        SizedBox(
+          height: 30,
         ),
-      ),
-      ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          primary: Colors.black,
-          shadowColor: Colors.transparent,
-          padding: EdgeInsets.all(10),
+        Text(
+          "¡Bienvenido!",
+          textAlign: TextAlign.center,
+          style: TextStyle(fontSize: 50),
+          textScaleFactor: 1,
         ),
-        onPressed: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => const InicioInstaladorPage()));
-        },
-        child: Image.asset(
-          'assets/images/inst.png',
-          height: 120,
-          width: 120,
+        SizedBox(
+          height: 15,
         ),
-      ),
-      SizedBox(
-        height: 20,
-      )
-    ]));
+        Text(
+          "Seleccione la Opción",
+          style: TextStyle(fontSize: 22),
+          textScaleFactor: 1,
+        ),
+        Expanded(
+            flex: 1,
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                primary: Colors.transparent,
+                shadowColor: Colors.transparent,
+              ),
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => const HomePage()));
+              },
+              child: Image.asset(
+                'assets/images/logogris.png',
+                scale: 2.2,
+              ),
+            )),
+        Text(
+          'Configuración de Equipos QMAX',
+          textAlign: TextAlign.center,
+          style: TextStyle(fontSize: 20),
+          textScaleFactor: 1.1,
+        ),
+        Expanded(
+          flex: 1,
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              primary: Colors.transparent,
+              shadowColor: Colors.transparent,
+            ),
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const InicioInstaladorPage()));
+            },
+            child: Icon(
+              Icons.build_circle_outlined,
+              size: 170,
+            ),
+          ),
+        ),
+        Text(
+          'Dimensionamiento Sistemas QMAX',
+          textAlign: TextAlign.center,
+          style: TextStyle(fontSize: 20),
+          textScaleFactor: 1.1,
+        ),
+        SizedBox(
+          height: 20,
+        )
+      ]),
+    ));
   }
 }
