@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:qmax_inst/src/pages/home_page.dart';
+import 'package:qmax_inst/src/providers/dimensionamiento_provider.dart';
 
+import '../widgets/menu_lateral.dart';
 import 'inicio_page_instalador.dart';
 
 class onePage extends StatefulWidget {
@@ -13,45 +15,7 @@ class onePage extends StatefulWidget {
 class _onePage extends State<onePage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: homePageColumn(),
-      appBar: AppBar(
-        actions: [
-          IconButton(
-              onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) => AlertDialog(
-                    contentPadding: const EdgeInsets.all(20.0),
-                    content: Row(
-                      children: const <Widget>[
-                        Expanded(
-                          child: Text(
-                            "La Aplicación brinda opciones de configuración y/o dimensionamiento de sistemas",
-                            style: TextStyle(
-                              fontSize: 16,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    actions: <Widget>[
-                      TextButton(
-                          child: const Text('Continuar'),
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          }),
-                    ],
-                  ),
-                );
-              },
-              icon: const Icon(Icons.help))
-        ],
-        title: const Text('APLICACION INTEGRADORES',
-            style: TextStyle(fontSize: 12)),
-        centerTitle: true,
-      ),
-    );
+    return principal(context);
   }
 
   Center homePageColumn() {
@@ -127,5 +91,48 @@ class _onePage extends State<onePage> {
         )
       ]),
     ));
+  }
+
+  Widget principal(BuildContext context) {
+    return Scaffold(
+      body: homePageColumn(),
+      appBar: AppBar(
+        actions: [
+          IconButton(
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) => AlertDialog(
+                    contentPadding: const EdgeInsets.all(20.0),
+                    content: Row(
+                      children: const <Widget>[
+                        Expanded(
+                          child: Text(
+                            "La Aplicación brinda opciones de configuración y/o dimensionamiento de sistemas",
+                            style: TextStyle(
+                              fontSize: 16,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    actions: <Widget>[
+                      TextButton(
+                          child: const Text('Continuar'),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          }),
+                    ],
+                  ),
+                );
+              },
+              icon: const Icon(Icons.help))
+        ],
+        title: const Text('APLICACION INTEGRADORES',
+            style: TextStyle(fontSize: 12)),
+        centerTitle: true,
+      ),
+      drawer: menuLateral(),
+    );
   }
 }

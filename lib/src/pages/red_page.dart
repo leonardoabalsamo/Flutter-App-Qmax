@@ -19,17 +19,30 @@ class _RedPage extends State<RedPage> {
   Widget build(BuildContext context) {
     var dimensionamientoProvider =
         Provider.of<DimensionamientoProvider>(context, listen: true);
+    return principal(context, dimensionamientoProvider);
+  }
+
+  Widget principal(
+      BuildContext context, DimensionamientoProvider dimensionamientoProvider) {
     return Scaffold(
         body: Center(
             child: Container(
-                padding: const EdgeInsets.all(10),
+                padding: const EdgeInsets.only(top: 50, bottom: 50),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Text(
                       'Verifique el consumo en la factura ',
-                      style: TextStyle(fontSize: 18),
+                      style: TextStyle(fontSize: 20),
                     ),
+                    Text(
+                      '(El valor debe ser mensual 30 días)',
+                      style: TextStyle(fontSize: 15),
+                    ),
+                    SizedBox(
+                      height: 30,
+                    ),
+                    slideBarEnergia(),
                     SizedBox(
                       height: 20,
                     ),
@@ -38,18 +51,30 @@ class _RedPage extends State<RedPage> {
                       height: 200,
                     ),
                     SizedBox(
-                      height: 20,
+                      height: 40,
                     ),
-                    slideBarEnergia(),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Text(
-                      'Seleccione la Ubicación:  ',
-                      style: TextStyle(fontSize: 18),
+                    Divider(
+                      color: Colors.white,
+                      thickness: 4,
+                      indent: 20,
+                      endIndent: 20,
                     ),
                     SizedBox(
                       height: 20,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.location_on),
+                        Text(
+                          ' UBICACIÓN DE INSTALACIÓN ',
+                          style: TextStyle(fontSize: 22, fontFamily: 'Roboto'),
+                        ),
+                        Icon(Icons.light_mode_outlined)
+                      ],
+                    ),
+                    SizedBox(
+                      height: 30,
                     ),
                     ListaUbicaciones(),
                   ],
@@ -125,6 +150,7 @@ AppBar dimAppBar(BuildContext context) {
           Navigator.of(context).pop();
           dimensionamientoProvider.Red = false;
           dimensionamientoProvider.Grupo = false;
+          dimensionamientoProvider.notifyListeners();
         }),
   );
 }

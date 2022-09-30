@@ -11,8 +11,31 @@ class DimensionamientoProvider extends ChangeNotifier {
   var seleccion = <bool>[];
   var texto = <Widget>[];
 
+  //Suma de consumos parcial
+  //potencia de consumo X Cantidad
+  double parcial = 0;
+
+  //Cantidad de horas de uso del consumo parcial
+  double horas = 0;
+
+  //Suma total
+  double sumaEnergia=0;
+
   //probando la suma y resta
   var indicesSeleccionados = <int>[];
+
+  //Dropdown Button de seleccion de consumos
+  var cantidad = <int>[];
+  var cantidadHoras = <int>[];
+
+  inicializacion() {
+    for (int i = 1; i < 13; i++) {
+      cantidad.add(i);
+    }
+    for (int i = 1; i < 25; i++) {
+      cantidadHoras.add(i);
+    }
+  }
 
   double valorFactura = 0;
   double EnergiaDiaria = 0;
@@ -24,8 +47,48 @@ class DimensionamientoProvider extends ChangeNotifier {
   double BancoBateria = 0;
   double totalEnergia = 0;
 
-  var Ubicaciones = <String>[];
-  var Consumos = <String>[];
+  var Ubicaciones = <String>[
+    'Buenos Aires',
+    'Catamarca',
+    'Cordoba',
+    'Corrientes',
+    'Chaco',
+    'Chubut',
+    'Entre Rios',
+    'Formosa',
+    'Jujuy',
+    'La Pampa',
+    'La Rioja',
+    'Mendoza',
+    'Misiones',
+    'Neuquén',
+    'Rio Negro',
+    'Salta',
+    'San Juan',
+    'San Luis',
+    'Santa Cruz',
+    'Santa Fé',
+    'Santiago del Estero',
+    'Tucuman',
+    'Tierra del Fuego',
+  ];
+
+  var Consumos = <String>[
+    'Heladera',
+    'Freezer',
+    'Lampara Led',
+    'Lavarropas',
+    'Cafetera',
+    'Bomba 3/4HP',
+    'Cargador Cel',
+    'Notebook',
+    'Televisor LED',
+    'Router Wifi',
+    'Ventilador Techo',
+    'Ventilador Pie',
+    'Aire Acondicionado 2200Fg',
+  ];
+
   var Kit = <Widget>[];
 
   Map<String, int> _consumosSeleccionados = {};
@@ -54,7 +117,6 @@ class DimensionamientoProvider extends ChangeNotifier {
   }
 
   Map<String, double> hsSolaresJson = {
-    'Capital Federal': 5.1,
     'Buenos Aires': 5.03,
     'Catamarca': 5.54,
     'Cordoba': 5.05,
@@ -81,19 +143,21 @@ class DimensionamientoProvider extends ChangeNotifier {
   };
 
   Map<String, int> consumosJson = {
-    'Heladera': 1000,
-    'Freezer': 1200,
-    'Lampara Led': 72,
+    'Heladera': 120,
+    'Freezer': 150,
+    'Lampara Led': 9,
     'Lavarropas': 500,
-    'Cafetera': 188,
-    'Bomba 3/4HP': 750,
+    'Cafetera': 1000,
+    'Bomba 1HP': 750,
     'Cargador Cel': 5,
     'Notebook': 80,
-    'Televisor LED': 80,
+    'Televisor LED 32': 80,
+    'Televisor LED 40': 100,
     'Router Wifi': 100,
     'Ventilador Techo': 120,
-    'Ventilador Pie': 160,
-    'Aire Acondicionado 2200Fg': 3200,
+    'Ventilador Pie': 80,
+    'AA 2200 Fg': 900,
+    'AA 3500 Fg': 1500,
   };
 //Funciones de los modelos
 
@@ -126,23 +190,23 @@ class DimensionamientoProvider extends ChangeNotifier {
 
   //Devuelve Lista <String>
 
-  List<String> get getUbicaciones {
-    for (String key in hsSolaresJson.keys) {
-      //key = Capital Federal
-      //${_hsSolaresJson[key]} 5.1
-      Ubicaciones.add(key);
-    }
-    return Ubicaciones;
-  }
+  // List<String> get getUbicaciones {
+  //   for (String key in hsSolaresJson.keys) {
+  //     //key = Capital Federal
+  //     //${_hsSolaresJson[key]} 5.1
+  //     Ubicaciones.add(key);
+  //   }
+  //   return Ubicaciones;
+  // }
 
-  List<String> get getConsumos {
-    for (String key in consumosJson.keys) {
-      //key = Capital Federal
-      //${_hsSolaresJson[key]} 5.1
-      Consumos.add(key);
-    }
-    return Consumos;
-  }
+  // List<String> get getConsumos {
+  //   for (String key in consumosJson.keys) {
+  //     //key = Capital Federal
+  //     //${_hsSolaresJson[key]} 5.1
+  //     Consumos.add(key);
+  //   }
+  //   return Consumos;
+  // }
 
   kitAislado() {
     for (String key in hsSolaresJson.keys) {

@@ -22,6 +22,7 @@ import '../providers/seleccion_provider.dart';
 
 import '../models/bateria_model.dart';
 import '../models/inversor_model.dart';
+import '../widgets/menu_lateral.dart';
 import 'inicio_page.dart';
 
 class ConfigPage extends StatefulWidget {

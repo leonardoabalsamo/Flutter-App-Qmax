@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qmax_inst/sql_helper.dart';
-
 import 'package:qmax_inst/src/providers/dimensionamiento_provider.dart';
 
 class KitPage extends StatefulWidget {
@@ -75,6 +74,7 @@ class _KitPage extends State<KitPage> {
     var contadorItem = dimensionamientoProvider.texto.length;
     //Tiene datos muestra kits
     return Scaffold(
+
         // body: Center(
         //   child: ListView(
         //       padding: const EdgeInsets.all(20.0),
@@ -192,7 +192,7 @@ class _KitPage extends State<KitPage> {
             dimensionamientoProvider.valorFactura = 0;
 
             /*Vaciamos la BD de consumos*/
-            SQLHelper.deleteConsumos();
+            //SQLHelper.deleteConsumos();
           }),
     );
   }

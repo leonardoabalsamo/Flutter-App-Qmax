@@ -15,8 +15,6 @@ class checkGrupo extends StatefulWidget {
 }
 
 class _checkGrupo extends State<checkGrupo> {
-  bool _check = false;
-
   @override
   Widget build(BuildContext context) {
     var dimensionamientoProvider =
@@ -25,13 +23,13 @@ class _checkGrupo extends State<checkGrupo> {
     return SwitchListTile(
       title: Text('¿Tiene Grupo?'),
       subtitle: Text('Indique si cuenta con Grupo Electrógeno'),
-      value: _check,
+      value: dimensionamientoProvider.Grupo,
       activeTrackColor: Color.fromARGB(255, 131, 207, 242),
       activeColor: Colors.blue,
       inactiveTrackColor: Colors.grey,
       onChanged: (bool value) {
         setState(() {
-          _check = value;
+          dimensionamientoProvider.Grupo = value;
           dimensionamientoProvider.Grupo = value;
           print(dimensionamientoProvider.Grupo);
           dimensionamientoProvider.notifyListeners();
@@ -50,7 +48,6 @@ class checkRed extends StatefulWidget {
 }
 
 class _checkRed extends State<checkRed> {
-  bool _check = false;
   @override
   Widget build(BuildContext context) {
     var dimensionamientoProvider =
@@ -59,15 +56,13 @@ class _checkRed extends State<checkRed> {
     return SwitchListTile(
       title: Text('¿Tiene Red?'),
       subtitle: Text('Indique si cuenta con Red Eléctrica'),
-      value: _check,
+      value: dimensionamientoProvider.Red,
       activeTrackColor: Color.fromARGB(255, 131, 207, 242),
       activeColor: Colors.blue,
       inactiveTrackColor: Colors.grey,
       onChanged: (bool value) {
         setState(() {
-          _check = value;
           dimensionamientoProvider.Red = value;
-          print(dimensionamientoProvider.Red);
           dimensionamientoProvider.notifyListeners();
         });
       },
@@ -84,30 +79,32 @@ class slideBarEnergia extends StatefulWidget {
 }
 
 class _slideBarEnergia extends State<slideBarEnergia> {
-  double _currentSliderValue = 0;
-
   @override
   Widget build(BuildContext context) {
     var dimensionamientoProvider =
         Provider.of<DimensionamientoProvider>(context, listen: true);
     return Column(
       children: [
-        Text('Valor Seleccionado:  $_currentSliderValue kWh / Mes'),
         Slider(
-          value: _currentSliderValue,
+          activeColor: Colors.blue.shade300,
+          inactiveColor: Colors.blue.shade100,
+          value: dimensionamientoProvider.valorFactura,
           max: 1000,
           divisions: 20,
-          label: _currentSliderValue.round().toString(),
+          label: dimensionamientoProvider.valorFactura.round().toString(),
           onChanged: (double value) {
             setState(() {
-              _currentSliderValue = value;
-              dimensionamientoProvider.setValorFactura = _currentSliderValue;
+              dimensionamientoProvider.valorFactura = value;
               dimensionamientoProvider.notifyListeners();
             });
           },
         ),
+        Text(
+          'Valor Seleccionado:  ${dimensionamientoProvider.valorFactura} kWh / Mes',
+          style: TextStyle(fontSize: 16),
+        ),
         SizedBox(
-          height: 10,
+          height: 20,
         ),
       ],
     );
@@ -136,7 +133,6 @@ class _ListaConsumos extends State<ListaConsumos> {
       onChanged: (String? newValue) {
         setState(() {
           dropdownValue = newValue!;
-          // dimensionamientoProvider. = newValue;
         });
       },
       items: <String>[
@@ -171,7 +167,7 @@ class ListaCantidad extends StatefulWidget {
 }
 
 class _ListaCantidad extends State<ListaCantidad> {
-  String dropdownValue = 'SELECCIONE LA CANTIDAD';
+  String dropdownValue = '1';
 
   @override
   Widget build(BuildContext context) {
@@ -190,17 +186,8 @@ class _ListaCantidad extends State<ListaCantidad> {
           seleccionProvider.setInversor = invBusca.buscaInversor(newValue);
         });
       },
-      items: <String>[
-        'SELECCIONE LA CANTIDAD',
-        '1',
-        '2',
-        '3',
-        '4',
-        '5',
-        '6',
-        '7',
-        '8'
-      ].map<DropdownMenuItem<String>>((String value) {
+      items: <String>['1', '2', '3', '4', '5', '6', '7', '8']
+          .map<DropdownMenuItem<String>>((String value) {
         return DropdownMenuItem<String>(
           value: value,
           child: SizedBox(
@@ -238,7 +225,7 @@ class _ListaUbicaciones extends State<ListaUbicaciones> {
       itemHeight: kMinInteractiveDimension,
       alignment: AlignmentDirectional.center,
       icon: const Icon(
-        Icons.arrow_drop_down,
+        Icons.arrow_circle_down_sharp,
       ),
       iconSize: 30,
       underline: SizedBox(),
@@ -261,32 +248,9 @@ class _ListaUbicaciones extends State<ListaUbicaciones> {
           dimensionamientoProvider.notifyListeners();
         });
       },
-      items: // dimensionamientoProvider.getConsumos
-          <String>[
-        'Buenos Aires',
-        'Catamarca',
-        'Cordoba',
-        'Corrientes',
-        'Chaco',
-        'Chubut',
-        'Entre Rios',
-        'Formosa',
-        'Jujuy',
-        'La Pampa',
-        'La Rioja',
-        'Mendoza',
-        'Misiones',
-        'Neuquén',
-        'Rio Negro',
-        'Salta',
-        'San Juan',
-        'San Luis',
-        'Santa Cruz',
-        'Santa Fé',
-        'Santiago del Estero',
-        'Tucuman',
-        'Tierra del Fuego',
-      ].map<DropdownMenuItem<String>>((String value) {
+      items: dimensionamientoProvider
+              .Ubicaciones //Lista de Ubicaciones (Provincias)
+          .map<DropdownMenuItem<String>>((String value) {
         return DropdownMenuItem<String>(
           value: value,
           child: Text(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
 import 'package:qmax_inst/src/providers/seleccion_provider.dart';
+import 'package:qmax_inst/src/widgets/error_combinacion.dart';
 
 import '../models/bateria_model.dart';
 import '../models/inversor_model.dart';
@@ -119,7 +120,7 @@ class _InicioPageState extends State<InicioPage> {
                     MaterialPageRoute(builder: (context) => const MedioPage()),
                   );
                 } else {
-                  await _showError(context);
+                  await showError(context);
                 }
               },
               label: const Text(
@@ -226,7 +227,7 @@ class _InicioPageState extends State<InicioPage> {
                   MaterialPageRoute(builder: (context) => const MedioPage()),
                 );
               } else {
-                await _showError(context);
+                await showError(context);
               }
             },
             label: const Text(
@@ -335,7 +336,7 @@ class _InicioPageState extends State<InicioPage> {
                 MaterialPageRoute(builder: (context) => const MedioPage()),
               );
             } else {
-              await _showError(context);
+              await showError(context);
             }
           },
           label: const Text(
@@ -346,34 +347,6 @@ class _InicioPageState extends State<InicioPage> {
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       );
     }
-  }
-
-  Future _showError(BuildContext context) {
-    return showDialog(
-      context: context,
-      builder: (BuildContext context) => AlertDialog(
-        contentPadding: const EdgeInsets.all(10.0),
-        content: Row(
-          children: const <Widget>[
-            Expanded(
-              child: Text(
-                "No es posible la combinación indicada. Reintente",
-                style: TextStyle(
-                  fontSize: 14,
-                ),
-              ),
-            ),
-          ],
-        ),
-        actions: <Widget>[
-          TextButton(
-              child: const Text('Aceptar'),
-              onPressed: () {
-                Navigator.pop(context);
-              }),
-        ],
-      ),
-    );
   }
 }
 

@@ -14,47 +14,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: homePageColumn(),
-      appBar: AppBar(
-        actions: [
-          IconButton(
-              onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) => FittedBox(
-                    child: AlertDialog(
-                      contentPadding: const EdgeInsets.all(10.0),
-                      content: Expanded(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Text(
-                              "La nueva App brinda una forma ágil y rápida para configurar los Equipos QMAX",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          ],
-                        ),
-                      ),
-                      actions: <Widget>[
-                        TextButton(
-                            child: const Text('Aceptar'),
-                            onPressed: () {
-                              Navigator.pop(context);
-                            }),
-                      ],
-                    ),
-                  ),
-                );
-              },
-              icon: const Icon(Icons.help))
-        ],
-        title: const Text('INVERSORES REGULADORES [ SPD ]',
-            style: TextStyle(fontSize: 12, fontFamily: 'Roboto')),
-        centerTitle: true,
-      ),
-    );
+    return Scaffold(body: homePageColumn(), appBar: dimAppBar(context));
   }
 
   Center homePageColumn() {
@@ -79,6 +39,13 @@ class _HomePageState extends State<HomePage> {
       SizedBox(
         height: 20,
       ),
+      Text(
+        "Inversor SPD",
+        textAlign: TextAlign.center,
+        style: TextStyle(
+            fontSize: 32, fontWeight: FontWeight.w300, fontFamily: 'Roboto'),
+        textScaleFactor: 1,
+      ),
       ElevatedButton(
         style: ElevatedButton.styleFrom(
             primary: Colors.black,
@@ -93,6 +60,13 @@ class _HomePageState extends State<HomePage> {
           'assets/images/inv.png',
           height: 150,
         ),
+      ),
+      Text(
+        "Regulador MPPT",
+        textAlign: TextAlign.center,
+        style: TextStyle(
+            fontSize: 32, fontWeight: FontWeight.w300, fontFamily: 'Roboto'),
+        textScaleFactor: 1,
       ),
       ElevatedButton(
         style: ElevatedButton.styleFrom(
@@ -116,5 +90,46 @@ class _HomePageState extends State<HomePage> {
         height: 50,
       )
     ]));
+  }
+
+  AppBar dimAppBar(context) {
+    return AppBar(
+      actions: [
+        IconButton(
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) => FittedBox(
+                  child: AlertDialog(
+                    contentPadding: const EdgeInsets.all(10.0),
+                    content: Expanded(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text(
+                            "La nueva App brinda una forma ágil y rápida para configurar los Equipos QMAX",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ],
+                      ),
+                    ),
+                    actions: <Widget>[
+                      TextButton(
+                          child: const Text('Aceptar'),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          }),
+                    ],
+                  ),
+                ),
+              );
+            },
+            icon: const Icon(Icons.help))
+      ],
+      title: const Text('INVERSORES REGULADORES [ SPD ]',
+          style: TextStyle(fontSize: 12, fontFamily: 'Roboto')),
+      centerTitle: true,
+    );
   }
 }
