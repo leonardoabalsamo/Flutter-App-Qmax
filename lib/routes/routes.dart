@@ -5,9 +5,11 @@ import 'package:qmax_inst/src/pages/inicio_page.dart';
 import 'package:qmax_inst/src/pages/kit_page_dimensionamiento.dart';
 import 'package:qmax_inst/src/pages/medio_page.dart';
 
+import '../src/pages/grupo_page.dart';
 import '../src/pages/inicio_page_instalador.dart';
 import '../src/pages/inicio_page_regulador.dart';
 import '../src/pages/one_page.dart';
+import '../src/pages/red_page.dart';
 
 Map<String, WidgetBuilder> getApplicationRoutes() {
   return <String, WidgetBuilder>{
@@ -21,5 +23,7 @@ Map<String, WidgetBuilder> getApplicationRoutes() {
     'medioPage': (BuildContext context) => const MedioPage(),
     'configPage': (BuildContext context) => const ConfigPage(),
     'kitPage': (BuildContext context) => const KitPage(),
+    'redPage': (BuildContext context) => const RedPage(),
+    'grupoPage': (BuildContext context) => const GrupoPage(),
   };
 }

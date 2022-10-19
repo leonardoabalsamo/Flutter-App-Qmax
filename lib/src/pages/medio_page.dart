@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:qmax_inst/src/widgets/error_combinacion.dart';
 import '../providers/seleccion_provider.dart';
 import 'config_page.dart';
 
@@ -18,90 +19,11 @@ class _MedioPage extends State<MedioPage> {
     var seleccionProvider =
         Provider.of<SeleccionProvider>(context, listen: true);
     if (seleccionProvider.tipoInstalacion != 'TIPO DE INSTALACION') {
+      //Indica que el usuario realizó una selección
+
       if (seleccionProvider.red != 'RED ELECTRICA') {
-        return Scaffold(
-          body: Center(
-            child: Column(
-              children: [
-                const SizedBox(
-                  height: 15,
-                ),
-                const ListaTipo(),
-                const SizedBox(
-                  height: 5,
-                ),
-                Expanded(
-                    child: Image.asset(
-                  "assets/images/instalacion.png",
-                )),
-                const SizedBox(
-                  height: 5,
-                ),
-                const ListaRed(),
-                Expanded(
-                    child: Image.asset(
-                  "assets/images/inversor_iq.png",
-                )),
-                const ListaSolucion(),
-                const SizedBox(
-                  height: 5,
-                ),
-                Expanded(
-                    child: Image.asset(
-                  "assets/images/logo_bateria_t.png",
-                )),
-                const SizedBox(
-                  height: 55,
-                ),
-              ],
-            ),
-          ),
-          appBar: AppBar(
-            title: const Text('SOLUCION PLANTEADA',
-                style: TextStyle(fontSize: 12)),
-          ),
-          floatingActionButton: FloatingActionButton.extended(
-            onPressed: () {
-              bool check = validaInst();
-              if (check == true) {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const ConfigPage()),
-                );
-              } else {
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) => AlertDialog(
-                    contentPadding: const EdgeInsets.all(10.0),
-                    content: Row(
-                      children: const <Widget>[
-                        Expanded(
-                          child: Text(
-                            "La selección no es correcta, reintente. ",
-                            style: TextStyle(
-                              fontSize: 16,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    actions: <Widget>[
-                      TextButton(
-                          child: const Text('Aceptar'),
-                          onPressed: () {
-                            Navigator.pop(context);
-                          }),
-                    ],
-                  ),
-                );
-              }
-            },
-            label: const Text('Obtener Configuración'),
-            icon: const Icon(Icons.arrow_forward),
-          ),
-          floatingActionButtonLocation:
-              FloatingActionButtonLocation.centerDocked,
-        );
+        //Indica que el usuario realizó una selección
+        return verificaRed(context);
       } else {
         return Scaffold(
           body: Center(
@@ -126,7 +48,6 @@ class _MedioPage extends State<MedioPage> {
                     child: Image.asset(
                   "assets/images/inversor_iq.png",
                 )),
-                //const ListaSolucion(),
                 const SizedBox(
                   height: 5,
                 ),
@@ -153,31 +74,7 @@ class _MedioPage extends State<MedioPage> {
                   MaterialPageRoute(builder: (context) => const ConfigPage()),
                 );
               } else {
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) => AlertDialog(
-                    contentPadding: const EdgeInsets.all(10.0),
-                    content: Row(
-                      children: const <Widget>[
-                        Expanded(
-                          child: Text(
-                            "La selección no es correcta, reintente. ",
-                            style: TextStyle(
-                              fontSize: 16,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    actions: <Widget>[
-                      TextButton(
-                          child: const Text('Aceptar'),
-                          onPressed: () {
-                            Navigator.pop(context);
-                          }),
-                    ],
-                  ),
-                );
+                showError(context);
               }
             },
             label: const Text('Obtener Configuración'),
@@ -206,12 +103,10 @@ class _MedioPage extends State<MedioPage> {
               const SizedBox(
                 height: 5,
               ),
-              //const ListaRed(),
               Expanded(
                   child: Image.asset(
                 "assets/images/inversor_iq.png",
               )),
-              //const ListaSolucion(),
               const SizedBox(
                 height: 5,
               ),
@@ -238,31 +133,7 @@ class _MedioPage extends State<MedioPage> {
                 MaterialPageRoute(builder: (context) => const ConfigPage()),
               );
             } else {
-              showDialog(
-                context: context,
-                builder: (BuildContext context) => AlertDialog(
-                  contentPadding: const EdgeInsets.all(10.0),
-                  content: Row(
-                    children: const <Widget>[
-                      Expanded(
-                        child: Text(
-                          "La selección no es correcta, reintente. ",
-                          style: TextStyle(
-                            fontSize: 16,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  actions: <Widget>[
-                    TextButton(
-                        child: const Text('Aceptar'),
-                        onPressed: () {
-                          Navigator.pop(context);
-                        }),
-                  ],
-                ),
-              );
+              showError(context);
             }
           },
           label: const Text('Obtener Configuración'),
@@ -305,6 +176,66 @@ class _MedioPage extends State<MedioPage> {
         return check;
     }
   }
+
+  Scaffold verificaRed(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: Column(
+          children: [
+            const SizedBox(
+              height: 15,
+            ),
+            const ListaTipo(),
+            const SizedBox(
+              height: 5,
+            ),
+            Expanded(
+                child: Image.asset(
+              "assets/images/instalacion.png",
+            )),
+            const SizedBox(
+              height: 5,
+            ),
+            const ListaRed(),
+            Expanded(
+                child: Image.asset(
+              "assets/images/inversor_iq.png",
+            )),
+            const ListaSolucion(),
+            const SizedBox(
+              height: 5,
+            ),
+            Expanded(
+                child: Image.asset(
+              "assets/images/logo_bateria_t.png",
+            )),
+            const SizedBox(
+              height: 55,
+            ),
+          ],
+        ),
+      ),
+      appBar: AppBar(
+        title: const Text('SOLUCION PLANTEADA', style: TextStyle(fontSize: 12)),
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          bool check = validaInst();
+          if (check == true) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const ConfigPage()),
+            );
+          } else {
+            showError(context);
+          }
+        },
+        label: const Text('Obtener Configuración'),
+        icon: const Icon(Icons.arrow_forward),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+    );
+  }
 }
 
 class ListaTipo extends StatefulWidget {
@@ -318,8 +249,7 @@ class _ListaTipo extends State<ListaTipo> {
   String dropdownValue = 'TIPO DE INSTALACION';
   @override
   Widget build(BuildContext context) {
-    var seleccionProvider =
-        Provider.of<SeleccionProvider>(context, listen: true);
+    var sP = Provider.of<SeleccionProvider>(context, listen: true);
     return DropdownButton<String>(
       style: const TextStyle(fontSize: 20, color: Colors.white),
       borderRadius: BorderRadius.circular(10),
@@ -328,8 +258,8 @@ class _ListaTipo extends State<ListaTipo> {
       onChanged: (String? newValue) {
         setState(() {
           dropdownValue = newValue!;
-          seleccionProvider.tipoInstalacion = newValue;
-          seleccionProvider.notifyListeners();
+          sP.tipoInstalacion = newValue;
+          sP.notificar(context);
         });
       },
       items: <String>[
@@ -361,9 +291,8 @@ class _ListaRed extends State<ListaRed> {
   String dropdownValue = 'RED ELECTRICA';
   @override
   Widget build(BuildContext context) {
-    var seleccionProvider =
-        Provider.of<SeleccionProvider>(context, listen: true);
-    String tipoinst = seleccionProvider.tipoInstalacion;
+    var sP = Provider.of<SeleccionProvider>(context, listen: true);
+    String tipoinst = sP.tipoInstalacion;
 
     if (tipoinst == 'VEHICULOS') {
       return DropdownButton(
@@ -390,8 +319,8 @@ class _ListaRed extends State<ListaRed> {
         onChanged: (String? newValue) {
           setState(() {
             dropdownValue = newValue!;
-            seleccionProvider.red = newValue;
-            seleccionProvider.notifyListeners();
+            sP.red = newValue;
+            sP.notificar(context);
           });
         },
         items: <String>[
@@ -440,10 +369,9 @@ class _ListaSolucion extends State<ListaSolucion> {
   String dropdownValue = 'TIPO DE SOLUCION';
   @override
   Widget build(BuildContext context) {
-    var seleccionProvider =
-        Provider.of<SeleccionProvider>(context, listen: true);
-    String tipoinst = seleccionProvider.tipoInstalacion;
-    String red = seleccionProvider.red;
+    var sP = Provider.of<SeleccionProvider>(context, listen: true);
+    String tipoinst = sP.tipoInstalacion;
+    String red = sP.red;
     DropdownButton desplegable;
 
     if (tipoinst == 'TIPO DE INSTALACION') {
@@ -522,8 +450,8 @@ class _ListaSolucion extends State<ListaSolucion> {
         onChanged: (String? newValue) {
           setState(() {
             dropdownValue = newValue!;
-            seleccionProvider.tipoSolucion = dropdownValue;
-            seleccionProvider.notifyListeners();
+            sP.tipoSolucion = dropdownValue;
+            sP.notificar(context);
           });
         },
         items: <String>[

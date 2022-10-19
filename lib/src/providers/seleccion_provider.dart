@@ -82,7 +82,6 @@ class SeleccionProvider extends ChangeNotifier {
   }
 
   bool validacionReg() {
-    
     // cantidad de bancos = (tension nominal bateria * cantidad baterias)/tensionBanco
 
     cantidadBancos =
@@ -111,5 +110,9 @@ class SeleccionProvider extends ChangeNotifier {
     } else {
       return false;
     }
+  }
+
+  notificar(context) {
+    notifyListeners();
   }
 }

@@ -1,3 +1,7 @@
+//import 'dart:html';
+
+//import 'dart:html';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qmax_inst/src/providers/dimensionamiento_provider.dart';
@@ -17,50 +21,105 @@ class _RedPage extends State<RedPage> {
   @override
   @override
   Widget build(BuildContext context) {
-    var dimensionamientoProvider =
-        Provider.of<DimensionamientoProvider>(context, listen: true);
+    var dP = Provider.of<DimensionamientoProvider>(context, listen: true);
+    return principal(context, dP);
+  }
+
+  Widget principal(BuildContext context, DimensionamientoProvider dP) {
     return Scaffold(
         body: Center(
             child: Container(
-                padding: const EdgeInsets.all(10),
+                padding: const EdgeInsets.only(top: 20, bottom: 50),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Text(
                       'Verifique el consumo en la factura ',
-                      style: TextStyle(fontSize: 18),
+                      style: TextStyle(fontSize: 20),
+                    ),
+                    Text(
+                      '(El valor debe ser mensual 30 días)',
+                      style: TextStyle(fontSize: 15),
                     ),
                     SizedBox(
-                      height: 20,
+                      height: 10,
                     ),
-                    Image.asset(
-                      'assets/images/fact.jpeg',
-                      height: 200,
+                    Expanded(
+                      child: Image.asset(
+                        'assets/images/fact.jpeg',
+                      ),
                     ),
                     SizedBox(
-                      height: 20,
+                      height: 10,
                     ),
                     slideBarEnergia(),
                     SizedBox(
+                      height: 10,
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text(
+                          'Meta de Ahorro',
+                          style: TextStyle(fontSize: 18),
+                        ),
+                      ],
+                    ),
+                    slideBarMeta(),
+                    SizedBox(
+                      height: 30,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Text(
+                          'Selección de Panel',
+                          style: TextStyle(fontSize: 20),
+                        ),
+                      ],
+                    ),
+                    slideBarPanel(),
+                    SizedBox(
                       height: 20,
                     ),
-                    Text(
-                      'Seleccione la Ubicación:  ',
-                      style: TextStyle(fontSize: 18),
+                    Divider(
+                      color: Colors.white,
+                      thickness: 4,
+                      indent: 20,
+                      endIndent: 20,
                     ),
                     SizedBox(
                       height: 20,
                     ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.location_on),
+                        Text(
+                          ' UBICACIÓN DE INSTALACIÓN ',
+                          style: TextStyle(fontSize: 22, fontFamily: 'Roboto'),
+                        ),
+                        Icon(Icons.light_mode_outlined)
+                      ],
+                    ),
+                    SizedBox(
+                      height: 30,
+                    ),
                     ListaUbicaciones(),
+                    SizedBox(
+                      height: 30,
+                    ),
                   ],
                 ))),
         appBar: dimAppBar(context),
         floatingActionButton: FloatingActionButton.extended(
           onPressed: () async {
-            print('VALOR FACTURA: ' +
-                dimensionamientoProvider.valorFactura.toString());
-            if (dimensionamientoProvider.valorFactura != 0 &&
-                dimensionamientoProvider.UbicacionSeleccionada != "") {
+            if (verificacion(context) == true) {
+              //muestro meta de ahorro ->
+              dP.kitRed();
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => const KitPage()),
@@ -76,11 +135,21 @@ class _RedPage extends State<RedPage> {
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat);
   }
+
+  bool verificacion(context) {
+    var dP = Provider.of<DimensionamientoProvider>(context, listen: false);
+
+    if (dP.valorFactura == 0) () => false;
+    if (dP.UbicacionSeleccionada == "") () => false;
+    if (dP.meta == 0) () => false;
+    if (dP.PanelSeleccionado == 0) () => false;
+
+    return true;
+  }
 }
 
 AppBar dimAppBar(BuildContext context) {
-  var dimensionamientoProvider =
-      Provider.of<DimensionamientoProvider>(context, listen: true);
+  var dP = Provider.of<DimensionamientoProvider>(context, listen: true);
   return AppBar(
     title: const Text(
       'DIMENSIONAMIENTO',
@@ -122,8 +191,9 @@ AppBar dimAppBar(BuildContext context) {
         icon: Icon(Icons.arrow_back, color: Colors.white),
         onPressed: () {
           Navigator.of(context).pop();
-          dimensionamientoProvider.Red = false;
-          dimensionamientoProvider.Grupo = false;
+          dP.Red = false;
+          dP.Grupo = false;
+          dP.notificar(context);
         }),
   );
 }

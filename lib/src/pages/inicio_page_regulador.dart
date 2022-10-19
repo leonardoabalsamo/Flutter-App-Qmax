@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qmax_inst/src/pages/config_page.dart';
 import 'package:qmax_inst/src/providers/seleccion_provider.dart';
+import 'package:qmax_inst/src/widgets/error_combinacion.dart';
 
 import '../models/bateria_model.dart';
+//import '../widgets/menu_lateral.dart';
 
 class InicioPageRegulador extends StatefulWidget {
   const InicioPageRegulador({
@@ -74,44 +76,7 @@ class _InicioPageReguladorState extends State<InicioPageRegulador> {
               ),
             ],
           )),
-          appBar: AppBar(
-            title: const Text(
-              'SELECCION DE MODELO',
-              style: TextStyle(fontSize: 12),
-            ),
-            centerTitle: true,
-            actions: [
-              IconButton(
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) => AlertDialog(
-                        contentPadding: const EdgeInsets.all(10.0),
-                        content: Row(
-                          children: const <Widget>[
-                            Expanded(
-                              child: Text(
-                                "La selección no puede superar los 4 bancos de baterías en paralelo por desbalance en carga y descarga. ",
-                                style: TextStyle(
-                                  fontSize: 16,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        actions: <Widget>[
-                          TextButton(
-                              child: const Text('Aceptar'),
-                              onPressed: () {
-                                Navigator.pop(context);
-                              }),
-                        ],
-                      ),
-                    );
-                  },
-                  icon: const Icon(Icons.help))
-            ],
-          ),
+          appBar: dimAppBar(context),
           floatingActionButton: FloatingActionButton.extended(
             onPressed: () async {
               if (seleccionProvider.validacionReg()) {
@@ -120,7 +85,7 @@ class _InicioPageReguladorState extends State<InicioPageRegulador> {
                   MaterialPageRoute(builder: (context) => const ConfigPage()),
                 );
               } else {
-                await _showError(context);
+                await showError(context);
               }
             },
             label: const Text(
@@ -171,7 +136,6 @@ class _InicioPageReguladorState extends State<InicioPageRegulador> {
                 ),
               ),
               ListaTensiones(),
-              //ListaNominal(),
               const Expanded(
                 child: SizedBox(
                   height: 10,
@@ -188,31 +152,7 @@ class _InicioPageReguladorState extends State<InicioPageRegulador> {
             actions: [
               IconButton(
                   onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) => AlertDialog(
-                        contentPadding: const EdgeInsets.all(10.0),
-                        content: Row(
-                          children: const <Widget>[
-                            Expanded(
-                              child: Text(
-                                "La selección no puede superar los 4 bancos de baterías en paralelo por desbalance en carga y descarga. ",
-                                style: TextStyle(
-                                  fontSize: 16,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        actions: <Widget>[
-                          TextButton(
-                              child: const Text('Aceptar'),
-                              onPressed: () {
-                                Navigator.pop(context);
-                              }),
-                        ],
-                      ),
-                    );
+                    errorCantBat(context);
                   },
                   icon: const Icon(Icons.help))
             ],
@@ -225,7 +165,7 @@ class _InicioPageReguladorState extends State<InicioPageRegulador> {
                   MaterialPageRoute(builder: (context) => const ConfigPage()),
                 );
               } else {
-                await _showError(context);
+                await showError(context);
               }
             },
             label: const Text(
@@ -275,7 +215,6 @@ class _InicioPageReguladorState extends State<InicioPageRegulador> {
                 ],
               ),
             ),
-            //ListaTensiones(),
             const Expanded(
               child: SizedBox(
                 height: 10,
@@ -292,31 +231,7 @@ class _InicioPageReguladorState extends State<InicioPageRegulador> {
           actions: [
             IconButton(
                 onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) => AlertDialog(
-                      contentPadding: const EdgeInsets.all(10.0),
-                      content: Row(
-                        children: const <Widget>[
-                          Expanded(
-                            child: Text(
-                              "La selección no puede superar los 4 bancos de baterías en paralelo por desbalance en carga y descarga. ",
-                              style: TextStyle(
-                                fontSize: 16,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      actions: <Widget>[
-                        TextButton(
-                            child: const Text('Aceptar'),
-                            onPressed: () {
-                              Navigator.pop(context);
-                            }),
-                      ],
-                    ),
-                  );
+                  errorCantBat(context);
                 },
                 icon: const Icon(Icons.help))
           ],
@@ -329,7 +244,7 @@ class _InicioPageReguladorState extends State<InicioPageRegulador> {
                 MaterialPageRoute(builder: (context) => const ConfigPage()),
               );
             } else {
-              await _showError(context);
+              await showError(context);
             }
           },
           label: const Text(
@@ -342,31 +257,44 @@ class _InicioPageReguladorState extends State<InicioPageRegulador> {
     }
   }
 
-  Future _showError(BuildContext context) {
-    return showDialog(
-      context: context,
-      builder: (BuildContext context) => AlertDialog(
-        contentPadding: const EdgeInsets.all(10.0),
-        content: Row(
-          children: const <Widget>[
-            Expanded(
-              child: Text(
-                "No es posible la combinación indicada. Reintente",
-                style: TextStyle(
-                  fontSize: 14,
-                ),
-              ),
-            ),
-          ],
-        ),
-        actions: <Widget>[
-          TextButton(
-              child: const Text('Aceptar'),
-              onPressed: () {
-                Navigator.pop(context);
-              }),
-        ],
+  dimAppBar(BuildContext context) {
+    return AppBar(
+      title: const Text(
+        'SELECCION DE MODELO',
+        style: TextStyle(fontSize: 12),
       ),
+      centerTitle: true,
+      actions: [
+        IconButton(
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) => AlertDialog(
+                  contentPadding: const EdgeInsets.all(10.0),
+                  content: Row(
+                    children: const <Widget>[
+                      Expanded(
+                        child: Text(
+                          "La selección no puede superar los 4 bancos de baterías en paralelo por desbalance en carga y descarga. ",
+                          style: TextStyle(
+                            fontSize: 16,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  actions: <Widget>[
+                    TextButton(
+                        child: const Text('Aceptar'),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        }),
+                  ],
+                ),
+              );
+            },
+            icon: const Icon(Icons.help))
+      ],
     );
   }
 }
@@ -443,9 +371,8 @@ class _ListaTensiones extends State<ListaTensiones> {
   String dropdownValue = 'SELECCIONE LA CANTIDAD';
   @override
   Widget build(BuildContext context) {
-    var seleccionProvider =
-        Provider.of<SeleccionProvider>(context, listen: true);
-    String bat = seleccionProvider.bateria;
+    var sP = Provider.of<SeleccionProvider>(context, listen: true);
+    String bat = sP.bateria;
     if (bat == 'SELECCIONE LA BATERIA') {
       return DropdownButton(
         items: <String>['..'].map<DropdownMenuItem<String>>((String value) {
@@ -470,8 +397,8 @@ class _ListaTensiones extends State<ListaTensiones> {
         onChanged: (String? newValue) {
           setState(() {
             dropdownValue = newValue!;
-            seleccionProvider.cantBat = dropdownValue;
-            seleccionProvider.notifyListeners();
+            sP.cantBat = dropdownValue;
+            sP.notificar(context);
           });
         },
         items: <String>[
@@ -510,8 +437,7 @@ class _ListaNominal extends State<ListaNominal> {
   String dropdownValue = 'SELECCIONE LA TENSION';
   @override
   Widget build(BuildContext context) {
-    var seleccionProvider =
-        Provider.of<SeleccionProvider>(context, listen: true);
+    var sP = Provider.of<SeleccionProvider>(context, listen: true);
 
     return DropdownButton<String>(
       style: const TextStyle(fontSize: 20, color: Colors.white),
@@ -521,8 +447,8 @@ class _ListaNominal extends State<ListaNominal> {
       onChanged: (String? newValue) {
         setState(() {
           dropdownValue = newValue!;
-          seleccionProvider.tensionBanco = dropdownValue;
-          seleccionProvider.notifyListeners();
+          sP.tensionBanco = dropdownValue;
+          sP.notificar(context);
         });
       },
       items: <String>[
