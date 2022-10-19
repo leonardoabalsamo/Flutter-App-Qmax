@@ -1,44 +1,43 @@
 //import 'dart:ffi';
 
 import 'package:flutter/material.dart';
-import 'package:qmax_inst/sql_helper.dart';
+//import 'package:qmax_inst/sql_helper.dart';
 
 class DimensionamientoProvider extends ChangeNotifier {
+  //Declaración de Variables
+
   bool Red = false;
   bool Grupo = false;
-  String PanelSeleccionado = '';
+
+  int PanelSeleccionado = 0;
   String UbicacionSeleccionada = '';
+
   var seleccion = <bool>[];
   var texto = <Widget>[];
+
+  //Dropdown Button de seleccion de consumos
+  var potenciaConsumo = <double>[];
+  var cantidad = <int>[];
+  var cantidadHoras = <int>[];
 
   //Suma de consumos parcial
   //potencia de consumo X Cantidad
   double parcial = 0;
-
   //Cantidad de horas de uso del consumo parcial
   double horas = 0;
 
-  //Suma total
-  double sumaEnergia=0;
+  //Suma total de energía
+  double sumaEnergia = 0;
 
-  //probando la suma y resta
+  //Potencia necesaria para el inversor
+  double potenciaTotal = 0;
+
+  //Selección de consumos
   var indicesSeleccionados = <int>[];
-
-  //Dropdown Button de seleccion de consumos
-  var cantidad = <int>[];
-  var cantidadHoras = <int>[];
-
-  inicializacion() {
-    for (int i = 1; i < 13; i++) {
-      cantidad.add(i);
-    }
-    for (int i = 1; i < 25; i++) {
-      cantidadHoras.add(i);
-    }
-  }
 
   double valorFactura = 0;
   double EnergiaDiaria = 0;
+  double metaDiaria = 0;
   double TensionInversor = 0;
   num CantReg = 0;
   num CantPanel = 0;
@@ -46,6 +45,9 @@ class DimensionamientoProvider extends ChangeNotifier {
   double PotenciaPaneles = 0;
   double BancoBateria = 0;
   double totalEnergia = 0;
+  double meta = 0;
+  int dias = 0;
+  double valorKit = 0;
 
   var Ubicaciones = <String>[
     'Buenos Aires',
@@ -73,49 +75,9 @@ class DimensionamientoProvider extends ChangeNotifier {
     'Tierra del Fuego',
   ];
 
-  var Consumos = <String>[
-    'Heladera',
-    'Freezer',
-    'Lampara Led',
-    'Lavarropas',
-    'Cafetera',
-    'Bomba 3/4HP',
-    'Cargador Cel',
-    'Notebook',
-    'Televisor LED',
-    'Router Wifi',
-    'Ventilador Techo',
-    'Ventilador Pie',
-    'Aire Acondicionado 2200Fg',
-  ];
-
   var Kit = <Widget>[];
 
-  Map<String, int> _consumosSeleccionados = {};
-
-  inicioSeleccion() {
-    for (int i = 0; i < consumosJson.length; i++) {
-      seleccion.add(false);
-    }
-  }
-
-  Future<int> creaConsumo(descripcion, potencia) async {
-    final id = await SQLHelper.createConsumo(descripcion, potencia);
-    return id;
-  }
-
-  Future<int> creaBateria(
-      tipo, modelo, fondo, flote, capacidad, tensionNominal) async {
-    final id = await SQLHelper.createBateria(
-        tipo, modelo, fondo, flote, capacidad, tensionNominal);
-    return id;
-  }
-
-  Future<int> creaInversor(modelo, potencia, tensionNominal) async {
-    final id = await SQLHelper.createInversor(modelo, potencia, tensionNominal);
-    return id;
-  }
-
+//Mapa usado para determinar las Hs Solares Pico
   Map<String, double> hsSolaresJson = {
     'Buenos Aires': 5.03,
     'Catamarca': 5.54,
@@ -142,6 +104,7 @@ class DimensionamientoProvider extends ChangeNotifier {
     'Tierra del Fuego': 3.82,
   };
 
+//Mapa usado para determinar potencia de consumos
   Map<String, int> consumosJson = {
     'Heladera': 120,
     'Freezer': 150,
@@ -159,74 +122,24 @@ class DimensionamientoProvider extends ChangeNotifier {
     'AA 2200 Fg': 900,
     'AA 3500 Fg': 1500,
   };
-//Funciones de los modelos
-
-  double get getValorFactura {
-    return valorFactura;
-  }
-
-  Map<String, double> get getHsSolaresJson {
-    return hsSolaresJson;
-  }
-
-  List<Widget> get getTexto {
-    return texto;
-  }
-
-  set setValorFactura(double fact) {
-    valorFactura = fact;
-    notifyListeners();
-  }
-
-  set setRed(bool R) {
-    Red = R;
-    notifyListeners();
-  }
-
-  set setGrupo(bool G) {
-    Grupo = G;
-    notifyListeners();
-  }
-
-  //Devuelve Lista <String>
-
-  // List<String> get getUbicaciones {
-  //   for (String key in hsSolaresJson.keys) {
-  //     //key = Capital Federal
-  //     //${_hsSolaresJson[key]} 5.1
-  //     Ubicaciones.add(key);
-  //   }
-  //   return Ubicaciones;
-  // }
-
-  // List<String> get getConsumos {
-  //   for (String key in consumosJson.keys) {
-  //     //key = Capital Federal
-  //     //${_hsSolaresJson[key]} 5.1
-  //     Consumos.add(key);
-  //   }
-  //   return Consumos;
-  // }
 
   kitAislado() {
-    for (String key in hsSolaresJson.keys) {
-      if (key == UbicacionSeleccionada) {
-        Insolacion = hsSolaresJson[key]?.toDouble();
-      }
-      ;
-    }
-    PotenciaPaneles = (totalEnergia / Insolacion! / 0.73);
+    texto.clear();
+    //datos ->
+    //Insolacion //sumaEnergia //ubicacion
+
+    PotenciaPaneles = (sumaEnergia / 0.85 / Insolacion! / 0.73);
 
     if (PotenciaPaneles <= 540) {
       //12v
       TensionInversor = 12;
-      PanelSeleccionado = '400Wp';
+      //PanelSeleccionado = '400Wp';
+      CantPanel = PotenciaPaneles / PanelSeleccionado;
       CantReg = 1;
-      CantPanel = CantReg;
     } else if (PotenciaPaneles >= 1080) {
       //48V
       TensionInversor = 48;
-      PanelSeleccionado = '360Wp';
+      //PanelSeleccionado = '360Wp';
       if (PotenciaPaneles <= 2160) {
         // 1 regulador 6 paneles
         CantReg = 1;
@@ -247,62 +160,97 @@ class DimensionamientoProvider extends ChangeNotifier {
     } else {
       //24V
       TensionInversor = 24;
-      PanelSeleccionado = '360Wp';
+      //PanelSeleccionado = '360Wp';
       CantReg = 1;
       CantPanel = CantReg * 3;
     }
-    BancoBateria = (totalEnergia / 0.85 / TensionInversor) * 2; // 50% DOD
+    var energiaGenerada = PanelSeleccionado * CantPanel * Insolacion! * 0.73;
 
-    texto.add(Text(
-        'Insolación: ' + (Insolacion!.toInt()).toString() + ' Hs Solares'));
-    texto.add(Divider());
+    BancoBateria = (sumaEnergia / 0.85 / TensionInversor) * 2; // 50% DOD
+
+    valorKit = (0.82 * PotenciaPaneles) +
+        (0.3 * TensionInversor * BancoBateria) +
+        (potenciaTotal);
+
+    /*Valores*/
+    /*
+    USD / W Panel USD 0.82
+    USD / W Bateria USD  0.30
+    USD / W Inverter USD 1 dl
+    */
     texto.add(
-        Text('Energía Diaria: ' + (totalEnergia.toInt()).toString() + ' Wh'));
+        Text('Cantidad Paneles:  ' + CantPanel.round().toString() + ' u.'));
     texto.add(Divider());
     texto.add(Text(
-        'Potencia Paneles: ' + (PotenciaPaneles.toInt()).toString() + ' W'));
+        'Potencia Paneles:  ' + (PotenciaPaneles.toInt()).toString() + ' W'));
     texto.add(Divider());
-    texto.add(Text('Banco de Batería: ' +
+    texto.add(Text('Energía Diaria Generada:  ' +
+        (energiaGenerada.toInt()).toString() +
+        ' Wh'));
+    texto.add(Divider());
+    texto.add(Text('Insolación:  ' + Insolacion!.toString() + ' Hs '));
+    texto.add(Divider());
+    texto.add(SizedBox(
+      height: 30,
+    ));
+    texto.add(Text(
+      'Consumo de Energía',
+      style: TextStyle(fontSize: 30),
+    ));
+    texto.add(SizedBox(
+      height: 10,
+    ));
+    texto.add(Text('Energía Diaria Consumida:  ' +
+        (sumaEnergia.toInt()).toString() +
+        ' Wh'));
+    texto.add(Divider());
+
+    texto.add(Text('Banco de Batería:  ' +
         (BancoBateria.toInt()).toString() +
         'Ah' +
         ' @ ' +
         (TensionInversor.toInt()).toString() +
-        'Vcc'));
+        'V'));
+    texto.add(Divider());
 
-    Kit.add(Text('Panel: ' + PanelSeleccionado.toString(),
-        style: TextStyle(
-            fontFamily: 'Ubuntu',
-            color: Colors.white,
-            fontSize: 14,
-            leadingDistribution: TextLeadingDistribution.proportional)));
-    Kit.add(const Divider());
+    texto.add(Text('Potencia Inversor:  ' +
+        (potenciaTotal.toInt()).toString() +
+        'W @ ' +
+        (TensionInversor.toInt()).toString() +
+        'V'));
+    texto.add(Divider());
+
+    texto.add(SizedBox(height: 40));
+    texto.add(Text(
+      'Valor Aprox. KIT:  USD ' + valorKit.toInt().toString(),
+      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+    ));
   }
 
   kitRed() {
-    EnergiaDiaria = ((valorFactura / 30) * 1000) / 2; // Meta Ahorro 50%
+    texto.clear();
+    EnergiaDiaria = ((valorFactura / 30) * 1000);
+    metaDiaria = EnergiaDiaria * meta;
+
     for (String key in hsSolaresJson.keys) {
-      //key = Capital Federal
-      //${_hsSolaresJson[key]} 5.1
-      //Devuelvo las horas solares seleccionadas
       if (key == UbicacionSeleccionada) {
-        //print(UbicacionSeleccionada + ': ' + _hsSolaresJson[key].toString());
         Insolacion = hsSolaresJson[key]?.toDouble();
       }
       ;
     }
 
-    PotenciaPaneles = (EnergiaDiaria / Insolacion! / 0.73);
+    PotenciaPaneles = (metaDiaria / 0.85 / Insolacion! / 0.73);
 
     if (PotenciaPaneles <= 540) {
       //12v
       TensionInversor = 12;
-      PanelSeleccionado = '400Wp';
+      //PanelSeleccionado = '400Wp';
+      CantPanel = PotenciaPaneles / PanelSeleccionado;
       CantReg = 1;
-      CantPanel = CantReg;
     } else if (PotenciaPaneles >= 1080) {
       //48V
       TensionInversor = 48;
-      PanelSeleccionado = '360Wp';
+      //PanelSeleccionado = '360Wp';
       if (PotenciaPaneles <= 2160) {
         // 1 regulador 6 paneles
         CantReg = 1;
@@ -323,52 +271,80 @@ class DimensionamientoProvider extends ChangeNotifier {
     } else {
       //24V
       TensionInversor = 24;
-      PanelSeleccionado = '360Wp';
+      //PanelSeleccionado = '360Wp';
       CantReg = 1;
       CantPanel = CantReg * 3;
     }
+
     BancoBateria = (EnergiaDiaria / 0.85 / TensionInversor) * 2; // 50% DOD
-    texto.add(Text('Meta de Ahorro: 50% '));
-    texto.add(Divider());
-    texto.add(Text(
-        'Insolación: ' + (Insolacion!.toInt()).toString() + ' Hs Solares'));
-    texto.add(Divider());
+
+    valorKit =
+        (0.82 * PotenciaPaneles) + (0.3 * TensionInversor * BancoBateria);
+
+    print(metaDiaria);
+    print(Insolacion);
+    print(PotenciaPaneles);
+    print(CantReg);
+    print(CantPanel);
+    print(valorKit);
+
+    /*Valores*/
+    /*
+    USD / W Panel USD 0.82
+    USD / W Bateria USD  0.30
+    USD / W Inverter USD 1 dl
+    */
+
+    var energiaGenerada = PanelSeleccionado * CantPanel * Insolacion! * 0.73;
+
     texto.add(
-        Text('Energía Diaria: ' + (EnergiaDiaria.toInt()).toString() + ' Wh'));
+        Text('Cantidad Paneles:  ' + CantPanel.round().toString() + ' u.'));
     texto.add(Divider());
     texto.add(Text(
-        'Potencia Paneles: ' + (PotenciaPaneles.toInt()).toString() + ' W'));
+        'Potencia Paneles:  ' + (PotenciaPaneles.toInt()).toString() + ' W'));
     texto.add(Divider());
-    texto.add(Text('Banco de Batería: ' +
+
+    texto.add(
+        Text('Cantidad Reguladores:  ' + CantReg.round().toString() + ' u.'));
+    texto.add(Divider());
+    texto.add(Text('Energía Diaria Generada:  ' +
+        (energiaGenerada.toInt()).toString() +
+        ' Wh'));
+    texto.add(Divider());
+    texto.add(Text('Insolación Promedio:  ' + Insolacion!.toString() + ' Hs '));
+    texto.add(SizedBox(
+      height: 30,
+    ));
+    texto.add(Text(
+      'Consumo de Energía',
+      style: TextStyle(fontSize: 30),
+    ));
+    texto.add(SizedBox(
+      height: 10,
+    ));
+    texto.add(Text('Energía Diaria Consumida:  ' +
+        (EnergiaDiaria.toInt()).toString() +
+        ' Wh'));
+
+    texto.add(Divider());
+
+    texto.add(Text('Banco de Batería:  ' +
         (BancoBateria.toInt()).toString() +
         'Ah' +
         ' @ ' +
         (TensionInversor.toInt()).toString() +
-        'Vcc'));
+        'V'));
+    texto.add(Divider());
 
-    Kit.add(Text('Panel: ' + PanelSeleccionado.toString(),
-        style: TextStyle(
-            fontFamily: 'Ubuntu',
-            color: Colors.white,
-            fontSize: 14,
-            leadingDistribution: TextLeadingDistribution.proportional)));
-    Kit.add(const Divider());
+    texto.add(
+        Text('Meta de Ahorro:  ' + ((meta * 100).toInt()).toString() + '%'));
+    texto.add(Divider());
 
-    // Kit = [
-    //   'Panel: ' +
-    // ]
-    // terminarrrrrrrrrrrrrrrrr
-  }
-
-  //Agrega nuevo registro al Map
-  AgregaConsumo(String consumo, int valor) {
-    //_consumosSeleccionados.update("$consumo", (value) => valor);
-    _consumosSeleccionados.addAll({consumo: valor});
-  }
-
-  //Elimina registro por medio de la key
-  EliminaConsumo(String consumo) {
-    _consumosSeleccionados.remove(consumo);
+    texto.add(SizedBox(height: 40));
+    texto.add(Text(
+      'Valor Aprox. KIT:  USD ' + valorKit.toInt().toString(),
+      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+    ));
   }
 
   Suma(double v) {
@@ -379,8 +355,58 @@ class DimensionamientoProvider extends ChangeNotifier {
     totalEnergia = totalEnergia - v;
   }
 
+//Inicializo indices
+  inicioSeleccion() {
+    for (int i = 0; i < consumosJson.length; i++) {
+      seleccion.add(false);
+    }
+  }
+
+//Inicializo los Dropdowns Cantidad y Hs
+  inicializacion() {
+    for (int i = 1; i < 12; i++) {
+      cantidad.add(1);
+    }
+    for (int i = 1; i < 25; i++) {
+      cantidadHoras.add(1);
+    }
+  }
+
+//Reset de Energía e Indices seleccionados
   Reset() {
     totalEnergia = 0;
     inicioSeleccion();
+  }
+
+  void ResetConf() {
+    UbicacionSeleccionada = '';
+    PotenciaPaneles = 0;
+    BancoBateria = 0;
+    totalEnergia = 0;
+    EnergiaDiaria = 0;
+    valorFactura = 0;
+    sumaEnergia = 0; //contador de energía
+    potenciaTotal = 0; //contador potencia
+    meta = 0;
+    PanelSeleccionado = 0;
+    valorKit = 0;
+    valorFactura = 0;
+
+    texto.clear();
+    cantidad.clear();
+    cantidadHoras.clear();
+    seleccion.clear();
+
+    Red = false;
+    Grupo = false;
+
+    notifyListeners();
+
+    /*Vaciamos la BD de consumos*/
+    //SQLHelper.deleteConsumos();
+  }
+
+  notificar(context) {
+    notifyListeners();
   }
 }

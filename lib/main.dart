@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-/*Para ocultar la barra de acciones inferior*/
-import 'package:flutter/services.dart';
 
 import 'package:provider/provider.dart';
 import 'package:qmax_inst/src/pages/one_page.dart';
@@ -14,9 +12,10 @@ import 'package:qmax_inst/src/providers/dimensionamiento_provider.dart';
 
 void main() {
   /*para ocultar la barra de acciones inferior*/
-  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      statusBarColor: Colors.transparent,
-      statusBarBrightness: Brightness.light));
+  // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+  //     systemNavigationBarColor: Colors.transparent,
+  //     statusBarColor: Colors.white,
+  //     statusBarBrightness: Brightness.light));
 
   runApp(const MyApp());
 }

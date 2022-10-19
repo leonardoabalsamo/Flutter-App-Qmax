@@ -6,7 +6,7 @@ import 'package:qmax_inst/src/providers/seleccion_provider.dart';
 import 'package:qmax_inst/src/widgets/error_combinacion.dart';
 
 import '../models/bateria_model.dart';
-import '../widgets/menu_lateral.dart';
+//import '../widgets/menu_lateral.dart';
 
 class InicioPageRegulador extends StatefulWidget {
   const InicioPageRegulador({
@@ -371,9 +371,8 @@ class _ListaTensiones extends State<ListaTensiones> {
   String dropdownValue = 'SELECCIONE LA CANTIDAD';
   @override
   Widget build(BuildContext context) {
-    var seleccionProvider =
-        Provider.of<SeleccionProvider>(context, listen: true);
-    String bat = seleccionProvider.bateria;
+    var sP = Provider.of<SeleccionProvider>(context, listen: true);
+    String bat = sP.bateria;
     if (bat == 'SELECCIONE LA BATERIA') {
       return DropdownButton(
         items: <String>['..'].map<DropdownMenuItem<String>>((String value) {
@@ -398,8 +397,8 @@ class _ListaTensiones extends State<ListaTensiones> {
         onChanged: (String? newValue) {
           setState(() {
             dropdownValue = newValue!;
-            seleccionProvider.cantBat = dropdownValue;
-            seleccionProvider.notifyListeners();
+            sP.cantBat = dropdownValue;
+            sP.notificar(context);
           });
         },
         items: <String>[
@@ -438,8 +437,7 @@ class _ListaNominal extends State<ListaNominal> {
   String dropdownValue = 'SELECCIONE LA TENSION';
   @override
   Widget build(BuildContext context) {
-    var seleccionProvider =
-        Provider.of<SeleccionProvider>(context, listen: true);
+    var sP = Provider.of<SeleccionProvider>(context, listen: true);
 
     return DropdownButton<String>(
       style: const TextStyle(fontSize: 20, color: Colors.white),
@@ -449,8 +447,8 @@ class _ListaNominal extends State<ListaNominal> {
       onChanged: (String? newValue) {
         setState(() {
           dropdownValue = newValue!;
-          seleccionProvider.tensionBanco = dropdownValue;
-          seleccionProvider.notifyListeners();
+          sP.tensionBanco = dropdownValue;
+          sP.notificar(context);
         });
       },
       items: <String>[

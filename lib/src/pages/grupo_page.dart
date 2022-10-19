@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
-import 'package:path/path.dart';
+// import 'package:flutter/scheduler.dart';
+// import 'package:path/path.dart';
 import 'package:provider/provider.dart';
 import 'package:qmax_inst/sql_helper.dart';
 import 'package:qmax_inst/src/pages/kit_page_dimensionamiento.dart';
@@ -20,8 +20,7 @@ class GrupoPage extends StatefulWidget {
 class _GrupoPage extends State<GrupoPage> {
   @override
   Widget build(BuildContext context) {
-    var dimensionamientoProvider =
-        Provider.of<DimensionamientoProvider>(context, listen: true);
+    var dP = Provider.of<DimensionamientoProvider>(context, listen: true);
     return Scaffold(
         body: ListConsumos(),
         appBar: dimAppBar(context),
@@ -29,29 +28,22 @@ class _GrupoPage extends State<GrupoPage> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             ElevatedButton(
+                style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all<Color>(
+                        Color.fromARGB(255, 101, 99, 99))),
                 onPressed: () {
                   setState(() {
-                    dimensionamientoProvider.Reset();
+                    dP.Reset();
                     _resetConsumo(context);
                   });
                 },
                 child: Text('Reset')),
-            ElevatedButton(
-                onPressed: () {
-                  setState(() {
-                    print("Suma parcial: " +
-                        '${dimensionamientoProvider.sumaEnergia}');
-                  });
-                },
-                child: Text('Imprime')),
             FloatingActionButton.extended(
               onPressed: () async {
-                if (dimensionamientoProvider.totalEnergia == 0 ||
-                    dimensionamientoProvider.UbicacionSeleccionada ==
-                        'Ubicación') {
+                if (dP.sumaEnergia == 0 || dP.Insolacion == 0) {
                   errorSeleccion(context);
                 } else {
-                  dimensionamientoProvider.kitAislado();
+                  dP.kitAislado();
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => const KitPage()),
@@ -69,16 +61,16 @@ class _GrupoPage extends State<GrupoPage> {
   }
 
   void _resetConsumo(context) {
-    var dimensionamientoProvider =
-        Provider.of<DimensionamientoProvider>(context, listen: false);
-    dimensionamientoProvider.seleccion.clear();
-    dimensionamientoProvider.EnergiaDiaria = 0;
-    dimensionamientoProvider.sumaEnergia = 0; //contador de energía
+    var dP = Provider.of<DimensionamientoProvider>(context, listen: false);
+    dP.seleccion.clear();
+    dP.sumaEnergia = 0; //contador de energía
+    dP.potenciaTotal = 0; //contador potencia
+    dP.cantidad.clear();
+    dP.cantidadHoras.clear();
   }
 
   AppBar dimAppBar(BuildContext context) {
-    var dimensionamientoProvider =
-        Provider.of<DimensionamientoProvider>(context, listen: true);
+    var dP = Provider.of<DimensionamientoProvider>(context, listen: true);
     return AppBar(
       title: const Text(
         'DIMENSIONAMIENTO GRUPO',
@@ -93,15 +85,20 @@ class _GrupoPage extends State<GrupoPage> {
                 builder: (BuildContext context) => AlertDialog(
                   contentPadding: const EdgeInsets.all(10.0),
                   content: Row(
-                    children: const <Widget>[
-                      Expanded(
-                        child: Text(
-                          "La energía diaria consumida depende de la potencia (W) y tiempo de uso (kWh)",
-                          style: TextStyle(
-                            fontSize: 16,
-                          ),
-                        ),
-                      ),
+                    children: <Widget>[
+                      Container(
+                          height: 110,
+                          width: 200,
+                          padding: EdgeInsets.all(0),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Text("sumaEnergía: " + '${dP.sumaEnergia}'),
+                              Text("Ubicación: " +
+                                  '${dP.UbicacionSeleccionada}'),
+                              Text("Insolación: " + '${dP.Insolacion}'),
+                            ],
+                          )),
                     ],
                   ),
                   actions: <Widget>[
@@ -120,10 +117,10 @@ class _GrupoPage extends State<GrupoPage> {
           icon: Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () {
             Navigator.of(context).pop();
-            dimensionamientoProvider.Red = false;
-            dimensionamientoProvider.Grupo = false;
-            dimensionamientoProvider.Reset();
-            dimensionamientoProvider.notifyListeners();
+            dP.Red = false;
+            dP.Grupo = false;
+            dP.Reset();
+            dP.notificar(context);
           }),
     );
   }
@@ -141,10 +138,15 @@ class _ListConsumosState extends State<ListConsumos> {
 
   //Valores de los desplegables Cantidad y Hs Uso
   var cantidad = <int>[];
-  int ValorCantidad = 1;
+  int ValorCantidad = 0;
 
   var cantidadHoras = <int>[];
-  int ValorHs = 1;
+  int ValorHs = 0;
+
+  //flags
+
+  var flagCantidad = false;
+  var flagHs = false;
 
   //Mapa para guardar la selección
   final seleccion = Map<String, double>;
@@ -157,7 +159,7 @@ class _ListConsumosState extends State<ListConsumos> {
 
   //Funcion que inicializa los desplegables de Cantidad y Hs de Uso
   inicializa() {
-    for (int i = 1; i < 13; i++) {
+    for (int i = 1; i < 12; i++) {
       cantidad.add(i);
     }
     for (int i = 1; i < 25; i++) {
@@ -167,10 +169,9 @@ class _ListConsumosState extends State<ListConsumos> {
 
   @override
   Widget build(BuildContext context) {
-    var dimensionamientoProvider =
-        Provider.of<DimensionamientoProvider>(context, listen: true);
-    dimensionamientoProvider.inicioSeleccion();
-    dimensionamientoProvider.inicializacion();
+    var dP = Provider.of<DimensionamientoProvider>(context, listen: true);
+    dP.inicioSeleccion(); // inicializa lista seleccion
+    dP.inicializacion(); // inicializa DropDownButtons
 
     return Container(
       decoration: BoxDecoration(color: Colors.black),
@@ -180,7 +181,7 @@ class _ListConsumosState extends State<ListConsumos> {
           ubicacion(context),
           Expanded(
               child: Container(
-                  margin: EdgeInsets.only(bottom: 70),
+                  margin: EdgeInsets.only(bottom: 90),
                   decoration: BoxDecoration(
                       color: Colors.blue.shade400,
                       borderRadius: BorderRadius.circular(10.0)),
@@ -210,12 +211,17 @@ class _ListConsumosState extends State<ListConsumos> {
           ],
         ),
         SizedBox(
-          height: 30,
+          height: 10,
         ),
         ListaUbicaciones(),
         SizedBox(
-          height: 5,
+          height: 20,
         ),
+        Text(
+          'Selección de Panel',
+          style: TextStyle(fontSize: 20),
+        ),
+        slideBarPanel(),
         Divider(
           color: Colors.white,
           thickness: 4,
@@ -223,7 +229,7 @@ class _ListConsumosState extends State<ListConsumos> {
           endIndent: 20,
         ),
         SizedBox(
-          height: 25,
+          height: 20,
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -247,9 +253,8 @@ class _ListConsumosState extends State<ListConsumos> {
 
 //Contenedor con el ListView de los consumos
   ListView listadoConsumos(BuildContext context) {
-    var dimensionamientoProvider =
-        Provider.of<DimensionamientoProvider>(context, listen: true);
-    var contadoritem = dimensionamientoProvider.consumosJson.length;
+    var dP = Provider.of<DimensionamientoProvider>(context, listen: true);
+    var contadoritem = dP.consumosJson.length;
 
     return ListView.builder(
       padding: EdgeInsets.only(left: 10, right: 10),
@@ -275,56 +280,46 @@ class _ListConsumosState extends State<ListConsumos> {
 
               //NOMBRE DEL CONSUMO
               title: Text(
-                '${dimensionamientoProvider.consumosJson.keys.elementAt(index)}',
+                '${dP.consumosJson.keys.elementAt(index)}',
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 textAlign: TextAlign.left,
               ),
 
               //POTENCIA CONSUMIDA
               subtitle: Text(
-                '(${dimensionamientoProvider.consumosJson.values.elementAt(index)} W)',
+                '(${dP.consumosJson.values.elementAt(index)} W)',
                 style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
                     color: Colors.black),
                 textAlign: TextAlign.left,
               ),
-              value: dimensionamientoProvider.seleccion[index],
-              selected: dimensionamientoProvider.seleccion[index],
+              value: dP.seleccion[index],
+              selected: dP.seleccion[index],
               onChanged: (bool? value) {
                 setState(() {
                   // RESUELTO SUMA Y RESTA CONSUMO
-                  dimensionamientoProvider.seleccion[index] = value!;
+                  dP.seleccion[index] = value!;
 
                   //Me guardo el valor ->
-                  valor = dimensionamientoProvider.consumosJson.values
-                      .elementAt(index)
-                      .toDouble();
+                  valor = dP.consumosJson.values.elementAt(index).toDouble();
 
                   ventanaEmergente(index, context);
                 });
 
-                if (dimensionamientoProvider.indicesSeleccionados
-                    .contains(index)) {
-                  dimensionamientoProvider.indicesSeleccionados.remove(index);
-                  dimensionamientoProvider.Resta(valor);
-
-                  //     .consumosJson.keys
-                  //     .elementAt(index));
+                if (dP.indicesSeleccionados.contains(index)) {
+                  dP.indicesSeleccionados.remove(index);
+                  dP.Resta(valor);
                   // ('ESTABA SELECCIONADO Y LO RESTA');
 
                   //Manejo con BD
-                  // SQLHelper.deleteConsumo(dimensionamientoProvider
+                  // SQLHelper.deleteConsumo(dP
 
                 } else {
-                  dimensionamientoProvider.indicesSeleccionados
-                      .add(index); // select
-                  dimensionamientoProvider.Suma(valor); //Suma en el Total
-                  SQLHelper.createConsumo(
-                      dimensionamientoProvider.consumosJson.keys
-                          .elementAt(index),
-                      dimensionamientoProvider.consumosJson.values
-                          .elementAt(index));
+                  dP.indicesSeleccionados.add(index); // select
+                  dP.Suma(valor); //Suma en el Total
+                  SQLHelper.createConsumo(dP.consumosJson.keys.elementAt(index),
+                      dP.consumosJson.values.elementAt(index));
                   // ('NO ESTABA SELECCIONADO Y LO SUMA');
                 }
               }),
@@ -335,8 +330,7 @@ class _ListConsumosState extends State<ListConsumos> {
 
 //Desplegable de cantidades de consumos
   DropdownButton<int> desplegableCantidad(int index, context) {
-    var dimensionamientoProvider =
-        Provider.of<DimensionamientoProvider>(context, listen: true);
+    var dP = Provider.of<DimensionamientoProvider>(context, listen: true);
     return DropdownButton(
       underline: SizedBox(),
       style: const TextStyle(fontSize: 18, color: Colors.white),
@@ -355,22 +349,11 @@ class _ListConsumosState extends State<ListConsumos> {
       }).toList(),
       onChanged: (int? newValue) {
         setState(() {
-          //potencia * cantidad
-          dimensionamientoProvider.parcial = dimensionamientoProvider
-                  .consumosJson.values
-                  .elementAt(index)
-                  .toDouble() *
-              newValue!.toDouble();
-          print(
-              "POTENCIA POR CANTIDAD:" + '${dimensionamientoProvider.parcial}');
-
-          //Me guardo la cantidad en la posición Index del Array
-          dimensionamientoProvider.cantidad[index] = newValue!;
-          ValorCantidad = newValue;
-
-          dimensionamientoProvider.EnergiaDiaria += ValorCantidad *
-              dimensionamientoProvider.consumosJson.values.elementAt(index) *
-              ValorHs;
+          //Cantidad
+          flagCantidad = true;
+          ValorCantidad = newValue!;
+          dP.cantidad[index] = ValorCantidad;
+          dP.notificar(context);
         });
       },
     );
@@ -378,8 +361,7 @@ class _ListConsumosState extends State<ListConsumos> {
 
 //Desplegable de horas de uso
   DropdownButton<int> desplegableHoras(int index, BuildContext context) {
-    var dimensionamientoProvider =
-        Provider.of<DimensionamientoProvider>(context, listen: true);
+    var dP = Provider.of<DimensionamientoProvider>(context, listen: true);
     return DropdownButton(
       underline: SizedBox(),
       style: const TextStyle(fontSize: 18, color: Colors.white),
@@ -399,10 +381,11 @@ class _ListConsumosState extends State<ListConsumos> {
       onChanged: (int? newValue) {
         setState(() {
           //Guardo valor en horas
-          dimensionamientoProvider.horas = newValue!.toDouble();
-
-          dimensionamientoProvider.cantidadHoras[index] = newValue!;
-          ValorHs = newValue;
+          flagHs = true;
+          ValorHs = newValue!;
+          dP.horas = ValorHs.toDouble();
+          dP.cantidadHoras[index] = ValorHs;
+          dP.notificar(context);
         });
       },
     );
@@ -410,15 +393,22 @@ class _ListConsumosState extends State<ListConsumos> {
 
 //Emergente con los desplegables
   Future ventanaEmergente(int index, BuildContext context) {
-    var dimensionamientoProvider =
-        Provider.of<DimensionamientoProvider>(context, listen: false);
     // Muestra en pantalla Consumo -> Cantidad -> Hs Uso
+    var dP = Provider.of<DimensionamientoProvider>(context, listen: false);
+    ValorCantidad = 1;
+    ValorHs = 1;
+
+    //Si seleccionó, por lo menos es una unidad
+    if (flagCantidad == false && flagHs == false) {
+      seleccionInicial(index, context);
+    }
+
     return showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text(
-            '${dimensionamientoProvider.consumosJson.keys.elementAt(index)}',
+            '${dP.consumosJson.keys.elementAt(index)}',
             style: TextStyle(fontSize: 28, color: Colors.white),
             textAlign: TextAlign.center,
           ),
@@ -466,21 +456,35 @@ class _ListConsumosState extends State<ListConsumos> {
                   ]),
                   onPressed: () {
                     Navigator.of(context).pop();
+                    //Compenso sumaEnergia = 0;
+                    dP.sumaEnergia -=
+                        dP.consumosJson.values.elementAt(index).toDouble();
 
                     //contador energía
-                    dimensionamientoProvider.sumaEnergia =
-                        dimensionamientoProvider.sumaEnergia +
-                            (dimensionamientoProvider.parcial *
-                                dimensionamientoProvider.horas);
+                    dP.sumaEnergia += (dP.cantidad[index] *
+                            dP.cantidadHoras[index] *
+                            dP.consumosJson.values.elementAt(index))
+                        .toDouble();
 
-                    //Inicializo las variables
-                    dimensionamientoProvider.parcial = 0;
-                    dimensionamientoProvider.horas = 0;
+                    dP.potenciaTotal += (dP.cantidad[index] *
+                            dP.consumosJson.values.elementAt(index))
+                        .toDouble();
+                    ValorCantidad = 1;
+                    ValorHs = 1;
+                    flagCantidad = false;
+                    flagHs = false;
+                    dP.notificar(context);
                   }),
             )
           ],
         );
       },
     );
+  }
+
+  void seleccionInicial(int index, context) {
+    var dP = Provider.of<DimensionamientoProvider>(context, listen: false);
+    dP.sumaEnergia += dP.consumosJson.values.elementAt(index).toDouble();
+    ;
   }
 }

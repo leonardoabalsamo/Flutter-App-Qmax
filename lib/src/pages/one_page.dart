@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:qmax_inst/src/pages/home_page.dart';
-import 'package:qmax_inst/src/providers/dimensionamiento_provider.dart';
+//import 'package:qmax_inst/src/providers/dimensionamiento_provider.dart';
 
 import '../widgets/menu_lateral.dart';
 import 'inicio_page_instalador.dart';
@@ -15,6 +16,8 @@ class onePage extends StatefulWidget {
 class _onePage extends State<onePage> {
   @override
   Widget build(BuildContext context) {
+    //oculta barra inferior y superior
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
     return principal(context);
   }
 

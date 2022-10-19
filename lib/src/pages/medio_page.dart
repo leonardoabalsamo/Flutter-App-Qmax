@@ -249,8 +249,7 @@ class _ListaTipo extends State<ListaTipo> {
   String dropdownValue = 'TIPO DE INSTALACION';
   @override
   Widget build(BuildContext context) {
-    var seleccionProvider =
-        Provider.of<SeleccionProvider>(context, listen: true);
+    var sP = Provider.of<SeleccionProvider>(context, listen: true);
     return DropdownButton<String>(
       style: const TextStyle(fontSize: 20, color: Colors.white),
       borderRadius: BorderRadius.circular(10),
@@ -259,8 +258,8 @@ class _ListaTipo extends State<ListaTipo> {
       onChanged: (String? newValue) {
         setState(() {
           dropdownValue = newValue!;
-          seleccionProvider.tipoInstalacion = newValue;
-          seleccionProvider.notifyListeners();
+          sP.tipoInstalacion = newValue;
+          sP.notificar(context);
         });
       },
       items: <String>[
@@ -292,9 +291,8 @@ class _ListaRed extends State<ListaRed> {
   String dropdownValue = 'RED ELECTRICA';
   @override
   Widget build(BuildContext context) {
-    var seleccionProvider =
-        Provider.of<SeleccionProvider>(context, listen: true);
-    String tipoinst = seleccionProvider.tipoInstalacion;
+    var sP = Provider.of<SeleccionProvider>(context, listen: true);
+    String tipoinst = sP.tipoInstalacion;
 
     if (tipoinst == 'VEHICULOS') {
       return DropdownButton(
@@ -321,8 +319,8 @@ class _ListaRed extends State<ListaRed> {
         onChanged: (String? newValue) {
           setState(() {
             dropdownValue = newValue!;
-            seleccionProvider.red = newValue;
-            seleccionProvider.notifyListeners();
+            sP.red = newValue;
+            sP.notificar(context);
           });
         },
         items: <String>[
@@ -371,10 +369,9 @@ class _ListaSolucion extends State<ListaSolucion> {
   String dropdownValue = 'TIPO DE SOLUCION';
   @override
   Widget build(BuildContext context) {
-    var seleccionProvider =
-        Provider.of<SeleccionProvider>(context, listen: true);
-    String tipoinst = seleccionProvider.tipoInstalacion;
-    String red = seleccionProvider.red;
+    var sP = Provider.of<SeleccionProvider>(context, listen: true);
+    String tipoinst = sP.tipoInstalacion;
+    String red = sP.red;
     DropdownButton desplegable;
 
     if (tipoinst == 'TIPO DE INSTALACION') {
@@ -453,8 +450,8 @@ class _ListaSolucion extends State<ListaSolucion> {
         onChanged: (String? newValue) {
           setState(() {
             dropdownValue = newValue!;
-            seleccionProvider.tipoSolucion = dropdownValue;
-            seleccionProvider.notifyListeners();
+            sP.tipoSolucion = dropdownValue;
+            sP.notificar(context);
           });
         },
         items: <String>[

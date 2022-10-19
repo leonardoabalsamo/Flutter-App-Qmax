@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:qmax_inst/sql_helper.dart';
+//import 'package:qmax_inst/sql_helper.dart';
 import 'package:qmax_inst/src/pages/red_page.dart';
 import 'package:qmax_inst/src/providers/dimensionamiento_provider.dart';
 import 'package:qmax_inst/src/widgets/error_combinacion.dart';
-import 'package:sqflite/sqflite.dart';
+//import 'package:sqflite/sqflite.dart';
 import '../models/class_app.dart';
-import '../widgets/menu_lateral.dart';
+//import '../widgets/menu_lateral.dart';
 import 'grupo_page.dart';
 
 class InicioInstaladorPage extends StatefulWidget {
@@ -49,26 +49,22 @@ class _InicioPageInstaladorState extends State<InicioInstaladorPage> {
     //SQLHelper.createInversor('QM-1212-SPD', 1200, 12);
     //SQLHelper.createUbicacion('Capital Federal', 5.1);
 
-    var dimensionamientoProvider =
-        Provider.of<DimensionamientoProvider>(context, listen: true);
-
     return principal();
   }
 
   void verificaSeleccion() async {
-    var dimensionamientoProvider =
-        Provider.of<DimensionamientoProvider>(context, listen: false);
-    if (dimensionamientoProvider.Grupo && dimensionamientoProvider.Red) {
+    var dP = Provider.of<DimensionamientoProvider>(context, listen: false);
+    if (dP.Grupo && dP.Red) {
       await errorSeleccion(context);
-      dimensionamientoProvider.Grupo = false;
-      dimensionamientoProvider.Red = false;
-      dimensionamientoProvider.notifyListeners();
-    } else if (dimensionamientoProvider.Red) {
+      dP.Grupo = false;
+      dP.Red = false;
+      dP.notificar(context);
+    } else if (dP.Red) {
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => RedPage()),
       );
-    } else if (dimensionamientoProvider.Grupo) {
+    } else if (dP.Grupo) {
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => GrupoPage()),
@@ -133,8 +129,7 @@ class _InicioPageInstaladorState extends State<InicioInstaladorPage> {
   }
 
   AppBar dimAppBar(BuildContext context) {
-    var dimensionamientoProvider =
-        Provider.of<DimensionamientoProvider>(context, listen: true);
+    var dP = Provider.of<DimensionamientoProvider>(context, listen: true);
     return AppBar(
       title: const Text(
         'DIMENSIONAMIENTO',
@@ -176,9 +171,9 @@ class _InicioPageInstaladorState extends State<InicioInstaladorPage> {
           icon: Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () {
             Navigator.of(context).pop();
-            dimensionamientoProvider.Red = false;
-            dimensionamientoProvider.Grupo = false;
-            SQLHelper.deleteConsumos();
+            dP.Red = false;
+            dP.Grupo = false;
+            //SQLHelper.deleteConsumos();
           }),
     );
   }
