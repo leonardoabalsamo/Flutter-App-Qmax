@@ -33,85 +33,88 @@ class _RedPage extends State<RedPage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Text(
-                      'Verifique el consumo en la factura ',
-                      style: TextStyle(fontSize: 20),
-                    ),
-                    Text(
-                      '(El valor debe ser mensual 30 días)',
-                      style: TextStyle(fontSize: 15),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Expanded(
-                      child: Image.asset(
-                        'assets/images/fact.jpeg',
-                      ),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    slideBarEnergia(),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Text(
-                          'Meta de Ahorro',
-                          style: TextStyle(fontSize: 18),
-                        ),
-                      ],
-                    ),
-                    slideBarMeta(),
-                    SizedBox(
-                      height: 30,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Text(
-                          'Selección de Panel',
-                          style: TextStyle(fontSize: 20),
-                        ),
-                      ],
-                    ),
-                    slideBarPanel(),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Divider(
-                      color: Colors.white,
-                      thickness: 4,
-                      indent: 20,
-                      endIndent: 20,
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.location_on),
-                        Text(
-                          ' UBICACIÓN DE INSTALACIÓN ',
-                          style: TextStyle(fontSize: 22, fontFamily: 'Roboto'),
-                        ),
-                        Icon(Icons.light_mode_outlined)
-                      ],
-                    ),
-                    SizedBox(
-                      height: 30,
-                    ),
-                    ListaUbicaciones(),
-                    SizedBox(
-                      height: 30,
-                    ),
+                    Card(
+                        elevation: 10,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20)),
+                        margin: EdgeInsets.all(10),
+                        child: Padding(
+                            padding: EdgeInsets.all(20),
+                            child: Column(
+                              children: [
+                                Text(
+                                  'Indique el consumo en la factura ',
+                                  style: TextStyle(fontSize: 18),
+                                ),
+                                Text(
+                                  '(El valor debe ser mensual 30 días)',
+                                  style: TextStyle(fontSize: 15),
+                                ),
+                                slideBarEnergia(),
+                              ],
+                            ))),
+                    Card(
+                        elevation: 10,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20)),
+                        margin: EdgeInsets.all(10),
+                        child: Padding(
+                            padding: EdgeInsets.all(20),
+                            child: Column(
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    const Text(
+                                      'Meta de Ahorro',
+                                      style: TextStyle(fontSize: 18),
+                                    ),
+                                  ],
+                                ),
+                                slideBarMeta(),
+                                SizedBox(
+                                  height: 40,
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  children: [
+                                    Text(
+                                      'Selección de Panel',
+                                      style: TextStyle(fontSize: 20),
+                                    ),
+                                  ],
+                                ),
+                                slideBarPanel(),
+                              ],
+                            ))),
+                    Card(
+                        elevation: 10,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20)),
+                        margin: EdgeInsets.all(10),
+                        child: Padding(
+                            padding: EdgeInsets.all(20),
+                            child: Column(
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(Icons.location_on),
+                                    Text(
+                                      ' UBICACIÓN DE INSTALACIÓN ',
+                                      style: TextStyle(
+                                          fontSize: 18, fontFamily: 'Roboto'),
+                                    ),
+                                    Icon(Icons.light_mode_outlined)
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 30,
+                                ),
+                                ListaUbicaciones(),
+                              ],
+                            ))),
                   ],
                 ))),
         appBar: dimAppBar(context),
@@ -139,10 +142,21 @@ class _RedPage extends State<RedPage> {
   bool verificacion(context) {
     var dP = Provider.of<DimensionamientoProvider>(context, listen: false);
 
-    if (dP.valorFactura == 0) () => false;
-    if (dP.UbicacionSeleccionada == "") () => false;
-    if (dP.meta == 0) () => false;
-    if (dP.PanelSeleccionado == 0) () => false;
+    if (dP.valorFactura == 0) {
+      return false;
+    }
+    if (dP.UbicacionSeleccionada == "") {
+      return false;
+    }
+    if (dP.meta == 0.0) {
+      return false;
+    }
+    if (dP.PanelSeleccionado == 0) {
+      return false;
+    }
+    if (dP.Insolacion == 0.0) {
+      return false;
+    }
 
     return true;
   }
@@ -207,7 +221,7 @@ Future _showError(BuildContext context) {
         children: const <Widget>[
           Expanded(
             child: Text(
-              "¡Debe seleccionar todos los campos!",
+              "¡Todos los campos son obligatorios!",
               style: TextStyle(
                 fontSize: 14,
               ),

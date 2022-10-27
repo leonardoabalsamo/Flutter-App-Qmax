@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 // import 'package:flutter/scheduler.dart';
 // import 'package:path/path.dart';
 import 'package:provider/provider.dart';
-import 'package:qmax_inst/sql_helper.dart';
+//import 'package:qmax_inst/sql_helper.dart';
 import 'package:qmax_inst/src/pages/kit_page_dimensionamiento.dart';
 import 'package:qmax_inst/src/providers/dimensionamiento_provider.dart';
 import 'package:qmax_inst/src/widgets/error_combinacion.dart';
@@ -40,14 +40,14 @@ class _GrupoPage extends State<GrupoPage> {
                 child: Text('Reset')),
             FloatingActionButton.extended(
               onPressed: () async {
-                if (dP.sumaEnergia == 0 || dP.Insolacion == 0) {
-                  errorSeleccion(context);
-                } else {
+                if (verificacion(context)) {
                   dP.kitAislado();
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => const KitPage()),
                   );
+                } else {
+                  errorSeleccion(context);
                 }
               },
               label: const Text(
@@ -58,6 +58,25 @@ class _GrupoPage extends State<GrupoPage> {
           ],
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat);
+  }
+
+  bool verificacion(context) {
+    var dP = Provider.of<DimensionamientoProvider>(context, listen: false);
+
+    if (dP.UbicacionSeleccionada == "") {
+      return false;
+    }
+    if (dP.Insolacion == 0.0) {
+      return false;
+    }
+    if (dP.PanelSeleccionado == 0) {
+      return false;
+    }
+    if (dP.sumaEnergia == 0.0) {
+      return false;
+    }
+
+    return true;
   }
 
   void _resetConsumo(context) {
@@ -174,20 +193,74 @@ class _ListConsumosState extends State<ListConsumos> {
     dP.inicializacion(); // inicializa DropDownButtons
 
     return Container(
-      decoration: BoxDecoration(color: Colors.black),
-      margin: EdgeInsets.all(0),
-      child: Column(
-        children: [
-          ubicacion(context),
-          Expanded(
-              child: Container(
-                  margin: EdgeInsets.only(bottom: 90),
-                  decoration: BoxDecoration(
-                      color: Colors.blue.shade400,
-                      borderRadius: BorderRadius.circular(10.0)),
-                  child: listadoConsumos(context))),
-        ],
-      ),
+      margin: EdgeInsets.only(bottom: 60),
+      child: Column(children: [
+        ubicacion(context),
+        Expanded(
+            child: Card(
+                color: Colors.black,
+                elevation: 10,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20)),
+                margin: EdgeInsets.all(10),
+                child: Padding(
+                    padding: EdgeInsets.all(10),
+                    child: Container(
+                        decoration: BoxDecoration(
+                            color: Colors.black,
+                            borderRadius: BorderRadius.circular(20)),
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.all(10),
+                              child: Container(
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(
+                                      Icons.light_outlined,
+                                    ),
+                                    Text(
+                                      ' SELECCIÓN DE CONSUMOS ',
+                                      style: TextStyle(
+                                          fontSize: 18, fontFamily: 'Roboto'),
+                                    ),
+                                    Icon(Icons.batch_prediction_rounded)
+                                  ],
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              child: listadoConsumos(context),
+                            )
+                          ],
+                        ))))),
+        Card(
+            elevation: 10,
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+            margin: EdgeInsets.all(10),
+            child: Padding(
+              padding: EdgeInsets.all(20),
+              child: Center(
+                  child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Icon(Icons.light_mode_outlined),
+                      Text(
+                        ' SELECCIÓN DE PANEL ',
+                        style: TextStyle(fontSize: 18),
+                      ),
+                      Icon(Icons.light_mode_outlined),
+                    ],
+                  ),
+                  slideBarPanel(),
+                ],
+              )),
+            ))
+      ]),
     );
   }
 
@@ -196,57 +269,34 @@ class _ListConsumosState extends State<ListConsumos> {
     return Container(
         child: Column(
       children: [
-        SizedBox(
-          height: 25,
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(Icons.location_on),
-            Text(
-              ' UBICACIÓN DE INSTALACIÓN ',
-              style: TextStyle(fontSize: 20, fontFamily: 'Roboto'),
-            ),
-            Icon(Icons.light_mode_outlined)
-          ],
-        ),
-        SizedBox(
-          height: 10,
-        ),
-        ListaUbicaciones(),
-        SizedBox(
-          height: 20,
-        ),
-        Text(
-          'Selección de Panel',
-          style: TextStyle(fontSize: 20),
-        ),
-        slideBarPanel(),
-        Divider(
-          color: Colors.white,
-          thickness: 4,
-          indent: 20,
-          endIndent: 20,
-        ),
-        SizedBox(
-          height: 20,
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.light_outlined,
-            ),
-            Text(
-              ' SELECCIÓN DE CONSUMOS ',
-              style: TextStyle(fontSize: 20, fontFamily: 'Roboto'),
-            ),
-            Icon(Icons.batch_prediction_rounded)
-          ],
-        ),
-        SizedBox(
-          height: 25,
-        ),
+        Card(
+            elevation: 10,
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+            margin: EdgeInsets.all(10),
+            child: Padding(
+              padding: EdgeInsets.all(20),
+              child: Center(
+                  child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.location_on),
+                      Text(
+                        ' UBICACIÓN DE INSTALACIÓN ',
+                        style: TextStyle(fontSize: 18, fontFamily: 'Roboto'),
+                      ),
+                      Icon(Icons.light_mode_outlined),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  ListaUbicaciones(),
+                ],
+              )),
+            )),
       ],
     ));
   }
@@ -271,7 +321,7 @@ class _ListConsumosState extends State<ListConsumos> {
           CheckboxListTile(
               //enableFeedback: true,
               dense: true,
-              activeColor: Color.fromARGB(255, 6, 0, 0),
+              activeColor: Colors.lightBlue,
               tileColor: Color.fromARGB(255, 255, 255, 255),
               selectedTileColor: Colors.white,
               side: BorderSide(
@@ -281,17 +331,17 @@ class _ListConsumosState extends State<ListConsumos> {
               //NOMBRE DEL CONSUMO
               title: Text(
                 '${dP.consumosJson.keys.elementAt(index)}',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                    fontSize: 20,
+                    //fontWeight: FontWeight.bold,
+                    color: Colors.white),
                 textAlign: TextAlign.left,
               ),
 
               //POTENCIA CONSUMIDA
               subtitle: Text(
                 '(${dP.consumosJson.values.elementAt(index)} W)',
-                style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black),
+                style: TextStyle(fontSize: 14, color: Colors.white),
                 textAlign: TextAlign.left,
               ),
               value: dP.seleccion[index],
@@ -318,8 +368,8 @@ class _ListConsumosState extends State<ListConsumos> {
                 } else {
                   dP.indicesSeleccionados.add(index); // select
                   dP.Suma(valor); //Suma en el Total
-                  SQLHelper.createConsumo(dP.consumosJson.keys.elementAt(index),
-                      dP.consumosJson.values.elementAt(index));
+                  // SQLHelper.createConsumo(dP.consumosJson.keys.elementAt(index),
+                  //     dP.consumosJson.values.elementAt(index));
                   // ('NO ESTABA SELECCIONADO Y LO SUMA');
                 }
               }),
@@ -436,46 +486,36 @@ class _ListConsumosState extends State<ListConsumos> {
             ),
           ),
           actions: <Widget>[
-            Container(
-              height: 50,
-              width: 130,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Colors.blue.shade300),
-              child: IconButton(
-                  icon: Row(children: [
-                    Text(
-                      'Continuar',
-                      style:
-                          TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Icon(Icons.arrow_forward, color: Colors.white)
-                  ]),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                    //Compenso sumaEnergia = 0;
-                    dP.sumaEnergia -=
-                        dP.consumosJson.values.elementAt(index).toDouble();
+            //Cancela
+            ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text('Cancelar')),
+            //Agrega
+            ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  //Compenso sumaEnergia = 0;
+                  dP.sumaEnergia -=
+                      dP.consumosJson.values.elementAt(index).toDouble();
 
-                    //contador energía
-                    dP.sumaEnergia += (dP.cantidad[index] *
-                            dP.cantidadHoras[index] *
-                            dP.consumosJson.values.elementAt(index))
-                        .toDouble();
+                  //contador energía
+                  dP.sumaEnergia += (dP.cantidad[index] *
+                          dP.cantidadHoras[index] *
+                          dP.consumosJson.values.elementAt(index))
+                      .toDouble();
 
-                    dP.potenciaTotal += (dP.cantidad[index] *
-                            dP.consumosJson.values.elementAt(index))
-                        .toDouble();
-                    ValorCantidad = 1;
-                    ValorHs = 1;
-                    flagCantidad = false;
-                    flagHs = false;
-                    dP.notificar(context);
-                  }),
-            )
+                  dP.potenciaTotal += (dP.cantidad[index] *
+                          dP.consumosJson.values.elementAt(index))
+                      .toDouble();
+                  ValorCantidad = 1;
+                  ValorHs = 1;
+                  flagCantidad = false;
+                  flagHs = false;
+                  dP.notificar(context);
+                },
+                child: Text('Agregar')),
           ],
         );
       },
