@@ -5,13 +5,14 @@ import '../models/bateria_model.dart';
 import '../models/inversor_model.dart';
 
 class SeleccionProvider extends ChangeNotifier {
-  String inversor = 'SELECCIONE EL INVERSOR';
-  String bateria = 'SELECCIONE LA BATERIA';
-  String cantBat = 'SELECCIONE LA CANTIDAD';
-  String tipoInstalacion = 'TIPO DE INSTALACION';
-  String red = 'RED ELECTRICA';
-  String tipoSolucion = 'TIPO DE SOLUCION';
-  String tensionBanco = 'SELECCIONE LA TENSION';
+  String inversor = '';
+  String bateria = '';
+  String cantBat = '';
+
+  String tipoInstalacion = '';
+  String red = '';
+  String tipoSolucion = '';
+  String tensionBanco = '';
   num cantidadBancos = 0;
   num capacidadBanco = 0;
 
@@ -60,6 +61,15 @@ class SeleccionProvider extends ChangeNotifier {
 
 // Metodo validacion de bancos
   bool validacion() {
+    if (inversor == '') {
+      return false;
+    }
+    if (bateria == '') {
+      return false;
+    }
+    if (cantBat == '') {
+      return false;
+    }
     num aux;
 
     if (inversorSeleccionado.tensionNominalInversor <
@@ -83,7 +93,6 @@ class SeleccionProvider extends ChangeNotifier {
 
   bool validacionReg() {
     // cantidad de bancos = (tension nominal bateria * cantidad baterias)/tensionBanco
-
     cantidadBancos =
         (bateriaSeleccionada.tensionNominalBateria * num.parse(cantBat)) /
             num.parse(tensionBanco);
@@ -110,6 +119,44 @@ class SeleccionProvider extends ChangeNotifier {
     } else {
       return false;
     }
+  }
+
+  ResetConfigInversor() {
+    cantBat = ''; //'0'
+    red = "";
+    tipoInstalacion = "";
+    tipoSolucion = "";
+    setBat = '';
+    inversor = '';
+    inversorSeleccionado =
+        Inversor(id: 0, modelo: "", tensionNominal: 0, potencia: 0);
+    bateria = '';
+    bateriaSeleccionada = Bateria(
+        id: 0,
+        tipo: "",
+        capacidad: 0,
+        modelo: "",
+        tensionNominal: 0,
+        flote: 0,
+        fondo: 0);
+    cantBat = '';
+    notifyListeners();
+  }
+
+  ResetConfigRegulador() {
+    bateria = '';
+    bateriaSeleccionada = Bateria(
+        id: 0,
+        tipo: "",
+        capacidad: 0,
+        modelo: "",
+        tensionNominal: 0,
+        flote: 0,
+        fondo: 0);
+    cantBat = '';
+    regulador = false;
+    tensionBanco = '';
+    notifyListeners();
   }
 
   notificar(context) {

@@ -21,74 +21,85 @@ class _HomePageState extends State<HomePage> {
     var seleccionProvider =
         Provider.of<SeleccionProvider>(context, listen: true);
     return Center(
-        child:
-            Column(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-      SizedBox(
-        height: 20,
-      ),
+        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
       Text(
-        "Seleccione el Producto",
+        "SELECCIONE EL PRODUCTO",
         textAlign: TextAlign.center,
         style: TextStyle(
-            fontSize: 32,
-            fontWeight: FontWeight.w300,
-            //fontStyle: FontStyle.italic,
-            fontFamily: 'Roboto'),
+            fontSize: 24, fontWeight: FontWeight.w400, fontFamily: 'Roboto'),
         textScaleFactor: 1,
       ),
-      SizedBox(
-        height: 20,
-      ),
-      Text(
-        "Inversor SPD",
-        textAlign: TextAlign.center,
-        style: TextStyle(
-            fontSize: 32, fontWeight: FontWeight.w300, fontFamily: 'Roboto'),
-        textScaleFactor: 1,
-      ),
-      ElevatedButton(
-        style: ElevatedButton.styleFrom(
-            primary: Colors.black,
-            shadowColor: Colors.transparent,
-            padding: EdgeInsets.all(30)),
-        onPressed: () {
-          seleccionProvider.regulador = false;
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => const InicioPage()));
-        },
-        child: Image.asset(
-          'assets/images/inv.png',
-          height: 150,
-        ),
-      ),
-      Text(
-        "Regulador MPPT",
-        textAlign: TextAlign.center,
-        style: TextStyle(
-            fontSize: 32, fontWeight: FontWeight.w300, fontFamily: 'Roboto'),
-        textScaleFactor: 1,
-      ),
-      ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          primary: Colors.black,
-          shadowColor: Colors.transparent,
-          padding: EdgeInsets.all(10),
-        ),
-        onPressed: () {
-          seleccionProvider.regulador = true; //Flag Regulador
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => const InicioPageRegulador()));
-        },
-        child: Image.asset(
-          'assets/images/mpptdisplay.png',
-          height: 150,
-        ),
-      ),
-      SizedBox(
-        height: 50,
-      )
+      Card(
+          elevation: 10,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          margin: EdgeInsets.all(20),
+          child: Column(
+            children: [
+              Padding(
+                  padding: EdgeInsets.all(30),
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.transparent,
+                      shadowColor: Colors.transparent,
+                    ),
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const InicioPage()));
+                    },
+                    child: Image.asset(
+                      'assets/images/inv.png',
+                      height: 180,
+                    ),
+                  )),
+              Text(
+                'INVERSOR SPD',
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 20),
+              ),
+              SizedBox(
+                height: 15,
+              )
+            ],
+          )),
+      Card(
+          elevation: 10,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          margin: EdgeInsets.all(20),
+          child: Column(
+            children: [
+              Padding(
+                  padding: EdgeInsets.all(30),
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.transparent,
+                      shadowColor: Colors.transparent,
+                    ),
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  const InicioPageRegulador()));
+                    },
+                    child: Image.asset(
+                      'assets/images/mpptdisplay.png',
+                      height: 150,
+                    ),
+                  )),
+              Text(
+                'MPPT',
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 20),
+              ),
+              SizedBox(
+                height: 15,
+              )
+            ],
+          )),
     ]));
   }
 
@@ -127,7 +138,7 @@ class _HomePageState extends State<HomePage> {
             },
             icon: const Icon(Icons.help))
       ],
-      title: const Text('INVERSORES REGULADORES [ SPD ]',
+      title: const Text('INVERSORES SPD - REGULADORES',
           style: TextStyle(fontSize: 12, fontFamily: 'Roboto')),
       centerTitle: true,
     );

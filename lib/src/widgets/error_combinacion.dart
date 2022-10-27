@@ -65,7 +65,7 @@ Future errorSeleccion(context) {
         children: const <Widget>[
           Expanded(
             child: Text(
-              "Debe seleccionar una opción",
+              "¡Todos los campos son obligatorios!",
               style: TextStyle(
                 fontSize: 16,
               ),

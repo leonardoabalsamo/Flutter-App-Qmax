@@ -31,67 +31,84 @@ class _onePage extends State<onePage> {
         Text(
           "¡Bienvenido!",
           textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 50),
+          style: TextStyle(fontSize: 60),
           textScaleFactor: 1,
         ),
         SizedBox(
           height: 15,
         ),
-        Text(
-          "Seleccione la Opción",
-          style: TextStyle(fontSize: 22),
-          textScaleFactor: 1,
-        ),
-        Expanded(
-            flex: 1,
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                primary: Colors.transparent,
-                shadowColor: Colors.transparent,
-              ),
-              onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const HomePage()));
-              },
-              child: Image.asset(
-                'assets/images/logogris.png',
-                scale: 2.2,
-              ),
+        Card(
+            elevation: 10,
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+            margin: EdgeInsets.all(20),
+            child: Column(
+              children: [
+                Padding(
+                    padding: EdgeInsets.all(30),
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.transparent,
+                        shadowColor: Colors.transparent,
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const HomePage()));
+                      },
+                      child: Image.asset(
+                        'assets/images/logogris.png',
+                        scale: 2.2,
+                      ),
+                    )),
+                Text(
+                  'CONFIGURACIÓN',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                SizedBox(
+                  height: 15,
+                )
+              ],
             )),
-        Text(
-          'Configuración de Equipos QMAX',
-          textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 20),
-          textScaleFactor: 1.1,
-        ),
-        Expanded(
-          flex: 1,
-          child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              primary: Colors.transparent,
-              shadowColor: Colors.transparent,
-            ),
-            onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const InicioInstaladorPage()));
-            },
-            child: Icon(
-              Icons.build_circle_outlined,
-              size: 170,
-            ),
+        Card(
+          elevation: 10,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          margin: EdgeInsets.all(20),
+          child: Column(
+            children: [
+              Padding(
+                  padding: EdgeInsets.all(20),
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.transparent,
+                      shadowColor: Colors.transparent,
+                    ),
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  const InicioInstaladorPage()));
+                    },
+                    child: Icon(
+                      Icons.build_circle_outlined,
+                      size: 170,
+                    ),
+                  )),
+              Text(
+                'DIMENSIONAMIENTO',
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(
+                height: 15,
+              )
+            ],
           ),
         ),
-        Text(
-          'Dimensionamiento Sistemas QMAX',
-          textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 20),
-          textScaleFactor: 1.1,
-        ),
-        SizedBox(
-          height: 20,
-        )
       ]),
     ));
   }

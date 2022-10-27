@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 class DimensionamientoProvider extends ChangeNotifier {
   //Declaración de Variables
 
+  int clave = 18355;
+
   bool Red = false;
   bool Grupo = false;
 
@@ -31,6 +33,10 @@ class DimensionamientoProvider extends ChangeNotifier {
 
   //Potencia necesaria para el inversor
   double potenciaTotal = 0;
+  int potenciaInversor = 0;
+
+  int potenciaTotalPaneles = 0;
+  int cantidadPaneles = 0;
 
   //Selección de consumos
   var indicesSeleccionados = <int>[];
@@ -48,8 +54,10 @@ class DimensionamientoProvider extends ChangeNotifier {
   double meta = 0;
   int dias = 0;
   double valorKit = 0;
+  double valorInst = 0;
 
   var Ubicaciones = <String>[
+    'SELECCIONE',
     'Buenos Aires',
     'Catamarca',
     'Cordoba',
@@ -127,63 +135,68 @@ class DimensionamientoProvider extends ChangeNotifier {
     texto.clear();
     //datos ->
     //Insolacion //sumaEnergia //ubicacion
+    // if (Insolacion == 0.0) {
+    //   Insolacion = 5.03;
+    // }
 
     PotenciaPaneles = (sumaEnergia / 0.85 / Insolacion! / 0.73);
+    cantidadPaneles = (PotenciaPaneles ~/ PanelSeleccionado);
+    potenciaTotalPaneles = cantidadPaneles * PanelSeleccionado;
 
-    if (PotenciaPaneles <= 540) {
+    if (potenciaTotalPaneles <= 540) {
       //12v
       TensionInversor = 12;
-      //PanelSeleccionado = '400Wp';
-      CantPanel = PotenciaPaneles / PanelSeleccionado;
       CantReg = 1;
-    } else if (PotenciaPaneles >= 1080) {
+    } else if (potenciaTotalPaneles >= 1080) {
       //48V
       TensionInversor = 48;
-      //PanelSeleccionado = '360Wp';
-      if (PotenciaPaneles <= 2160) {
+      if (potenciaTotalPaneles <= 2160) {
         // 1 regulador 6 paneles
         CantReg = 1;
-        CantPanel = CantReg * 6;
-      } else if (PotenciaPaneles <= 4320) {
+      } else if (potenciaTotalPaneles <= 4320) {
         // 2 reguladores 12 paneles
         CantReg = 2;
-        CantPanel = CantReg * 6;
-      } else if (PotenciaPaneles <= 6480) {
+      } else if (potenciaTotalPaneles <= 6480) {
         // 3 reguladores 18 paneles
         CantReg = 3;
-        CantPanel = CantReg * 6;
       } else {
         // 4 reguladores 24 paneles
         CantReg = 4;
-        CantPanel = CantReg * 6;
       }
     } else {
       //24V
       TensionInversor = 24;
-      //PanelSeleccionado = '360Wp';
       CantReg = 1;
-      CantPanel = CantReg * 3;
     }
-    var energiaGenerada = PanelSeleccionado * CantPanel * Insolacion! * 0.73;
+    var energiaGenerada = potenciaTotalPaneles * Insolacion!; //* 0.73;
 
     BancoBateria = (sumaEnergia / 0.85 / TensionInversor) * 2; // 50% DOD
 
-    valorKit = (0.82 * PotenciaPaneles) +
-        (0.3 * TensionInversor * BancoBateria) +
-        (potenciaTotal);
+    potenciaInversor = (potenciaTotal * 0.8).toInt();
 
-    /*Valores*/
+    valorKit = (0.82 * potenciaTotalPaneles) +
+        (0.3 * TensionInversor * BancoBateria) +
+        (potenciaInversor) +
+        (potenciaTotalPaneles * 0.60);
+
+    valorInst = 0.2 * valorKit;
+
+    /*Valores*/ //PERMITIR MODIFICAR LOS COSTOS
     /*
     USD / W Panel USD 0.82
     USD / W Bateria USD  0.30
     USD / W Inverter USD 1 dl
+    USD / W MPPT USD 0.60 dl
     */
-    texto.add(
-        Text('Cantidad Paneles:  ' + CantPanel.round().toString() + ' u.'));
+    texto.add(Text('Cantidad Paneles:  ' + cantidadPaneles.toString() + ' u.'));
     texto.add(Divider());
     texto.add(Text(
         'Potencia Paneles:  ' + (PotenciaPaneles.toInt()).toString() + ' W'));
     texto.add(Divider());
+    texto.add(
+        Text('Cantidad Reguladores:  ' + CantReg.round().toString() + ' u.'));
+    texto.add(Divider());
+
     texto.add(Text('Energía Diaria Generada:  ' +
         (energiaGenerada.toInt()).toString() +
         ' Wh'));
@@ -195,13 +208,13 @@ class DimensionamientoProvider extends ChangeNotifier {
     ));
     texto.add(Text(
       'Consumo de Energía',
-      style: TextStyle(fontSize: 30),
+      style: TextStyle(fontSize: 25),
     ));
     texto.add(SizedBox(
       height: 10,
     ));
     texto.add(Text('Energía Diaria Consumida:  ' +
-        (sumaEnergia.toInt()).toString() +
+        ((sumaEnergia ~/ 0.85).toInt()).toString() +
         ' Wh'));
     texto.add(Divider());
 
@@ -214,16 +227,30 @@ class DimensionamientoProvider extends ChangeNotifier {
     texto.add(Divider());
 
     texto.add(Text('Potencia Inversor:  ' +
-        (potenciaTotal.toInt()).toString() +
+        (potenciaInversor).toString() +
         'W @ ' +
         (TensionInversor.toInt()).toString() +
         'V'));
-    texto.add(Divider());
+    texto.add(SizedBox(height: 20));
 
-    texto.add(SizedBox(height: 40));
+    texto.add(Divider(
+      color: Colors.white,
+      thickness: 3,
+    ));
+    texto.add(SizedBox(height: 20));
+
     texto.add(Text(
-      'Valor Aprox. KIT:  USD ' + valorKit.toInt().toString(),
-      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+      'Valor Aprox. KIT:  USD ' + valorKit.toInt().toString() + ',00.- BNA',
+      style: TextStyle(fontSize: 14),
+    ));
+    texto.add(Divider(
+      color: Colors.white,
+    ));
+    texto.add(Text(
+      'Valor Aprox. Instalación:  USD ' +
+          valorInst.toInt().toString() +
+          ',00.- BNA',
+      style: TextStyle(fontSize: 14),
     ));
   }
 
@@ -231,6 +258,10 @@ class DimensionamientoProvider extends ChangeNotifier {
     texto.clear();
     EnergiaDiaria = ((valorFactura / 30) * 1000);
     metaDiaria = EnergiaDiaria * meta;
+
+    // if (Insolacion == 0.0) {
+    //   Insolacion = 5.03;
+    // }
 
     for (String key in hsSolaresJson.keys) {
       if (key == UbicacionSeleccionada) {
@@ -241,67 +272,65 @@ class DimensionamientoProvider extends ChangeNotifier {
 
     PotenciaPaneles = (metaDiaria / 0.85 / Insolacion! / 0.73);
 
-    if (PotenciaPaneles <= 540) {
+    cantidadPaneles = (PotenciaPaneles ~/ PanelSeleccionado);
+    potenciaTotalPaneles = cantidadPaneles * PanelSeleccionado;
+
+    if (potenciaTotalPaneles <= 540) {
       //12v
       TensionInversor = 12;
-      //PanelSeleccionado = '400Wp';
-      CantPanel = PotenciaPaneles / PanelSeleccionado;
       CantReg = 1;
-    } else if (PotenciaPaneles >= 1080) {
+    } else if (potenciaTotalPaneles >= 1080) {
       //48V
       TensionInversor = 48;
-      //PanelSeleccionado = '360Wp';
-      if (PotenciaPaneles <= 2160) {
+      if (potenciaTotalPaneles <= 2160) {
         // 1 regulador 6 paneles
         CantReg = 1;
-        CantPanel = CantReg * 6;
-      } else if (PotenciaPaneles <= 4320) {
+      } else if (potenciaTotalPaneles <= 4320) {
         // 2 reguladores 12 paneles
         CantReg = 2;
-        CantPanel = CantReg * 6;
-      } else if (PotenciaPaneles <= 6480) {
+      } else if (potenciaTotalPaneles <= 6480) {
         // 3 reguladores 18 paneles
         CantReg = 3;
-        CantPanel = CantReg * 6;
       } else {
         // 4 reguladores 24 paneles
         CantReg = 4;
-        CantPanel = CantReg * 6;
       }
     } else {
       //24V
       TensionInversor = 24;
-      //PanelSeleccionado = '360Wp';
       CantReg = 1;
-      CantPanel = CantReg * 3;
+    }
+
+    if (TensionInversor == 48) {
+      potenciaInversor = 4000;
+    } else {
+      potenciaInversor = 2000;
     }
 
     BancoBateria = (EnergiaDiaria / 0.85 / TensionInversor) * 2; // 50% DOD
 
-    valorKit =
-        (0.82 * PotenciaPaneles) + (0.3 * TensionInversor * BancoBateria);
+    valorKit = (0.82 * potenciaTotalPaneles) +
+        (0.3 * TensionInversor * BancoBateria) +
+        (potenciaInversor) +
+        (potenciaTotalPaneles * 0.60);
 
-    print(metaDiaria);
-    print(Insolacion);
-    print(PotenciaPaneles);
-    print(CantReg);
-    print(CantPanel);
-    print(valorKit);
+    valorInst = 0.2 * valorKit;
 
-    /*Valores*/
+    /*Valores*/ //PERMITIR MODIFICAR LOS COSTOS
     /*
     USD / W Panel USD 0.82
     USD / W Bateria USD  0.30
     USD / W Inverter USD 1 dl
+    USD / W MPPT USD 0.60 dl
     */
 
-    var energiaGenerada = PanelSeleccionado * CantPanel * Insolacion! * 0.73;
+    var energiaGenerada = potenciaTotalPaneles * Insolacion!; //* 0.73;
 
-    texto.add(
-        Text('Cantidad Paneles:  ' + CantPanel.round().toString() + ' u.'));
+    texto.add(Text('Cantidad Paneles:  ' + cantidadPaneles.toString() + ' u.'));
     texto.add(Divider());
-    texto.add(Text(
-        'Potencia Paneles:  ' + (PotenciaPaneles.toInt()).toString() + ' W'));
+    texto.add(Text('Potencia Paneles:  ' +
+        (potenciaTotalPaneles.toInt()).toString() +
+        ' W'));
     texto.add(Divider());
 
     texto.add(
@@ -315,16 +344,17 @@ class DimensionamientoProvider extends ChangeNotifier {
     texto.add(SizedBox(
       height: 30,
     ));
+
+    //CONSUMO
     texto.add(Text(
       'Consumo de Energía',
-      style: TextStyle(fontSize: 30),
+      style: TextStyle(fontSize: 25),
     ));
     texto.add(SizedBox(
       height: 10,
     ));
     texto.add(Text('Energía Diaria Consumida:  ' +
-        (EnergiaDiaria.toInt()).toString() +
-        ' Wh'));
+        ((EnergiaDiaria ~/ 0.85).toString() + ' Wh')));
 
     texto.add(Divider());
 
@@ -338,12 +368,26 @@ class DimensionamientoProvider extends ChangeNotifier {
 
     texto.add(
         Text('Meta de Ahorro:  ' + ((meta * 100).toInt()).toString() + '%'));
-    texto.add(Divider());
+    texto.add(SizedBox(height: 20));
 
-    texto.add(SizedBox(height: 40));
+    texto.add(Divider(
+      color: Colors.white,
+      thickness: 3,
+    ));
+    texto.add(SizedBox(height: 20));
     texto.add(Text(
-      'Valor Aprox. KIT:  USD ' + valorKit.toInt().toString(),
-      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+      'Valor Aprox. KIT:  USD ' + valorKit.toInt().toString() + ',00.- BNA',
+      style: TextStyle(fontSize: 14),
+    ));
+    texto.add(Divider(
+      color: Colors.white,
+    ));
+
+    texto.add(Text(
+      'Valor Aprox. Instalación:  USD ' +
+          valorInst.toInt().toString() +
+          ',00.- BNA',
+      style: TextStyle(fontSize: 14),
     ));
   }
 
@@ -391,7 +435,8 @@ class DimensionamientoProvider extends ChangeNotifier {
     PanelSeleccionado = 0;
     valorKit = 0;
     valorFactura = 0;
-
+    potenciaInversor = 0;
+    potenciaTotalPaneles = 0;
     texto.clear();
     cantidad.clear();
     cantidadHoras.clear();

@@ -18,6 +18,9 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter/services.dart';
 import 'package:open_file/open_file.dart';
 import 'package:provider/provider.dart';
+import 'package:qmax_inst/src/pages/kit_page_dimensionamiento.dart';
+import 'package:qmax_inst/src/pages/one_page.dart';
+import 'package:qmax_inst/src/widgets/error_combinacion.dart';
 import '../providers/seleccion_provider.dart';
 
 import '../models/bateria_model.dart';
@@ -66,6 +69,7 @@ class _ConfigPage extends State<ConfigPage> {
 
   @override
   Widget build(BuildContext context) {
+    var sP = Provider.of<SeleccionProvider>(context, listen: true);
     return Scaffold(
         body: vista(context),
         appBar: AppBar(
@@ -73,37 +77,30 @@ class _ConfigPage extends State<ConfigPage> {
             'CONFIGURACIÓN RECOMENDADA',
             style: TextStyle(fontSize: 12),
           ),
+          leading: IconButton(
+              icon: Icon(Icons.arrow_back, color: Colors.white),
+              onPressed: () {
+                showResetC(context);
+              }),
         ),
-        floatingActionButton: floatContainer());
+        floatingActionButton: btnFloat(context));
   }
 
-  Container floatContainer() {
-    var seleccionProvider =
-        Provider.of<SeleccionProvider>(context, listen: true);
-    return Container(
-      padding: EdgeInsets.zero,
-      child: FloatingActionButton(
-        child: Icon(Icons.arrow_back_rounded),
-        onPressed: () {
-          seleccionProvider.cantBat = '0';
-          seleccionProvider.red = "";
-          seleccionProvider.tipoInstalacion = "";
-          seleccionProvider.tipoSolucion = "";
-          seleccionProvider.setBat = '';
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => const InicioPage()));
-        },
-      ),
-    );
+  FloatingActionButton btnFloat(BuildContext context) {
+    var sP = Provider.of<SeleccionProvider>(context, listen: true);
+
+    return FloatingActionButton(
+        child: Icon(Icons.arrow_back_outlined),
+        onPressed: () async {
+          showResetC(context);
+        });
   }
 
   Center vista(context) {
-    var seleccionProvider =
-        Provider.of<SeleccionProvider>(context, listen: true);
-    print(seleccionProvider.regulador);
+    var sP = Provider.of<SeleccionProvider>(context, listen: true);
 
-    if (seleccionProvider.regulador == false) {
-      //retorno modelo inversor
+    if (sP.regulador == false) {
+      //retorno inversor
       return Center(
         child: ListView(
           children: [
@@ -134,9 +131,8 @@ class _ConfigPage extends State<ConfigPage> {
                       child: const Text('Descargar Configuración'),
                       onPressed: () async {
                         //Cargo el mapa json
-                        Map<String, dynamic> _json = await getJson(
-                            seleccionProvider.getInversor(),
-                            seleccionProvider.getBateria);
+                        Map<String, dynamic> _json =
+                            await getJson(sP.getInversor(), sP.getBateria);
                         //Escribo el archivo
                         _writeJson(_json);
                       },
@@ -149,8 +145,7 @@ class _ConfigPage extends State<ConfigPage> {
                         padding: const EdgeInsets.all(20.0),
                         scrollDirection: Axis.vertical,
                         children: _verificaConfiguracion(
-                            seleccionProvider.getInversor(),
-                            seleccionProvider.getBateria))),
+                            sP.getInversor(), sP.getBateria))),
               ],
             ),
           ],
@@ -188,9 +183,8 @@ class _ConfigPage extends State<ConfigPage> {
                       child: const Text('Descargar Configuración'),
                       onPressed: () async {
                         //Cargo el mapa json
-                        Map<String, dynamic> _json = await getJson(
-                            seleccionProvider.getInversor(),
-                            seleccionProvider.getBateria);
+                        Map<String, dynamic> _json =
+                            await getJson(sP.getInversor(), sP.getBateria);
                         //Escribo el archivo
                         _writeJson(_json);
                       },
@@ -268,12 +262,12 @@ class _ConfigPage extends State<ConfigPage> {
       case 'ESTACIONARIA':
         retorno = consultaRed(seleccionProvider.red, bat, inv);
         break;
-      case 'VEHICULOS':
+      case 'EMBARCACIONES/VEHICULOS':
         retorno = cargaVeh(bat, inv);
         break;
 
       default:
-        retorno = opcionDefault();
+        //retorno = opcionDefault();
         break;
     }
 
@@ -587,41 +581,51 @@ class _ConfigPage extends State<ConfigPage> {
         retorno.add(const Divider());
         return retorno;
       default:
-        retorno = opcionDefault();
+      //retorno = opcionDefault();
     }
     return retorno;
   }
+}
 
-  List<Widget> opcionDefault() {
-    List<Widget> retorno = [];
-    showDialog(
-      context: context,
-      builder: (BuildContext context) => AlertDialog(
-        contentPadding: const EdgeInsets.all(10.0),
-        content: Row(
-          children: const <Widget>[
-            Expanded(
-              child: Text(
-                "Debe seleccionar al menos una opción. Reintente",
-                style: TextStyle(
-                  fontSize: 16,
-                ),
+Future showResetC(BuildContext context) {
+  var sP = Provider.of<SeleccionProvider>(context, listen: false);
+  return showDialog(
+    context: context,
+    builder: (BuildContext context) => AlertDialog(
+      contentPadding: const EdgeInsets.all(10.0),
+      content: Row(
+        children: const <Widget>[
+          Expanded(
+            child: Text(
+              "¿Desea Salir? Se borrarán los datos ingresados",
+              style: TextStyle(
+                fontSize: 16,
               ),
             ),
-          ],
-        ),
-        actions: <Widget>[
-          TextButton(
-              child: const Text('Aceptar'),
-              onPressed: () {
-                Navigator.pop(context);
-              }),
+          ),
         ],
       ),
-    );
-    retorno.add(Text('0'));
-    return retorno;
-  }
+      actions: <Widget>[
+        TextButton(
+            child: const Text('Si'),
+            onPressed: () {
+              /*Vaciamos la BD de consumos*/
+              //SQLHelper.deleteConsumos();
+              sP.ResetConfigInversor();
+              sP.ResetConfigRegulador();
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const onePage()),
+              );
+            }),
+        TextButton(
+            child: const Text('No'),
+            onPressed: () {
+              Navigator.of(context).pop();
+            })
+      ],
+    ),
+  );
 }
 
 Future<File> getAssetByName(String sourceName) async {

@@ -81,36 +81,58 @@ class _InicioPageInstaladorState extends State<InicioInstaladorPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Container(
-                margin: EdgeInsetsDirectional.all(20),
+              Padding(
+                padding: EdgeInsets.all(10),
                 child: Text(
-                  'Para avanzar con el dimensionamiento..',
-                  style: TextStyle(fontSize: 16, fontFamily: 'Roboto'),
+                  'Para avanzar con el dimensionamiento:',
+                  style: TextStyle(fontSize: 18),
                 ),
               ),
-              Expanded(
-                flex: 1,
-                child: Image.asset(
-                  'assets/images/fact.jpeg',
-                ),
-              ),
-              Container(
-                margin: EdgeInsetsDirectional.only(top: 30),
-                child: Column(
-                  children: [
-                    checkRed(),
-                    SizedBox(
-                      height: 50,
+              Column(
+                children: [
+                  Card(
+                    elevation: 10,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20)),
+                    margin: EdgeInsets.all(10),
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.all(10),
+                          child: Image.asset(
+                            'assets/images/cargador.png',
+                            height: 150,
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.all(10),
+                          child: checkRed(),
+                        ),
+                      ],
                     ),
-                    checkGrupo(),
-                  ],
-                ),
-              ),
-              Expanded(
-                flex: 2,
-                child: Image.asset(
-                  'assets/images/logo_grupo_electrogeno_t.png',
-                ),
+                  ),
+                  Card(
+                    elevation: 10,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20)),
+                    margin: EdgeInsets.all(10),
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.all(10),
+                          child: checkGrupo(),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.all(10),
+                          child: Image.asset(
+                            'assets/images/logo_grupo_electrogeno_t.png',
+                            height: 150,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
             ],
           ),

@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
+import 'package:qmax_inst/src/models/class_app.dart';
 import 'package:qmax_inst/src/providers/seleccion_provider.dart';
 import 'package:qmax_inst/src/widgets/error_combinacion.dart';
 
-import '../models/bateria_model.dart';
-import '../models/inversor_model.dart';
+// import '../models/bateria_model.dart';
+// import '../models/inversor_model.dart';
 import 'medio_page.dart';
 
 class InicioPage extends StatefulWidget {
@@ -20,274 +21,18 @@ class InicioPage extends StatefulWidget {
 class _InicioPageState extends State<InicioPage> {
   @override
   Widget build(BuildContext context) {
-    var seleccionProvider =
-        Provider.of<SeleccionProvider>(context, listen: true);
-    if (seleccionProvider.inversor != 'SELECCIONE EL INVERSOR') {
-      if (seleccionProvider.bateria != 'SELECCIONE LA BATERIA') {
-        return Scaffold(
-            body: Center(
-                child: Column(
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(10),
-                ),
-                const SizedBox(
-                  height: 5,
-                ),
-                ListaInversores(),
-                const SizedBox(
-                  width: 10,
-                  height: 10,
-                ),
-                Expanded(
-                  child: Image.asset(
-                    'assets/images/inv.png',
-                    height: 140,
-                  ),
-                ),
-                ListaBaterias(),
-                const SizedBox(
-                  height: 5,
-                ),
-                Expanded(
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        child: Image.asset('assets/images/vision.png'),
-                      ),
-                      Expanded(
-                        flex: 2,
-                        child: Image.asset('assets/images/pylontech.png'),
-                      ),
-                      Expanded(
-                        child: Image.asset('assets/images/bateria.png'),
-                      ),
-                    ],
-                  ),
-                ),
-                ListaTensiones(),
-                const Expanded(
-                  child: SizedBox(
-                    height: 10,
-                  ),
-                )
-              ],
-            )),
-            appBar: AppBar(
-              title: const Text(
-                'SELECCION DE MODELO',
-                style: TextStyle(fontSize: 12),
-              ),
-              centerTitle: true,
-              actions: [
-                IconButton(
-                    onPressed: () {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) => AlertDialog(
-                          contentPadding: const EdgeInsets.all(10.0),
-                          content: Row(
-                            children: const <Widget>[
-                              Expanded(
-                                child: Text(
-                                  "La selección no puede superar los 4 bancos de baterías en paralelo por desbalance en carga y descarga. ",
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          actions: <Widget>[
-                            TextButton(
-                                child: const Text('Aceptar'),
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                }),
-                          ],
-                        ),
-                      );
-                    },
-                    icon: const Icon(Icons.help))
-              ],
-            ),
-            floatingActionButton: FloatingActionButton.extended(
-              onPressed: () async {
-                if (seleccionProvider.validacion()) {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const MedioPage()),
-                  );
-                } else {
-                  await showError(context);
-                }
-              },
-              label: const Text(
-                'Continuar',
-              ),
-              icon: const Icon(Icons.arrow_forward),
-            ),
-            floatingActionButtonLocation:
-                FloatingActionButtonLocation.centerFloat);
-      } else {
-        return Scaffold(
-          body: Center(
-              child: Column(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(10),
-              ),
-              const SizedBox(
-                height: 5,
-              ),
-              ListaInversores(),
-              const SizedBox(
-                width: 10,
-                height: 10,
-              ),
-              Expanded(
-                child: Image.asset(
-                  'assets/images/inv.png',
-                  height: 140,
-                ),
-              ),
-              ListaBaterias(),
-              const SizedBox(
-                height: 5,
-              ),
-              Expanded(
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Expanded(
-                      child: Image.asset('assets/images/vision.png'),
-                    ),
-                    Expanded(
-                      flex: 2,
-                      child: Image.asset('assets/images/pylontech.png'),
-                    ),
-                    Expanded(
-                      child: Image.asset('assets/images/bateria.png'),
-                    ),
-                  ],
-                ),
-              ),
-              //ListaTensiones(),
-              const Expanded(
-                child: SizedBox(
-                  height: 10,
-                ),
-              )
-            ],
-          )),
-          appBar: AppBar(
-            title: const Text(
-              'SELECCION DE MODELO',
-              style: TextStyle(fontSize: 12),
-            ),
-            centerTitle: true,
-            actions: [
-              IconButton(
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) => AlertDialog(
-                        contentPadding: const EdgeInsets.all(10.0),
-                        content: Row(
-                          children: const <Widget>[
-                            Expanded(
-                              child: Text(
-                                "La selección no puede superar los 4 bancos de baterías en paralelo por desbalance en carga y descarga. ",
-                                style: TextStyle(
-                                  fontSize: 16,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        actions: <Widget>[
-                          TextButton(
-                              child: const Text('Aceptar'),
-                              onPressed: () {
-                                Navigator.pop(context);
-                              }),
-                        ],
-                      ),
-                    );
-                  },
-                  icon: const Icon(Icons.help))
-            ],
-          ),
-          floatingActionButton: FloatingActionButton.extended(
-            onPressed: () async {
-              if (seleccionProvider.validacion()) {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const MedioPage()),
-                );
-              } else {
-                await showError(context);
-              }
-            },
-            label: const Text(
-              'Continuar',
-            ),
-            icon: const Icon(Icons.arrow_forward),
-          ),
-          floatingActionButtonLocation:
-              FloatingActionButtonLocation.centerFloat,
-        );
-      }
-    } else {
-      return Scaffold(
+    var sP = Provider.of<SeleccionProvider>(context, listen: true);
+
+    return Scaffold(
         body: Center(
             child: Column(
           children: [
-            Container(
-              padding: const EdgeInsets.all(10),
-            ),
-            const SizedBox(
-              height: 5,
-            ),
-            ListaInversores(),
-            const SizedBox(
-              width: 10,
+            SizedBox(
               height: 10,
             ),
-            Expanded(
-              child: Image.asset(
-                'assets/images/inv.png',
-                height: 140,
-              ),
-            ),
-            //ListaBaterias(),
-            const SizedBox(
-              height: 5,
-            ),
-            Expanded(
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Expanded(
-                    child: Image.asset('assets/images/vision.png'),
-                  ),
-                  Expanded(
-                    flex: 2,
-                    child: Image.asset('assets/images/pylontech.png'),
-                  ),
-                  Expanded(
-                    child: Image.asset('assets/images/bateria.png'),
-                  ),
-                ],
-              ),
-            ),
-            //ListaTensiones(),
-            const Expanded(
-              child: SizedBox(
-                height: 10,
-              ),
-            )
+            cardInversores(context),
+            cardBaterias(context),
+            cardCantidades(context),
           ],
         )),
         appBar: AppBar(
@@ -327,10 +72,17 @@ class _InicioPageState extends State<InicioPage> {
                 },
                 icon: const Icon(Icons.help))
           ],
+          leading: IconButton(
+              icon: Icon(Icons.arrow_back, color: Colors.white),
+              onPressed: () {
+                Navigator.of(context).pop();
+                sP.ResetConfigInversor();
+                sP.notificar(context);
+              }),
         ),
         floatingActionButton: FloatingActionButton.extended(
           onPressed: () async {
-            if (seleccionProvider.validacion()) {
+            if (sP.validacion()) {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => const MedioPage()),
@@ -344,219 +96,100 @@ class _InicioPageState extends State<InicioPage> {
           ),
           icon: const Icon(Icons.arrow_forward),
         ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      );
-    }
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat);
   }
-}
 
-class ListaInversores extends StatefulWidget {
-  const ListaInversores({Key? key}) : super(key: key);
-
-  @override
-  State<ListaInversores> createState() => _ListaInversores();
-}
-
-class _ListaInversores extends State<ListaInversores> {
-  String dropdownValue = 'SELECCIONE EL INVERSOR';
-
-  @override
-  Widget build(BuildContext context) {
-    var seleccionProvider =
-        Provider.of<SeleccionProvider>(context, listen: true);
-    var invBusca = Inversor(id: 0, modelo: "", tensionNominal: 0, potencia: 0);
-    return DropdownButton<String>(
-      style: const TextStyle(fontSize: 20, color: Colors.white),
-      value: dropdownValue,
-      isDense: true,
-      borderRadius: BorderRadius.circular(10),
-      onChanged: (String? newValue) {
-        setState(() {
-          dropdownValue = newValue!;
-          seleccionProvider.inversor = newValue;
-          seleccionProvider.setInversor = invBusca.buscaInversor(newValue);
-        });
-      },
-      items: <String>[
-        'SELECCIONE EL INVERSOR',
-        'QM-1212-SPD',
-        'QM-2312-SPD',
-        'QM-1224-SPD',
-        'QM-2324-SPD',
-        'QM-1248-SPD',
-        'QM-2348-SPD',
-        'QM-3524-SPD',
-        'QM-4548-SPD'
-      ].map<DropdownMenuItem<String>>((String value) {
-        return DropdownMenuItem<String>(
-          value: value,
-          child: SizedBox(
+  Widget cardInversores(context) {
+    return Card(
+        elevation: 10,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        margin: EdgeInsets.all(10),
+        child: Center(
+            child: Column(
+          children: [
+            Padding(
+              padding: EdgeInsets.all(10),
               child: Text(
-            value,
-            textAlign: TextAlign.center,
-          )),
-        );
-      }).toList(),
-    );
+                'MODELO DE INVERSOR',
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 20),
+              ),
+            ),
+            Image.asset(
+              'assets/images/inv.png',
+              height: 120,
+            ),
+            ListaInversores(),
+            SizedBox(
+              height: 20,
+            )
+          ],
+        )));
   }
-}
 
-class ListaBaterias extends StatefulWidget {
-  const ListaBaterias({Key? key}) : super(key: key);
+  Widget cardBaterias(context) {
+    var sP = Provider.of<SeleccionProvider>(context, listen: true);
 
-  @override
-  State<ListaBaterias> createState() => _ListaBaterias();
-}
-
-class _ListaBaterias extends State<ListaBaterias> {
-  String dropdownValue = 'SELECCIONE LA BATERIA';
-
-  @override
-  Widget build(BuildContext context) {
-    var seleccionProvider =
-        Provider.of<SeleccionProvider>(context, listen: true);
-    String inv = seleccionProvider.inversor;
-
-    var buscaBat = Bateria(
-        id: 0,
-        capacidad: 0,
-        flote: 0,
-        fondo: 0,
-        modelo: "",
-        tensionNominal: 0,
-        tipo: "");
-    if (inv == 'SELECCIONE EL INVERSOR') {
-      return DropdownButton(
-        items: <String>['..'].map<DropdownMenuItem<String>>((String value) {
-          return DropdownMenuItem<String>(
-            value: value,
-            child: SizedBox(
-                child: Text(
-              value,
-              textAlign: TextAlign.center,
-            )),
-          );
-        }).toList(),
-        onChanged: null,
-        disabledHint: Text('SELECCIONE EL INVERSOR'),
-      );
+    if (sP.inversor == '') {
+      return SizedBox();
     } else {
-      return DropdownButton<String>(
-        style: const TextStyle(fontSize: 20, color: Colors.white),
-        value: dropdownValue,
-        isDense: true,
-        borderRadius: BorderRadius.circular(10),
-        onChanged: (String? newValue) {
-          setState(() {
-            dropdownValue = newValue!;
-            seleccionProvider.bateria = newValue;
-            seleccionProvider.setBateria = buscaBat.buscaBateria(newValue);
-          });
-        },
-        items: <String>[
-          'SELECCIONE LA BATERIA',
-          'TROJAN T105',
-          'TROJAN T605',
-          'TROJAN 27TMX',
-          'VISION 6FM200X',
-          'VISION 6FM100X',
-          'PYLONTECH US2000C',
-          'PYLONTECH US3000C',
-          'PYLONTECH PHANTOM-S',
-        ].map<DropdownMenuItem<String>>((String value) {
-          return DropdownMenuItem<String>(
-            value: value,
-            child: SizedBox(
+      return Card(
+          elevation: 10,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          margin: EdgeInsets.all(10),
+          child: Center(
+              child: Column(
+            children: [
+              Padding(
+                padding: EdgeInsets.all(10),
                 child: Text(
-              value,
-              textAlign: TextAlign.center,
-            )),
-          );
-        }).toList(),
-      );
+                  'MODELO DE BATERÍAS',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 20),
+                ),
+              ),
+              Image.asset(
+                'assets/images/bateria.png',
+                height: 120,
+              ),
+              ListaBaterias(),
+              SizedBox(
+                height: 20,
+              )
+            ],
+          )));
     }
   }
-}
 
-class ListaTensiones extends StatefulWidget {
-  const ListaTensiones({Key? key}) : super(key: key);
+  Widget cardCantidades(context) {
+    var sP = Provider.of<SeleccionProvider>(context, listen: true);
 
-  @override
-  State<ListaTensiones> createState() => _ListaTensiones();
-}
-
-class _ListaTensiones extends State<ListaTensiones> {
-  String dropdownValue = 'SELECCIONE LA CANTIDAD';
-  @override
-  Widget build(BuildContext context) {
-    var seleccionProvider =
-        Provider.of<SeleccionProvider>(context, listen: true);
-    String bat = seleccionProvider.bateria;
-    String inv = seleccionProvider.inversor;
-    if (inv == 'SELECCIONE EL INVERSOR') {
-      return DropdownButton(
-        items: <String>['..'].map<DropdownMenuItem<String>>((String value) {
-          return DropdownMenuItem<String>(
-            value: value,
-            child: SizedBox(
-                child: Text(
-              value,
-              textAlign: TextAlign.center,
-            )),
-          );
-        }).toList(),
-        onChanged: null,
-        disabledHint: Text('SELECCIONE EL INVERSOR'),
-      );
-    }
-    if (bat == 'SELECCIONE LA BATERIA') {
-      return DropdownButton(
-        items: <String>['..'].map<DropdownMenuItem<String>>((String value) {
-          return DropdownMenuItem<String>(
-            value: value,
-            child: SizedBox(
-                child: Text(
-              value,
-              textAlign: TextAlign.center,
-            )),
-          );
-        }).toList(),
-        onChanged: null,
-        disabledHint: Text('SELECCIONE LA BATERIA'),
-      );
+    if (sP.bateria == '') {
+      return SizedBox();
     } else {
-      return DropdownButton<String>(
-        style: const TextStyle(fontSize: 20, color: Colors.white),
-        value: dropdownValue,
-        isDense: true,
-        borderRadius: BorderRadius.circular(10),
-        onChanged: (String? newValue) {
-          setState(() {
-            dropdownValue = newValue!;
-            seleccionProvider.cantBat = newValue;
-          });
-        },
-        items: <String>[
-          'SELECCIONE LA CANTIDAD',
-          '1',
-          '2',
-          '4',
-          '6',
-          '8',
-          '12',
-          '16',
-          '32'
-        ].map<DropdownMenuItem<String>>((String value) {
-          return DropdownMenuItem<String>(
-            value: value,
-            child: SizedBox(
+      return Card(
+          elevation: 10,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          margin: EdgeInsets.all(10),
+          child: Center(
+              child: Column(
+            children: [
+              Padding(
+                padding: EdgeInsets.all(10),
                 child: Text(
-              value,
-              textAlign: TextAlign.center,
-            )),
-          );
-        }).toList(),
-      );
+                  'CANTIDAD DE BATERÍAS',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 20),
+                ),
+              ),
+              ListaTensiones(),
+              SizedBox(
+                height: 20,
+              )
+            ],
+          )));
     }
   }
 }
